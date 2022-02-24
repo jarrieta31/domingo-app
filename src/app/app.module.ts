@@ -24,6 +24,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 //Plugins
 import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
+import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
+import { TextToSpeechAdvanced } from '@awesome-cordova-plugins/text-to-speech-advanced/ngx';
 
 @NgModule({
     declarations: [
@@ -43,6 +45,8 @@ import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
     providers: [
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
         Geolocation,
+        ScreenOrientation,
+        TextToSpeechAdvanced,
     ],
     bootstrap: [AppComponent],
 })
