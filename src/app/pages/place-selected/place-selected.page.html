@@ -1,9 +1,104 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>placeSelected</ion-title>
+  <ion-toolbar *ngIf="place.tipo == 'Urbano'" color="information">
+    <ion-buttons slot="start">
+      <ion-back-button
+        (click)="irHome()"
+        color="back"
+        text=""
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title color="back" id="nombre">{{place.nombre}}</ion-title>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="place.tipo == 'Rural'" color="options">
+    <ion-buttons slot="start">
+      <ion-back-button
+      (click)="irHome()"
+        color="back"
+        text=""
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title color="back" id="nombre">{{place.nombre}}</ion-title>
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
-
+  <ion-fab *ngIf="videos.length > 0" vertical="top" horizontal="start" slot="fixed">
+    <ion-fab-button color="danger">
+      <ion-icon name="logo-youtube"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="bottom" class="lista_videos">
+      <ion-fab-button class="btn_video" *ngFor="let video of videos">
+        <ion-icon
+          (click)="verVideo(video.url)"
+          name="videocam-outline"
+          style="font-size: 180%"
+        ></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+  <div class="padre" id="place-container">
+    <div class="diva">
+      <img
+        class="imgPrincipal"
+        id="foto"
+        src="{{ place.imagenPrincipal.url }}"
+      />
+    </div>
+    <div class="divb">
+      <ion-slides class="slidePadre" pager="false" [options]="slideOpts">
+        <ion-slide class="slideHijo" *ngFor="let img of place.imagenes">
+          <div id="imagenMini">
+            <img
+              (click)="cambiarImagen()"
+              class="imgGaleria"
+              src="{{ img.url }}"
+            />
+          </div>
+        </ion-slide>
+      </ion-slides>
+    </div>
+    <div class="divc">
+      <div class="iconos">
+        <div class="iconAuto" *ngIf="place.auto == true">
+          <ion-icon name="car-sport-outline"></ion-icon>
+        </div>
+        <div class="iconEstilos" *ngIf="place.bicicleta == true">
+          <ion-icon name="bicycle-outline"></ion-icon>
+        </div>
+        <div class="iconEstilos" *ngIf="place.caminar == true">
+          <ion-icon name="walk-outline"></ion-icon>
+        </div>
+        <!-- <div id="dist">
+                  <div>{{ distancia | formatDistancia }}</div>                 
+              </div> -->
+      </div>
+      <p
+        class="text"
+        id="place-description"
+        [routerLink]="['/descripcion', place.id]"
+        [innerHTML]="place.descripcionCorta"
+      ></p>
+    </div>
+    <div class="divd">
+      <app-minimapa [lugarActual]="place"></app-minimapa>
+    </div>
+    <h6 class="interes">Te puede interesar</h6>
+    <div class="divf">
+      <a
+        class="sugerencia"
+        (click)="getPlace(sug.id)"
+        *ngFor="let sug of near"
+        [routerLink]="['/place-selected',sug.id]"
+      >
+        <div class="sug">
+          <img class="sug_img" src="{{ sug.image.url }}" alt="" />
+        </div>
+        <div class="infoSug">
+          <div class="sugNombre">{{ sug.name }}</div>
+          <div class="sugDistancia">
+            {{ sug.distance | formatDistancia }} desde {{ place.nombre }}
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
 </ion-content>

@@ -1,9 +1,221 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>events</ion-title>
+  <ion-toolbar color="favorite">
+    <ion-img slot="start" src="/assets/icon/eventos.png"></ion-img>
+    <ion-title>Eventos</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <div id="alto" class="slider">
+    <ion-slides
+      class="sliderPrimero"
+      scrollbar="false"
+      pager="false"
+      [options]="slideOpts"
+    >
+      <ion-slide *ngFor="let item of sliderEvents" class="sliderHijo">
+        <img class="imgSlider" src="{{item.imagen.url}}" />
+      </ion-slide>
+    </ion-slides>
+    <!-- =========>=>=>=> Filtro =========>=>=>=> -->
+    <div class="filter_place">
+      <ion-label
+        *ngIf="isOpenLocation === false && !selectdistancia"
+        (click)="changeFilterLocation()"
+        >localidad</ion-label
+      >
+      <ion-label
+        *ngIf="isOpenLocation"
+        class="open_acordeon"
+        (click)="changeFilterLocation()"
+        >localidad</ion-label
+      >
+      <img
+        *ngIf="!selectdistancia"
+        src="/assets/icon/exchange.png" alt="" />
+      <ion-label 
+        *ngIf="isOpenType === false" 
+        (click)="changeFilterType()"
+        id="filters"
+        >tipo</ion-label
+      >
+      <ion-label
+        *ngIf="isOpenType"
+        class="open_acordeon"
+        (click)="changeFilterType()"
+        id="filters"
+        >tipo</ion-label
+      >
+      <img
+        src="/assets/icon/exchange.png" alt="" />
+      <ion-label *ngIf="isOpenDate === false" (click)="changeFilterDate()"
+      id="filters"
+        >fecha</ion-label
+      >
+      <ion-label
+        *ngIf="isOpenDate"
+        class="open_acordeon"
+        (click)="changeFilterDate()"
+        id="filters"
+        >fecha</ion-label
+      >
+    </div>
 
+    <div *ngIf="isFilterLocation || isFilterType || isFilterDate">
+      <form [formGroup]="filterForm" class="form_filter">
+        <div>
+          <!-- Filtro por Fecha  -->
+          <div (click)="changeDate()" class="filter_name">
+            <span id="filters" *ngIf="isOpenDate === false">Fecha</span>
+            <span id="filters" class="open_acordeon" *ngIf="isOpenDate">Fecha</span>
+            <i
+              *ngIf="isOpenDate === false"
+              class="fi fi-rr-angle-down icon_arrow"
+            ></i>
+            <i
+              *ngIf="isOpenDate"
+              class="fi fi-rr-angle-up icon_arrow open_acordeon"
+            ></i>
+          </div>
+          <div *ngIf="isOpenDate">
+            <div class="filter_list">
+              <ion-datetime
+                (ionChange)="filterEvento()"
+                mode="ios"
+                placeholder="desde"
+                formControlName="fecha_inicio"
+                id="filters"
+              >
+                <!-- [ngModel]="fecha_inicio"   -->
+              </ion-datetime>
+            </div>
+            <div class="filter_list">
+              <ion-datetime
+                (ionChange)="filterEvento()"
+                mode="ios"
+                placeholder="hasta"
+                formControlName="fecha_fin"
+                id="filters"
+              >
+                <!-- [ngModel]="fecha_fin"   -->
+              </ion-datetime>
+            </div>
+          </div>
+        </div>
+        <!-- Filtro por Fecha  -->
+        <!-- Filtro por Localidad  -->
+        <div *ngIf="!selectdistancia" >
+          <div (click)="changeLocation()" class="filter_name filter_type">
+            <span id="filters" *ngIf="isOpenLocation === false">Localidad</span>
+            <span id="filters" class="open_acordeon" *ngIf="isOpenLocation">Localidad</span>
+            <i
+              *ngIf="isOpenLocation === false"
+              class="fi fi-rr-angle-down icon_arrow"
+            ></i>
+            <i
+              *ngIf="isOpenLocation"
+              class="fi fi-rr-angle-up icon_arrow open_acordeon"
+            ></i>
+          </div>
+          <div *ngIf="isOpenLocation">
+            <ion-list>
+              <ion-radio-group
+                (ionChange)="filterEvento()"
+                formControlName="localidad"
+              >
+                <ion-item class="filter_list" lines="none">
+                  <ion-text id="filters" >Todo</ion-text>
+                  <ion-radio slot="end" value=""></ion-radio>
+                </ion-item>
+                <ion-item
+                  class="filter_list"
+                  lines="none"
+                  *ngFor="let loc of lista_localidades_eventos"
+                >
+                  <ion-text id="filters" >{{ loc }}</ion-text>
+                  <ion-radio slot="end" value="{{ loc }}"></ion-radio>
+                </ion-item>
+              </ion-radio-group>
+            </ion-list>
+          </div>
+        </div>
+        <!-- filtro por Localidad -->
+
+        <!-- filtro por Tipo -->
+        <div>
+          <div (click)="changeType()" class="filter_name filter_type">
+            <span id="filters" *ngIf="isOpenType === false">Tipo</span>
+            <span id="filters" class="open_acordeon" *ngIf="isOpenType">Tipo</span>
+            <i
+              *ngIf="isOpenType === false"
+              class="fi fi-rr-angle-down icon_arrow"
+            ></i>
+            <i
+              *ngIf="isOpenType"
+              class="fi fi-rr-angle-up icon_arrow open_acordeon"
+            ></i>
+          </div>
+          <div *ngIf="isOpenType">
+            <ion-list class="list_type">
+              <ion-radio-group
+                (ionChange)="filterEvento()"
+                formControlName="tipo"
+                class="type_border"
+              >
+                <ion-item class="filter_list" lines="none">
+                  <ion-text id="filters" >Todo</ion-text>
+                  <ion-radio slot="end" value=""></ion-radio>
+                </ion-item>
+                <ion-item
+                  class="filter_list last"
+                  lines="none"
+                  *ngFor="let cry of lista_tipos_eventos"
+                >
+                  <ion-text id="filters" >{{ cry }}</ion-text>
+                  <ion-radio slot="end" value="{{ cry }}"></ion-radio>
+                </ion-item>
+              </ion-radio-group>
+            </ion-list>
+          </div>
+        </div>
+        <!-- Filtro por Tipo -->
+      </form>
+    </div>
+  </div>
+
+  <!-- =========<=<=<=< Filtro =========<=<=<=< -->
+
+  <ion-list>
+    <ion-item
+      *ngFor="let item of eventos | filterEvents1:dataform "
+      class="event"
+      (click)="openModalDetailEvent(
+        item.id, 
+        item.fechaInicio, 
+        item.nombre, 
+        item.descripcion, 
+        item['imagen'].url, 
+        item.lugar, 
+        item['ubicacion'].lat, 
+        item['ubicacion'].lng, 
+        item.fechaFin, 
+        item.instagram, 
+        item.ticktAntel, 
+        item.facebook, 
+        item.whatsapp, 
+        item.moneda, 
+        item.precio, 
+        item.precioUnico)" >
+      <ion-avatar item-start class="image-event">
+        <ion-img [src]="item.imagen.url" class="img-elem"></ion-img>
+      </ion-avatar>
+      <div class="info-event">
+        <div id="filters" class="fecha">
+          {{item.fechaInicio | date:'dd.MM.yyyy - HH:mm'}} hs
+        </div>
+        <div id="filters" class="titulo">{{item.nombre}}</div>
+        <div id="filters" class="descripcion" [innerHTML]="item.descripcion"></div>
+      </div>
+    </ion-item>
+  </ion-list>
 </ion-content>

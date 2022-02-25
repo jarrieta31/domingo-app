@@ -1,9 +1,107 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>where-sleep</ion-title>
+  <ion-toolbar color="circuits">
+    <!-- <img slot="start" src="/assets/icon/dormir.png"> -->
+    <ion-img slot="start" src="/assets/icon/dormir.png"></ion-img>
+    <ion-title>¿Dónde Dormir?</ion-title>
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
+  <div id="alto" class="slider">
+    <ion-slides
+      class="sliderPrimero"
+      scrollbar="false"
+      pager="false"
+      [options]="slideOpts"
+    >
+      <ion-slide *ngFor="let item of sliderSleep" class="sliderHijo">
+        <img class="imgSlider" src="{{item.imagen.url}}" />
+      </ion-slide>
+    </ion-slides>
 
+    <!-- filtro -->
+    <div
+      *ngIf="!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')"
+      class="filter_place"
+    >
+      <ion-label (click)="changeFilterSleep()" id="filters">localidad</ion-label>
+    </div>
+    <div
+      *ngIf="!selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')"
+      class="filter_place"
+    >
+      <ion-label (click)="changeFilterSleep()" id="filters" class="open_filter"
+        >{{ optionLocation }}</ion-label
+      >
+    </div>
+
+    <div>
+      <form [formGroup]="filterForm" class="form_filter">
+        <!-- Filtro por Localidad  -->
+        <div  *ngIf="isFilterLocation">
+          <div class="filter_name">
+            <span id="filters">Localidad</span>
+          </div>
+          <div>
+            <ion-list class="list_location" (click)="changeFilterSleep()">
+              <ion-radio-group
+                (ionChange)="filterSleep()"
+                formControlName="localidad"
+                class="location_border"
+              >
+                <ion-item class="filter_list" lines="none">
+                  <ion-text id="filters">Todo</ion-text>
+                  <ion-radio slot="end" value=""></ion-radio>
+                </ion-item>
+                <ion-item
+                  class="filter_list last"
+                  lines="none"
+                  *ngFor="let loc of locationActive"
+                >
+                  <ion-text id="filters">{{ loc.localidad }}</ion-text>
+                  <ion-radio slot="end" value="{{ loc.localidad }}"></ion-radio>
+                </ion-item>
+              </ion-radio-group>
+            </ion-list>
+          </div>
+        </div>
+        <!-- filtro por Localidad -->
+      </form>
+    </div>
+  </div>
+
+  <ion-list class="lista">
+    <div class="empty" *ngIf="sleep.length === 0 || (checkDistance !== 'OK' && checkDistance !== 'FOUND')">
+      <i class="fi fi-rr-sad icon_empty"></i>
+      <div id="eat-info" class="text_empty">
+        No hay lugares para mostrar con el filtro seleccionado
+      </div>
+    </div>
+    <ng-container *ngFor="let item of sleep | filtroDondeDormir:dataForm">
+      <ion-item
+        *ngIf="(item.mostrar && checkDistance === 'FOUND') || (checkDistance === 'OK')"
+      >
+        <div class="padre">
+          <div class="imagen">
+            <ion-avatar item-start>
+              <ion-img [src]="item.imagen.url" class="img-elem"></ion-img>
+            </ion-avatar>
+            <small id="eat-info">{{item.distancia | formatDistancia}}</small>
+          </div>
+          <div class="info">
+            <ion-label>
+              <h2 id="eat-info">{{ item.nombre }}</h2>
+              <div class="infoAbajo">
+                <h3 id="eat-info">{{ item.direccion }}</h3>
+                <p id="eat-info" *ngFor="let tel of item.telefonos">
+                  <span id="eat-info">Tel: </span>{{ tel.numero }}
+                </p>
+              </div>
+              <ion-icon class="contact" name="logo-instagram"></ion-icon>
+              <ion-icon class="contact" name="logo-whatsapp"></ion-icon>
+            </ion-label>
+          </div>
+        </div>
+      </ion-item>
+    </ng-container>
+  </ion-list>
 </ion-content>

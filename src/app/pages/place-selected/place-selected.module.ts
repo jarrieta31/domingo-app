@@ -7,14 +7,20 @@ import { IonicModule } from '@ionic/angular';
 import { PlaceSelectedPageRoutingModule } from './place-selected-routing.module';
 
 import { PlaceSelectedPage } from './place-selected.page';
+import { PipesModule } from '../../shared/pipes/pipes.module';
+import { VideoPageModule } from '../video/video.module';
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    PlaceSelectedPageRoutingModule
-  ],
-  declarations: [PlaceSelectedPage]
+    imports: [
+        CommonModule,
+        ComponentsModule,
+        FormsModule,
+        IonicModule,
+        PipesModule,
+        PlaceSelectedPageRoutingModule,
+        VideoPageModule,
+    ],
+    declarations: [PlaceSelectedPage]
 })
-export class PlaceSelectedPageModule {}
+export class PlaceSelectedPageModule { }

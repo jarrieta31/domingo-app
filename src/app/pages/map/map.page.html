@@ -1,9 +1,25 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>map</ion-title>
+    <ion-buttons slot="start">
+            <ion-back-button (click)="volver()"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Ir a {{ nombre }}</ion-title>
+
+    <ion-label slot="end">      
+      <ion-icon name="{{icon}}"></ion-icon> 
+      {{distancia | formatDistancia}}       
+    </ion-label>
+    
+    
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content> 
 
+    <div id="contenedor">
+      
+      <div id="mapaIndicador"></div>
+
+    </div>
 </ion-content>

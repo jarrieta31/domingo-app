@@ -28,7 +28,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/map/map.module').then( m => m.MapPageModule)
   },
   {
-    path: 'modal-info',
+    path: 'descripcion/:id',
     loadChildren: () => import('./pages/modal-info/modal-info.module').then( m => m.ModalInfoPageModule)
   },
   {
@@ -36,7 +36,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/place/place.module').then( m => m.PlacePageModule)
   },
   {
-    path: 'place-selected',
+    path: 'place-selected/:id',
     loadChildren: () => import('./pages/place-selected/place-selected.module').then( m => m.PlaceSelectedPageModule)
   },
   {

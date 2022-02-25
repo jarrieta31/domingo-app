@@ -7,10 +7,12 @@ import { IonicModule } from '@ionic/angular';
 import { ModalInfoPageRoutingModule } from './modal-info-routing.module';
 
 import { ModalInfoPage } from './modal-info.page';
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
+    ComponentsModule,
     FormsModule,
     IonicModule,
     ModalInfoPageRoutingModule

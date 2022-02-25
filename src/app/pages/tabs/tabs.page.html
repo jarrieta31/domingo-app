@@ -1,9 +1,24 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>tabs</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-
-</ion-content>
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="home">
+      <i class="fi fi-rr-home icon-tab"></i>
+      <ion-label>Inicio</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="events">
+      <i class="fi fi-rr-calendar icon-tab"></i>
+      <ion-label>Eventos</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="place">
+      <i class="fi fi-rr-map-marker icon-tab"></i>
+      <ion-label>Lugares</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="eat">
+      <i class="fi fi-rr-hamburger icon-tab"></i>
+      <ion-label>Comida</ion-label>
+    </ion-tab-button>
+    <ion-tab-button class="moreOptions" (click)="openCustom()">
+      <i class="fi fi-rr-menu-dots icon-tab"></i>
+      <ion-label>Más</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

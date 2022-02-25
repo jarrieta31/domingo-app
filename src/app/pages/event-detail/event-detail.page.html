@@ -1,9 +1,72 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>event-detail</ion-title>
+  <ion-toolbar color="information">
+    <ion-buttons slot="start">
+      <ion-back-button
+        defaultHref="tabs/events"
+        (click)="salir()"
+        color="back"
+        text=""
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title color="back" id="nombre">{{titulo}}</ion-title>
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
-
+  <div class="padre" id="event-detail-container">
+    <div class="foto"><img src="{{imagen}}" alt="" /></div>
+    <section>
+      <div class="cuenta-regresiva">
+          <div class="time">
+              <ul class="time-list">
+                  <li id="event-detail-container" class="count-bg-one radius"><span id="days">{{day}}</span>Dias</li>
+                  <li id="event-detail-container" class="count-bg-two radius"><span id="hours">{{hours}}</span>Horas</li>
+                  <li id="event-detail-container" class="count-bg-three radius"><span id="minutes">{{minutes}}</span>Minutos</li>
+                  <li id="event-detail-container" class="count-bg-four radius"><span id="seconds">{{seconds}}</span>Segundos</li>
+              </ul>
+          </div>
+      </div>
+  </section>
+    <div class="ubicacion">
+      <div id="event-detail-container" class="dir">
+        <div id="event-detail-container" class="div-ubicacion" (click)="openMap()">{{ lugar }}</div>
+        <i class="fas fa-map-marker-alt mark-info"></i>529, 18 de Julio, San
+        José de Mayo
+      </div>
+    </div>
+    <div class="fecha-hora">
+      <div class="fecha">
+        <div id="event-detail-container"  class="div-fecha">Fecha</div>
+        <div class="fecha-hora_div">
+          <i id="event-detail-container" class="fas fa-calendar-alt mark-info"></i>{{fecha | date: 'dd.MM.yyyy'}}
+        </div>
+      </div>
+      <div  class="hora">
+        <div id="event-detail-container" class="div-hora">Hora</div>
+        <div  class="fecha-hora_div">
+          <i id="event-detail-container" class="fas fa-clock mark-info"></i>{{fecha | date:'HH:mm'}}
+        </div>
+      </div>
+    </div>
+    <div class="descripcion" id="description-event" [innerHTML]="descripcion">
+      {{descripcion}}&nbsp;<a id="event-detail-container" *ngIf="descripcion.length > 250">Ver más</a>
+    </div>
+  </div>
+  <div class="ticket">
+    <div *ngIf="precioUnico && precio > 0" class="entradas">
+      <div id="event-detail-container" class="entradas_div">Valor ticket</div>
+      <div id="event-detail-container" class="precios_div">{{ moneda }}&nbsp;{{ precio }}</div>
+    </div>
+    <div *ngIf="precioUnico === false && precio > 0" class="entradas">
+      <div id="event-detail-container" class="entradas_div">Desde</div>
+      <div id="event-detail-container" class="precios_div">{{ moneda }}&nbsp;{{ precio }}</div>
+    </div>
+    <div *ngIf="precio === 0" class="entradas">
+      <div id="event-detail-container" class="entradas_div">Entrada</div>
+      <div id="event-detail-container" class="precios_div">Gratis</div>
+    </div>
+    <div class="precio" (click)="openModalSellingPoint(instagram, tickAntel, facebook, whatsapp)">
+      <div><i class="fas fa-ticket-alt mark-info"></i></div>
+      <div id="event-detail-container" class="puntos-venta">Ver puntos de venta</div>
+    </div>
+  </div>
 </ion-content>

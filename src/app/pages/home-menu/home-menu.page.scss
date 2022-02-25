@@ -1,0 +1,242 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
+@import url("https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css");
+
+* {
+  z-index: 0;
+}
+
+.container {
+  height: 100vh;
+}
+
+.div_menu_izq, .div_menu_der, #filter_null_izq, #filter_null_der {
+  font-family: "Poppins", sans-serif !important;
+}
+
+/** menu e imagenes a color*/
+.menu {
+  display: flex;
+  flex-direction: row;
+  margin: 0 3%;
+  height: 75%;
+  position: relative;
+  z-index: 50;
+}
+
+.div__menu {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  color: #ffffff;
+  font-weight: bold;
+  font-family: "Poppins", sans-serif;
+}
+
+.div__menu > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2%;
+  border-radius: 5px;
+}
+
+.div__menu-izq:nth-child(1) {
+  background-image: url("/assets/img/lugares.jpg");
+  background-size: cover;
+  flex-grow: 1.6;
+}
+
+.div__menu-izq:nth-child(2) {
+  background-image: url("/assets/img/comer.jpg");
+  background-size: cover;
+  flex-grow: 1;
+}
+
+.div__menu-izq:nth-child(3) {
+  background-image: url("/assets/img/artistas.jpg");
+  background-size: cover;
+  flex-grow: 2;
+}
+
+.div__menu-der:nth-child(1) {
+  background-image: url("/assets/img/eventos.jpg");
+  background-size: cover;
+  flex-grow: 2;
+}
+
+.div__menu-der:nth-child(2) {
+  background-image: url("/assets/img/dormir.jpg");
+  background-size: cover;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.div__menu-der:nth-child(3) {
+  background-image: url("/assets/img/casa-dominga.jpg");
+  background-size: cover;
+  text-align: center;
+  flex-grow: 1.5;
+}
+/*****************************************************************/
+
+/** imagenes en blanco y negro*/
+#filter_null_izq:nth-child(1) {
+  background-image: url("/assets/img/lugares-byn.jpg");
+  background-size: cover;
+  flex-grow: 1.6;
+}
+
+#filter_null_izq:nth-child(2) {
+  background-image: url("/assets/img/comer-byn.jpg");
+  background-size: cover;
+  flex-grow: 1;
+}
+
+#filter_null_izq:nth-child(3) {
+  background-image: url("/assets/img/artistas-byn.jpg");
+  background-size: cover;
+  flex-grow: 2;
+}
+
+#filter_null_der:nth-child(1) {
+  background-image: url("/assets/img/eventos-byn.jpg");
+  background-size: cover;
+  flex-grow: 2;
+}
+
+#filter_null_der:nth-child(2) {
+  background-image: url("/assets/img/dormir-byn.jpg");
+  background-size: cover;
+  text-align: center;
+  flex-grow: 1;
+}
+
+#filter_null_der:nth-child(3) {
+  background-image: url("/assets/img/casa-dominga-byn.jpg");
+  background-size: cover;
+  text-align: center;
+  flex-grow: 1.5;
+}
+/************************************************************************/
+.slider_filter {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 2%;
+  height: 25%;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: #fff;
+}
+
+.option {
+  width: 100%;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.option__div {
+  width: 20%;
+  height: auto;
+  margin: 0 10px;
+}
+
+.slider_filter-title {
+  padding: 4% 0 0 20px;
+}
+
+span {
+  color: #fc67ff;
+}
+
+h1,
+span {
+  font-family: "Poppins", sans-serif;
+}
+
+p {
+  margin-top: 0 !important;
+  font-family: "Poppins", sans-serif;
+}
+
+h1 {
+  margin-bottom: 1% !important;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+}
+
+h1,
+p {
+  margin: 0 3%;
+}
+
+.btn {
+  width: 100%;
+}
+
+ion-button {
+  margin: auto;
+}
+
+.filter_button > ion-label {
+  display: inline-block;
+  width: 50%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 90%;
+  font-family: "Poppins", sans-serif;
+  color: #666;
+}
+
+.filter_button {
+  display: flex;
+  flex-direction: row;
+  border: 2px solid #888;
+  margin: auto;
+  width: 85%;
+  border-radius: 10px;
+  padding: 1% 2.5px 0.5% 2.5px;
+}
+
+.filter_button > i {
+  color: #888;
+}
+
+.depto_selected,
+.distance_selected {
+  color: #01dfb8 !important;
+}
+
+.depto_list {
+  margin: 10px auto;
+  width: 70%;
+  border-bottom-left-radius: 16px !important;
+  border-bottom-right-radius: 16px !important;
+  z-index: 150 !important;
+  position: relative;
+}
+
+.endline {
+  font-weight: bold;
+  text-align: center;
+  color: #999;
+  font-size: 18px;
+}
+
+ion-item {
+  height: 40px !important;
+}
+
+ion-text {
+  font-family: "Poppins", sans-serif;
+}
+
+.depto_bold {
+  font-weight: bold;
+}
