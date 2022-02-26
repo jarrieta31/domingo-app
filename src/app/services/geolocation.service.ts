@@ -1,7 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
-import { LocationAccuracy } from '@awesome-cordova-plugins/location-accuracy/ngx';
-import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
+//import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
 import * as Mapboxgl from "mapbox-gl";
 import { environment } from "../../environments/environment";
 import { Observable, BehaviorSubject, Subscription, timer } from "rxjs";
@@ -11,6 +9,7 @@ import { Point } from "../shared/point";
 import { Assessment } from "../shared/assessment";
 import { HttpClient } from "@angular/common/http";
 import { filter, tap } from 'rxjs/operators';
+import { Geolocation } from '@capacitor/geolocation';
 
 @Injectable({
     providedIn: "root",
@@ -46,51 +45,52 @@ export class GeolocationService {
     featureDepto: any[] = [];
 
     constructor(
-        private androidPermissions: AndroidPermissions,
         private http: HttpClient,
-        private geolocation: Geolocation,
-        private locationAccuracy: LocationAccuracy
+        //private geolocation: Geolocation,
     ) {
+
+        this.getLocation2();
+
         //Observable que obtiene los pulsos y obtiene la posicion
         //this.sourceClock$ = timer(500, 36000).pipe(
         //tap((clock) => {
-        this.sourceClock$ = timer(3500, 36000).pipe(tap(() => {
-            this.geolocation
-                .getCurrentPosition({
-                    enableHighAccuracy: true,
-                    timeout: 1000,
-                    maximumAge: 0,
-                })
-                .then((resp) => {
-                    //filter(p => p.coords != undefined)
-                    if (resp !== null) {
-                        this.gps = true;
-                        this.posicion = {
-                            longitud: resp.coords.longitude,
-                            latitud: resp.coords.latitude,
-                        };
-                        this.actualizarPosicion$({
-                            longitud: resp.coords.longitude,
-                            latitud: resp.coords.latitude,
-                        });
-                        this.getLocation(
-                            resp.coords.longitude,
-                            resp.coords.latitude
-                        ).subscribe((dto: any) => {
-                            this.featureDepto = [];
-                            dto.features.forEach((res: any) => {
-                                this.featureDepto.push(res.text);
-                            });
-                            let featureLen = this.featureDepto.length;
-                            this.currentDepto = this.featureDepto[featureLen - 2];
-                            console.log(this.currentDepto);
-                        });
-                        this.actualizarMarcador();
-                    }
-                });
-        })
+        //        this.sourceClock$ = timer(3500, 36000).pipe(tap(() => {
+        //            this.geolocation
+        //                .getCurrentPosition({
+        //                    enableHighAccuracy: true,
+        //                    timeout: 1000,
+        //                    maximumAge: 0,
+        //                })
+        //                .then((resp) => {
+        //                    //filter(p => p.coords != undefined)
+        //                    if (resp !== null) {
+        //                        this.gps = true;
+        //                        this.posicion = {
+        //                            longitud: resp.coords.longitude,
+        //                            latitud: resp.coords.latitude,
+        //                        };
+        //                        this.actualizarPosicion$({
+        //                            longitud: resp.coords.longitude,
+        //                            latitud: resp.coords.latitude,
+        //                        });
+        //                        this.getLocation(
+        //                            resp.coords.longitude,
+        //                            resp.coords.latitude
+        //                        ).subscribe((dto: any) => {
+        //                            this.featureDepto = [];
+        //                            dto.features.forEach((res: any) => {
+        //                                this.featureDepto.push(res.text);
+        //                            });
+        //                            let featureLen = this.featureDepto.length;
+        //                            this.currentDepto = this.featureDepto[featureLen - 2];
+        //                            console.log(this.currentDepto);
+        //                        });
+        //                        this.actualizarMarcador();
+        //                    }
+        //                });
+        //        })
 
-        )
+        //        )
 
 
         // .catch((error) => {
@@ -172,6 +172,12 @@ export class GeolocationService {
             lat +
             ".json?access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
         );
+    }
+
+    async getLocation2() {
+        const position = await Geolocation.getCurrentPosition();
+        console.log(position.coords.latitude);
+        console.log(position.coords.longitude);
     }
 
     //Retorna un observable con los datos para valorar un lugar
@@ -283,71 +289,6 @@ export class GeolocationService {
         let zoom = this.calculateZoom(this.distancia);
         this.mapa.setCenter([centro.longitud, centro.latitud]);
         this.mapa.setZoom(zoom);
-    }
-
-    //Compruebe si la aplicación tiene permiso de acceso GPS
-    checkGPSPermission() {
-        this.androidPermissions
-            .checkPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION)
-            .then(
-                (result) => {
-                    if (result.hasPermission) {
-                        //Si tiene permiso, muestre el diálogo 'Activar GPS'
-                        this.gps = true;
-                        this.askToTurnOnGPS();
-                    } else {
-                        //Si no tiene permiso pida permiso
-                        this.requestGPSPermission();
-                    }
-                },
-                (err) => {
-                    console.log("Error checkGPS: ", err);
-                }
-            );
-    }
-
-    //Pide los permisos para el GPS julio
-    requestGPSPermission() {
-        this.locationAccuracy.canRequest().then((canRequest: boolean) => {
-            if (canRequest) {
-                console.log("canRequest", canRequest);
-            } else {
-                //Mostrar el diálogo 'Solicitud de permiso de GPS'
-                this.androidPermissions
-                    .requestPermission(
-                        this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION
-                    )
-                    .then(
-                        () => {
-                            // método de llamada para encender el GPS
-                            this.askToTurnOnGPS();
-                        },
-                        (error) => {
-                            //Mostrar alerta si el usuario hace clic en "No, gracias"
-                            console.log(
-                                "requestPermission. Error al solicitar permisos de ubicación ",
-                                error
-                            );
-                        }
-                    );
-            }
-        });
-    }
-
-    askToTurnOnGPS() {
-        this.locationAccuracy
-            .request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
-            .then(
-                () => {
-                    // Cuando el GPS se activa hace la llamada para obtener coordenadas de ubicación precisas
-                    this.gps = true;
-                },
-                (error) => {
-                    console.log(
-                        "Error al solicitar permisos de ubicación " + JSON.stringify(error)
-                    );
-                }
-            );
     }
 
     // Recibe 2 Puntos y obtiene el centro retornando un Point

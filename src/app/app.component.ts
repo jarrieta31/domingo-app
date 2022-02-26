@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Platform } from "@ionic/angular";
-import { SplashScreen } from '@awesome-cordova-plugins/splash-screen/ngx';
-import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
+//import { SplashScreen } from '@awesome-cordova-plugins/splash-screen/ngx';
+//import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
 
 import { Subject, timer } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -24,8 +24,8 @@ export class AppComponent {
 
     constructor(
         private platform: Platform,
-        private splashScreen: SplashScreen,
-        private statusBar: StatusBar,
+    //    private splashScreen: SplashScreen,
+    //    private statusBar: StatusBar,
         private geolocationSvc: GeolocationService
     ) {
         this.initializeApp();
@@ -33,15 +33,6 @@ export class AppComponent {
 
     ngOnInit(): void {
         this.unsubscribe$ = new Subject<void>();
-        this.geolocationSvc.posicion$
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((res) => {
-                console.log(res);
-                this.gps = res;
-            });
-
-        this.geolocationSvc.checkGPSPermission();
-        this.geolocationSvc.iniciarSubscriptionClock();
 
         setTimeout(() => {
             this.unsubscribe$.next();
@@ -51,8 +42,8 @@ export class AppComponent {
 
     initializeApp() {
         this.platform.ready().then(() => {
-            this.statusBar.styleDefault();
-            this.splashScreen.hide();
+         //   this.statusBar.styleDefault();
+         //   this.splashScreen.hide();
 
             timer(3000).subscribe(() => (this.showSplash = false));
             this.checkDarkMode();

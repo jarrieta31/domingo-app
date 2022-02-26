@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
+//import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
 import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
 import { TextToSpeechAdvanced } from '@awesome-cordova-plugins/text-to-speech-advanced/ngx';
 import { Subject } from "rxjs";
@@ -37,7 +37,8 @@ export class HomeMenuPage {
         private dbService: DatabaseService,
         private geolocationSvc: GeolocationService,
         public alertController: AlertController,
-    ) { }
+    ) {
+     }
 
     async presentAlert() {
         const alert = await this.alertController.create({
@@ -105,8 +106,10 @@ export class HomeMenuPage {
             this.deptoSelected = null;
         }
     }
+    
 
     ionViewWillEnter() {
+
         this.unsubscribe$ = new Subject<void>();
 
         this.geolocationSvc.posicion$
