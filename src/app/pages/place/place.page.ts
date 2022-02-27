@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, NgZone } from "@angular/core";
 import { InAppBrowser } from "@awesome-cordova-plugins/in-app-browser/ngx";
 import { Observable, Subject } from "rxjs";
 import { takeUntil, tap } from "rxjs/operators";
@@ -14,6 +14,9 @@ import { DatabaseService } from "src/app/services/database.service";
 import { VisitPlaceService } from "src/app/services/database/visit-place.service";
 import { Slider } from "src/app/shared/slider";
 import { SlidesService } from "src/app/services/database/slides.service";
+import { Geolocation, Position, PositionOptions, GeolocationPermissionType } from '@capacitor/geolocation';
+import { Capacitor } from '@capacitor/core';
+import { Device } from '@capacitor/device';
 
 @Component({
   selector: 'app-place',
@@ -21,7 +24,7 @@ import { SlidesService } from "src/app/services/database/slides.service";
   styleUrls: ['./place.page.scss'],
 })
 export class PlacePage {
-  preload:string = "/assets/casaDominga.jpeg";
+  preload: string = "/assets/casaDominga.jpeg";
   constructor(
     private geolocationSvc: GeolocationService,
     private visitPlaceSvc: VisitPlaceService,
@@ -31,8 +34,9 @@ export class PlacePage {
     private browser: InAppBrowser,
     private http: HttpClient,
     private fb: FormBuilder,
-    private sliderSvc: SlidesService
-  ) {}
+    private sliderSvc: SlidesService,
+    private zone: NgZone,
+  ) { }
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
   private unsubscribe$: Subject<void>;
@@ -87,6 +91,12 @@ export class PlacePage {
   optionLocation: string = null;
   optionType: string = null;
 
+  // para geolocalizacion
+  coordinate: any;
+  watchCoordinate: any;
+  watchId: any;
+  platform: string;
+
   filterPlace() {
     this.dataForm = this.filterForm.value;
 
@@ -127,14 +137,14 @@ export class PlacePage {
   ) {
     return this.http.get(
       "https://api.mapbox.com/directions/v5/mapbox/driving/" +
-        lngUser +
-        "," +
-        latUser +
-        ";" +
-        lngPlace +
-        "," +
-        latPlace +
-        "?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
+      lngUser +
+      "," +
+      latUser +
+      ";" +
+      lngPlace +
+      "," +
+      latPlace +
+      "?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
     );
   }
 
@@ -188,6 +198,94 @@ export class PlacePage {
     return localStorage.getItem("distanceActivo") ? true : false;
   }
 
+
+  async getPlatform() {
+    const deviceInfo = await Device.getInfo();
+    this.platform = deviceInfo.platform
+  }
+
+  async requestPermissions() {
+    const permResult = await Geolocation.requestPermissions();
+    console.log('Perm location: ', permResult.location);
+    console.log('Perm coarseLocation: ', permResult.coarseLocation);
+    if (permResult.location == 'granted' && permResult.coarseLocation == 'granted') {
+
+    } else {
+
+    }
+  }
+
+  getCurrentCoordinate() {
+    if (!Capacitor.isPluginAvailable('Geolocation')) {
+      console.log('Plugin geolocation not available');
+      return;
+    }
+    Geolocation.getCurrentPosition().then(data => {
+      this.coordinate = {
+        latitude: data.coords.latitude,
+        longitude: data.coords.longitude,
+        accuracy: data.coords.accuracy
+      };
+    }).catch(err => {
+      console.error(err);
+    });
+  }
+
+
+  watchPosition() {
+    try {
+      this.watchId = Geolocation.watchPosition({}, (position, err) => {
+        console.log('Watch', position);
+        this.zone.run(() => {
+
+          if (position != null) {
+            this.places.forEach((calcDist) => {
+              this.getDistance(
+                position.coords.longitude,
+                position.coords.latitude,
+                calcDist.ubicacion.lng,
+                calcDist.ubicacion.lat
+              )
+                .pipe(takeUntil(this.unsubscribe$))
+                .subscribe((res) => {
+                  this.distancia = res["routes"]["0"].distance / 1000;
+
+                  this.hora = Math.trunc(res["routes"]["0"].duration / 60 / 60);
+                  this.minuto = Math.trunc(
+                    (res["routes"]["0"].duration / 60) % 60
+                  );
+
+                  let distFormat: string | number, placeDistance: string;
+                  if (this.distancia >= 1) {
+                    distFormat = parseFloat(String(this.distancia)).toFixed(3);
+                    placeDistance = "Estás a " + distFormat;
+                  } else {
+                    distFormat = parseFloat(String(this.distancia)).toFixed(2);
+                    placeDistance = "Estás a " + distFormat;
+                  }
+
+                  calcDist.distanciaNumber = this.distancia;
+                  calcDist.distancia = placeDistance;
+                  calcDist.hora = String(this.hora + " h");
+                  calcDist.minuto = String(this.minuto + " min");
+
+                  if (this.dist != null) {
+                    if (this.dist >= calcDist.distanciaNumber) {
+                      this.checkDistance = true;
+                    }
+                  } else this.checkDistance = true;
+                });
+            });
+
+          } else this.checkDistance = true;
+
+        });
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   /**se ejecuta cada vez que se ingresa a la tab */
   ionViewWillEnter() {
     if (
@@ -232,83 +330,15 @@ export class PlacePage {
 
     this.placeSvc.places.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
       this.places = res;
+
+      // llamada a la funcion de localizacion
+      this.watchPosition()
     });
 
-    setTimeout(() => {
-      if (this.places.length == 0) this.loading.dismiss();
-      else if (this.dep == null && this.checkDistance == false)
-        this.loading.dismiss();
+    if (this.places.length == 0) this.loading.dismiss();
+    else if (this.dep == null && this.checkDistance == false)
+      this.loading.dismiss();
 
-      this.geolocationSvc.posicion$
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((res) => {
-          if (res != null) {
-            this.places.forEach((calcDist) => {
-              this.getDistance(
-                res.longitud,
-                res.latitud,
-                calcDist.ubicacion.lng,
-                calcDist.ubicacion.lat
-              )
-                .pipe(takeUntil(this.unsubscribe$))
-                .subscribe((res) => {
-                  this.distancia = res["routes"]["0"].distance / 1000;
-
-                  this.hora = Math.trunc(res["routes"]["0"].duration / 60 / 60);
-                  this.minuto = Math.trunc(
-                    (res["routes"]["0"].duration / 60) % 60
-                  );
-
-                  let distFormat: string | number, placeDistance: string;
-                  if (this.distancia >= 1) {
-                    distFormat = parseFloat(String(this.distancia)).toFixed(3);
-                    placeDistance = "Estás a " + distFormat;
-                  } else {
-                    distFormat = parseFloat(String(this.distancia)).toFixed(2);
-                    placeDistance = "Estás a " + distFormat;
-                  }
-
-                  calcDist.distanciaNumber = this.distancia;
-                  calcDist.distancia = placeDistance;
-                  calcDist.hora = String(this.hora + " h");
-                  calcDist.minuto = String(this.minuto + " min");
-
-                  if (this.dist != null) {
-                    if (this.dist >= calcDist.distanciaNumber) {
-                      this.checkDistance = true;
-                    }
-                  } else this.checkDistance = true;
-                });
-            });
-
-            // this.distancePlace.on("route", (e: { route: any }) => {
-            //   let routes = e.route;
-            //   //console.log(routes)
-            //   this.distancia = parseFloat(
-            //     routes.map((r: { distance: number }) => r.distance / 1000)
-            //   );
-            //   this.hora = parseFloat(
-            //     routes.map((r: { duration: number }) =>
-            //       Math.trunc(r.duration / 60 / 60)
-            //     )
-            //   );
-            //   this.minuto = parseFloat(
-            //     routes.map((r: { duration: number }) =>
-            //       Math.trunc((r.duration / 60) % 60)
-            //     )
-            //   );
-
-            //   console.log(calcDist.distancia);
-            // });
-            // let options = { units: "kilometers" };
-            // let dist = distance(
-            //   [calcDist.ubicacion.lng, calcDist.ubicacion.lat],
-            //   [posicion.longitud, posicion.latitud],
-            //   options
-            // );
-          } else this.checkDistance = true;
-        });
-    }, 2000);
   }
 
   /**se ejecuta cada vez que se sale de la tab */

@@ -1,4 +1,33 @@
 <ion-content>
+    <ion-button size="small" (click)="requestPermissions()">
+        Geolocation Permissions
+    </ion-button>
+
+    <ion-card>
+        <ion-card-header>
+            <ion-button size="small" (click)="getCurrentCoordinate()">
+                Current Coordinate
+            </ion-button>
+        </ion-card-header>
+        <ion-card-content>
+            Lat: {{coordinate?.latitude }}
+            Long:{{ coordinate?.longitude }}
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+        <ion-card-header>
+            <ion-button size="small" (click)="watchPosition()">
+                Watch Position
+            </ion-button>
+        </ion-card-header>
+        <ion-card-content>
+            Lat: {{watchCoordinate?.latitude }}
+            Long: {{ watchCoordinate?.longitude }}
+        </ion-card-content>
+    </ion-card>
+
+    <ion-button size="small" (click)="clearWatch()">Clear Watch</ion-button>
     <div class="container">
         <div class="slider_filter">
             <div class="slider_filter-title">
@@ -15,7 +44,7 @@
                 <img src="/assets/icon/exchange.png" alt="" />
                 <ion-label class="distance_selected" (click)="seeDistance()" *ngIf="distanceSave !== null">{{
                     distanceSave }}</ion-label>
-                <ion-label (click)="seeDistance()" *ngIf="distanceSave === null && gps != null">distancia</ion-label>
+                <ion-label (click)="seeDistance()" *ngIf="distanceSave === null && gps">distancia</ion-label>
             </div>
 
             <ion-list *ngIf="depto" class="depto_list">

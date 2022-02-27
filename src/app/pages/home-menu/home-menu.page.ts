@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 //import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
 import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
 import { TextToSpeechAdvanced } from '@awesome-cordova-plugins/text-to-speech-advanced/ngx';
@@ -8,6 +8,9 @@ import { GeolocationService } from "src/app/services/geolocation.service";
 import { Departament } from "src/app/shared/departament";
 import { AlertController } from "@ionic/angular";
 import { takeUntil } from "rxjs/operators";
+import { Geolocation, Position, PositionOptions, GeolocationPermissionType } from '@capacitor/geolocation';
+import { Capacitor } from '@capacitor/core';
+import { Device } from '@capacitor/device';
 
 @Component({
     selector: 'app-home-menu',
@@ -27,18 +30,79 @@ export class HomeMenuPage {
 
     deptoSave: String = null;
     distanceSave: String = null;
-
-    gps: any = null;
+    gps: boolean = false;
 
     /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
     private unsubscribe$: Subject<void>;
+
+    coordinate: any;
+    watchCoordinate: any;
+    watchId: any;
+    platform: string;
 
     constructor(
         private dbService: DatabaseService,
         private geolocationSvc: GeolocationService,
         public alertController: AlertController,
+        private zone: NgZone,
     ) {
-     }
+        //this.requestPermissions();
+        this.getPlatform()
+    }
+
+    async getPlatform(){
+        const deviceInfo = await Device.getInfo();
+        this.platform = deviceInfo.platform
+    }
+
+    async requestPermissions() {
+        const permResult = await Geolocation.requestPermissions();
+        console.log('Perm location: ', permResult.location);
+        console.log('Perm coarseLocation: ', permResult.coarseLocation);
+        if( permResult.location == 'granted' && permResult.coarseLocation == 'granted'){
+            this.gps = true;
+        }else{
+            this.gps = false;
+        }
+    }
+
+    getCurrentCoordinate() {
+        if (!Capacitor.isPluginAvailable('Geolocation')) {
+            console.log('Plugin geolocation not available');
+            return;
+        }
+        Geolocation.getCurrentPosition().then(data => {
+            this.coordinate = {
+                latitude: data.coords.latitude,
+                longitude: data.coords.longitude,
+                accuracy: data.coords.accuracy
+            };
+        }).catch(err => {
+            console.error(err);
+        });
+    }
+
+    watchPosition() {
+        try {
+            this.watchId = Geolocation.watchPosition({}, (position, err) => {
+                console.log('Watch', position);
+                this.zone.run(() => {
+                    this.watchCoordinate = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                    };
+                });
+            });
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    clearWatch() {
+        if (this.watchId !== null) {
+            Geolocation.clearWatch({ id: this.watchId });
+        }
+    }
 
     async presentAlert() {
         const alert = await this.alertController.create({
@@ -106,18 +170,11 @@ export class HomeMenuPage {
             this.deptoSelected = null;
         }
     }
-    
+
 
     ionViewWillEnter() {
 
         this.unsubscribe$ = new Subject<void>();
-
-        this.geolocationSvc.posicion$
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((res) => {
-                console.log(res);
-                this.gps = res;
-            });
 
         setTimeout(() => {
             this.presentAlert();

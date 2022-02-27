@@ -9,7 +9,8 @@ import { Point } from "../shared/point";
 import { Assessment } from "../shared/assessment";
 import { HttpClient } from "@angular/common/http";
 import { filter, tap } from 'rxjs/operators';
-import { Geolocation } from '@capacitor/geolocation';
+//import { Geolocation } from '@capacitor/geolocation';
+//import { CallbackID, Capacitor } from '@capacitor/core';
 
 @Injectable({
     providedIn: "root",
@@ -164,6 +165,7 @@ export class GeolocationService {
         // );
     }
 
+
     getLocation(lng: number, lat: number) {
         return this.http.get(
             "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
@@ -175,9 +177,14 @@ export class GeolocationService {
     }
 
     async getLocation2() {
-        const position = await Geolocation.getCurrentPosition();
+        /*const position = await Geolocation.getCurrentPosition();
         console.log(position.coords.latitude);
         console.log(position.coords.longitude);
+        */
+    }
+    
+    async getWhachPosition(){
+
     }
 
     //Retorna un observable con los datos para valorar un lugar
@@ -185,13 +192,6 @@ export class GeolocationService {
         return this.lugarCercano$.asObservable();
     }
 
-    // iniciarSubscriptionMatch() {
-    //   this.subscriptionMatch = this.sourceMatch$.subscribe();
-    // }
-
-    // pararSubscriptionMatch() {
-    //   this.subscriptionMatch.unsubscribe();
-    // }
 
     iniciarSubscriptionClock() {
         this.subscriptionClock = this.sourceClock$.subscribe();
