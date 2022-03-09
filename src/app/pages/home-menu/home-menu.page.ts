@@ -44,29 +44,46 @@ export class HomeMenuPage {
         private dbService: DatabaseService,
         private geolocationSvc: GeolocationService,
         public alertController: AlertController,
-        private zone: NgZone,
     ) {
-        //this.requestPermissions();
-        this.getPlatform()
+        this.verificarFiltroDistancia()
     }
 
-    async getPlatform(){
+    /**
+     * Chequea si la funcionalidad de obtener la ubicación está habilitada y en caso 
+     * contrario pide la activación. Luego cambia la variable gps según corresponda para 
+     * mostrar el filtro de distancia.
+     */
+    async verificarFiltroDistancia() {
         const deviceInfo = await Device.getInfo();
-        this.platform = deviceInfo.platform
-    }
-
-    async requestPermissions() {
-        const permResult = await Geolocation.requestPermissions();
-        console.log('Perm location: ', permResult.location);
-        console.log('Perm coarseLocation: ', permResult.coarseLocation);
-        if( permResult.location == 'granted' && permResult.coarseLocation == 'granted'){
-            this.gps = true;
-        }else{
-            this.gps = false;
+        const permisos = await Geolocation.checkPermissions();
+        if (deviceInfo.platform !== 'web' && (permisos.location !== 'granted' || permisos.coarseLocation !== 'granted')) {
+            const permResult = await Geolocation.requestPermissions();
+            if (permResult.location == 'granted' && permResult.coarseLocation == 'granted') {
+                this.gps = true;
+                console.log("gps: true")
+                this.getWatchPosition();
+            //    this.getCurrentCoordinate();
+            } else {
+                this.gps = false;
+            }
         }
+        else if (deviceInfo.platform !== 'web' && (permisos.location === 'granted' || permisos.coarseLocation === 'granted')) {
+            console.log("gps: true")
+            this.gps = true;
+            this.getWatchPosition();
+            //this.getCurrentCoordinate();
+        }
+        else if (deviceInfo.platform === 'web' && permisos.coarseLocation === 'granted') {
+            this.gps = true;
+            console.log("llamada gps web")
+            //this.getCurrentCoordinate();
+            this.getWatchPosition();
+        }
+        else { this.gps = false }
     }
 
     getCurrentCoordinate() {
+        console.log("hola")
         if (!Capacitor.isPluginAvailable('Geolocation')) {
             console.log('Plugin geolocation not available');
             return;
@@ -82,16 +99,16 @@ export class HomeMenuPage {
         });
     }
 
-    watchPosition() {
+    getWatchPosition() {
         try {
             this.watchId = Geolocation.watchPosition({}, (position, err) => {
                 console.log('Watch', position);
-                this.zone.run(() => {
-                    this.watchCoordinate = {
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
-                    };
-                });
+                //this.zone.run(() => {
+                this.watchCoordinate = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                };
+                //});
             });
         } catch (e) {
             console.error(e);
@@ -174,6 +191,7 @@ export class HomeMenuPage {
 
     ionViewWillEnter() {
 
+        this.verificarFiltroDistancia();
         this.unsubscribe$ = new Subject<void>();
 
         setTimeout(() => {

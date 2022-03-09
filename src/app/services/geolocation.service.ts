@@ -9,7 +9,7 @@ import { Point } from "../shared/point";
 import { Assessment } from "../shared/assessment";
 import { HttpClient } from "@angular/common/http";
 import { filter, tap } from 'rxjs/operators';
-//import { Geolocation } from '@capacitor/geolocation';
+import { Geolocation } from '@capacitor/geolocation';
 //import { CallbackID, Capacitor } from '@capacitor/core';
 
 @Injectable({
@@ -17,27 +17,18 @@ import { filter, tap } from 'rxjs/operators';
 })
 export class GeolocationService {
     items: Place[] = [];
-    sourceMatch$: Observable<any>;
-    user: string;
-    subscriptionUser: Subscription;
-    subscriptionMatch: any;
     valuationsPlaces: Assessment[] = [];
     mapa: Mapboxgl.Map;
     myPositionMarker: any = null;
     points: Point[];
-
     watchLocationUpdates: any;
     isWatching: boolean;
     distancia: number;
-    lugarCercano$: BehaviorSubject<Place> = new BehaviorSubject<Place>(null);
     posicion$: BehaviorSubject<Point> = new BehaviorSubject<Point>(null);
-    posicionGetCurrent$: BehaviorSubject<Point> = new BehaviorSubject<Point>(null);
     posicion: Point = { longitud: 0, latitud: 0 };
     latCenter: number = 0;
     longCenter: number = 0;
     timetest: any;
-    sourceClock$: Observable<any>;
-    sourceGpsSubject$ = new BehaviorSubject(null);
     observerGps: any;
     public gps: boolean = false;
     subscriptionClock: any;
@@ -50,119 +41,11 @@ export class GeolocationService {
         //private geolocation: Geolocation,
     ) {
 
-        this.getLocation2();
+        //Geolocation.getCurrentPosition().then(position => {console.log})
+        //this.getCurrentPosition()
+        console.log("servicio")
+        //this.getWhachPosition()
 
-        //Observable que obtiene los pulsos y obtiene la posicion
-        //this.sourceClock$ = timer(500, 36000).pipe(
-        //tap((clock) => {
-        //        this.sourceClock$ = timer(3500, 36000).pipe(tap(() => {
-        //            this.geolocation
-        //                .getCurrentPosition({
-        //                    enableHighAccuracy: true,
-        //                    timeout: 1000,
-        //                    maximumAge: 0,
-        //                })
-        //                .then((resp) => {
-        //                    //filter(p => p.coords != undefined)
-        //                    if (resp !== null) {
-        //                        this.gps = true;
-        //                        this.posicion = {
-        //                            longitud: resp.coords.longitude,
-        //                            latitud: resp.coords.latitude,
-        //                        };
-        //                        this.actualizarPosicion$({
-        //                            longitud: resp.coords.longitude,
-        //                            latitud: resp.coords.latitude,
-        //                        });
-        //                        this.getLocation(
-        //                            resp.coords.longitude,
-        //                            resp.coords.latitude
-        //                        ).subscribe((dto: any) => {
-        //                            this.featureDepto = [];
-        //                            dto.features.forEach((res: any) => {
-        //                                this.featureDepto.push(res.text);
-        //                            });
-        //                            let featureLen = this.featureDepto.length;
-        //                            this.currentDepto = this.featureDepto[featureLen - 2];
-        //                            console.log(this.currentDepto);
-        //                        });
-        //                        this.actualizarMarcador();
-        //                    }
-        //                });
-        //        })
-
-        //        )
-
-
-        // .catch((error) => {
-        //   //this.posicion = environment.casaDominga;
-        //   this.actualizarPosicion$(null);
-        //   if (this.myPositionMarker != null) this.myPositionMarker.remove();
-        //   this.gps = false;
-        //   console.log("Error al obtener la ubicación" + error);
-        // });
-        //}),
-        //share()
-        //);
-
-        // this.sourceMatch$ = timer(1000, 20000).pipe(
-        //   tap((clock) => {
-        //     let posicion = this.posicion$.value;
-        //     let points: TwoPoints;
-        //     let dist: number;
-        //     let options = { units: "meters" };
-        //     if (posicion != null) {
-        //       this.getLocation(posicion.longitud, posicion.latitud).subscribe(
-        //         (dto: any) => {
-        //           this.featureDepto = [];
-        //           dto.features.forEach((res: any) => {
-        //             this.featureDepto.push(res.text);
-        //           });
-        //           let featureLen = this.featureDepto.length;
-        //           this.currentDepto = this.featureDepto[featureLen - 2];
-        //           console.log(this.currentDepto);
-        //         }
-        //       );
-        //     }
-
-        //     this.items.forEach((place) => {
-        //       if (posicion != null) {
-        //         points = {
-        //           longitud1: posicion.longitud,
-        //           latitud1: posicion.latitud,
-        //           longitud2: +place.ubicacion.lng,
-        //           latitud2: +place.ubicacion.lat,
-        //         };
-        //         dist = distance(
-        //           [place.ubicacion.lng, place.ubicacion.lat],
-        //           [posicion.longitud, posicion.latitud],
-        //           options
-        //         );
-        //         //Verifica la distancia
-        //         // if (dist <= 25) {
-        //         //Recorre las valoraciones del lugar para ver que el usuario no haya valorado antes
-        //         // for (var key in place.valoracion) {
-        //         //   //si el usuario ya valoró se termina el forech
-        //         //   if(this.user == key){
-        //         //     break
-        //         //   }
-        //         //   //si el usuario no ha valorado
-        //         //   if (key != this.user) {
-        //         //     //busca en el array de valoraciones para ver si ya dijo que no quiere valorar
-        //         //     this.valuationsPlaces.forEach(assessment => {
-        //         //       if (assessment.placeName == place.nombre && assessment.idUser == this.user && assessment.answer == false) {
-        //         //         assessment.answer = true;
-        //         //         this.lugarCercano$.next(place)
-        //         //       }
-        //         //     });
-        //         //   }
-        //         // }
-        //         //}
-        //       }
-        //     });
-        //   }),
-        //   share()
-        // );
     }
 
 
@@ -176,29 +59,35 @@ export class GeolocationService {
         );
     }
 
-    async getLocation2() {
-        /*const position = await Geolocation.getCurrentPosition();
+    async getCurrentPosition() {
+        const position = await Geolocation.getCurrentPosition();
         console.log(position.coords.latitude);
         console.log(position.coords.longitude);
-        */
-    }
-    
-    async getWhachPosition(){
-
+        
     }
 
-    //Retorna un observable con los datos para valorar un lugar
-    getLugarCercano() {
-        return this.lugarCercano$.asObservable();
-    }
+    async getWhachPosition() {
 
+        const watchId = await Geolocation.watchPosition({}, (position, err) => {
+            //filter(p => p.coords != undefined)
+            if (position !== null) {
+                this.gps = true;
+                this.posicion = { longitud: position.coords.longitude, latitud: position.coords.latitude };
 
-    iniciarSubscriptionClock() {
-        this.subscriptionClock = this.sourceClock$.subscribe();
-    }
-
-    pararSubscriptionClock() {
-        this.subscriptionClock.unsubscribe();
+                this.actualizarPosicion$({ longitud: position.coords.longitude, latitud: position.coords.latitude });
+                this.getLocation(position.coords.longitude, position.coords.latitude).subscribe((dto: any) => {
+                    this.featureDepto = [];
+                    dto.features.forEach((res: any) => {
+                        this.featureDepto.push(res.text);
+                    });
+                    let featureLen = this.featureDepto.length;
+                    this.currentDepto = this.featureDepto[featureLen - 2];
+                    console.log("timestamp gps: ", position.timestamp)
+                    console.log("dpto. activo:", this.currentDepto);
+                });
+                this.actualizarMarcador();
+            }
+        });
     }
 
     actualizarMarcador() {

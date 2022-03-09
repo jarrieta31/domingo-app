@@ -162,7 +162,7 @@ export class PlacePage {
   }
 
   loadImage() {
-    this.loading.dismiss();
+//    this.loading.dismiss();
   }
 
   /** Devuelve una lista de localidades */
@@ -232,13 +232,14 @@ export class PlacePage {
   }
 
 
-  watchPosition() {
+  async watchPosition(places: Place[]) {
     try {
-      this.watchId = Geolocation.watchPosition({}, (position, err) => {
+      this.watchId = await Geolocation.watchPosition({}, (position, err) => {
         console.log('Watch', position);
         this.zone.run(() => {
 
-          if (position != null) {
+          if (position !== null) {
+//            console.log(places)
             this.places.forEach((calcDist) => {
               this.getDistance(
                 position.coords.longitude,
@@ -280,7 +281,11 @@ export class PlacePage {
           } else this.checkDistance = true;
 
         });
+
+//    if (this.places.length == 0) this.loading.dismiss();
+//    else if (this.dep == null && this.checkDistance == false)  this.loading.dismiss();
       });
+
     } catch (e) {
       console.error(e);
     }
@@ -306,7 +311,7 @@ export class PlacePage {
         "No hay lugares para mostrar en el rango de " + this.dist + " km";
     }
 
-    this.show("Cargando lugares...");
+   // this.show("Cargando lugares...");
 
     if (localStorage.getItem("deptoActivo") != this.currentDepto) {
       this.currentDepto = localStorage.getItem("deptoActivo");
@@ -330,14 +335,13 @@ export class PlacePage {
 
     this.placeSvc.places.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
       this.places = res;
-
+      console.log(res)
       // llamada a la funcion de localizacion
-      this.watchPosition()
+      this.watchPosition(res)
     });
 
-    if (this.places.length == 0) this.loading.dismiss();
-    else if (this.dep == null && this.checkDistance == false)
-      this.loading.dismiss();
+//    if (this.places.length == 0) this.loading.dismiss();
+//    else if (this.dep == null && this.checkDistance == false)  this.loading.dismiss();
 
   }
 

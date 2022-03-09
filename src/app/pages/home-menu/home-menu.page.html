@@ -1,33 +1,4 @@
 <ion-content>
-    <ion-button size="small" (click)="requestPermissions()">
-        Geolocation Permissions
-    </ion-button>
-
-    <ion-card>
-        <ion-card-header>
-            <ion-button size="small" (click)="getCurrentCoordinate()">
-                Current Coordinate
-            </ion-button>
-        </ion-card-header>
-        <ion-card-content>
-            Lat: {{coordinate?.latitude }}
-            Long:{{ coordinate?.longitude }}
-        </ion-card-content>
-    </ion-card>
-
-    <ion-card>
-        <ion-card-header>
-            <ion-button size="small" (click)="watchPosition()">
-                Watch Position
-            </ion-button>
-        </ion-card-header>
-        <ion-card-content>
-            Lat: {{watchCoordinate?.latitude }}
-            Long: {{ watchCoordinate?.longitude }}
-        </ion-card-content>
-    </ion-card>
-
-    <ion-button size="small" (click)="clearWatch()">Clear Watch</ion-button>
     <div class="container">
         <div class="slider_filter">
             <div class="slider_filter-title">
@@ -36,6 +7,8 @@
                     y a partir de ahora seré tu guía. <br />
                     ¿Descubrimos juntos un nuevo sitio?
                 </p>
+                <p> watchCoordinate: Lat: {{watchCoordinate?.latitude }} Long: {{ watchCoordinate?.longitude }}</p>
+                <p> coordinate: Lat: {{coordinate?.latitude }} Long:{{ coordinate?.longitude }}</p>
             </div>
             <div class="filter_button">
                 <ion-label (click)="seeDepto()" *ngIf="deptoSave !== null" class="depto_selected">{{ deptoSave }}

@@ -6,6 +6,11 @@ import { Platform } from "@ionic/angular";
 import { Subject, timer } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { GeolocationService } from "./services/geolocation.service";
+import { Geolocation } from '@capacitor/geolocation';
+import { Capacitor } from '@capacitor/core';
+import { Posicion } from './shared/donde-comer';
+import { DatabaseService } from './services/database.service';
+import { Point } from './shared/point';
 
 @Component({
     selector: 'app-root',
@@ -24,11 +29,25 @@ export class AppComponent {
 
     constructor(
         private platform: Platform,
-    //    private splashScreen: SplashScreen,
-    //    private statusBar: StatusBar,
+        //    private splashScreen: SplashScreen,
+        //    private statusBar: StatusBar,
         private geolocationSvc: GeolocationService
     ) {
         this.initializeApp();
+    }
+
+    getCurrentCoordinate() {
+        if (!Capacitor.isPluginAvailable('Geolocation')) {
+            console.log('Plugin geolocation no available');
+            return;
+        }
+        Geolocation.getCurrentPosition().then(data => {
+            let posicion: Point = { longitud: data.coords.longitude, latitud: data.coords.latitude }
+            this.geolocationSvc.posicion$.next( posicion )
+            console.log("posicion iniciada")
+        }).catch(err => {
+            console.error(err);
+        });
     }
 
     ngOnInit(): void {
@@ -41,9 +60,10 @@ export class AppComponent {
     }
 
     initializeApp() {
+        this.getCurrentCoordinate();
         this.platform.ready().then(() => {
-         //   this.statusBar.styleDefault();
-         //   this.splashScreen.hide();
+            //   this.statusBar.styleDefault();
+            //   this.splashScreen.hide();
 
             timer(3000).subscribe(() => (this.showSplash = false));
             this.checkDarkMode();

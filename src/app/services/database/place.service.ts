@@ -192,6 +192,7 @@ export class PlaceService {
     this.places = new BehaviorSubject<Place[]>(this.initPlace);
   }
 
+    
   /**
    * Devuelve los lugares del departamento seleccionado por el usuario
    * @param searchDepto se utiliza para chequear si el departamento ya fue seleccionado anteriormente
