@@ -1,113 +1,121 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Router, NavigationEnd } from "@angular/router";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from "@angular/core";
+import { Router } from "@angular/router";
 import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
-import { InAppBrowser } from "@awesome-cordova-plugins/in-app-browser/ngx";
-import { Subject, Subscription } from "rxjs";
-import { TipoSputtr } from "src/app/shared/tipo-sputtr";
+import { Subject } from "rxjs";
 import { PlaceService } from "src/app/services/database/place.service";
 import { takeUntil } from "rxjs/operators";
 import { Place } from "src/app/shared/place";
+import { Browser } from '@capacitor/browser';
 
 @Component({
-    selector: 'app-modal-info',
-    templateUrl: './modal-info.page.html',
-    styleUrls: ['./modal-info.page.scss'],
+  selector: "app-modal-info",
+  templateUrl: "./modal-info.page.html",
+  styleUrls: ["./modal-info.page.scss"],
 })
-export class ModalInfoPage implements OnInit {
+export class ModalInfoPage implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
 
-    /**
-   * Funcionalidad: Texto a Audio (TextToSpeech)
-   * Variables globales
-   */
-    currentUrl: string;
-    urlSuscription: Subscription;
-    speaking: boolean = false;
-    paused: boolean = false;
-    escuchar: boolean = false;
-    vr: string[] = ["1", "1.5", "2"]; //representa las velocidades de reproduccion
-    spUttData: TipoSputtr = {
-        rate: "1", //  Velocidad de Reproduccion: Rango 0.1 - 10, xDefecto 1
-        text: "", // Texto a convertir a audio
-    };
+  descripcionText: string;
+  place: Place = null;
+  telefonos: string[] = [];
+  @ViewChild("descripcion", { static: true }) descripcionHtml: ElementRef;
 
-    private unsubscribe$ = new Subject<void>();
+  constructor(
+    private callNumber: CallNumber,
+    private placeSvc: PlaceService
+  ) {}
 
-    place: Place = null;
-    callTel: string = null;
+  ngOnInit() {
+    this.placeSvc.place_selected
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((res) => {
+        this.place = res;
+        this.place.telefonos.forEach((tel: string) => {
+          if (
+            tel["numero"] !== null &&
+            tel["numero"] !== undefined &&
+            tel["numero"] !== "" &&
+            tel["numero"] !== " "
+          ) {
+            this.telefonos.push(tel["numero"]);
+          }
+        });
+      });
 
-    constructor(
-        private router: Router,
-        private callNumber: CallNumber,
-        private browser: InAppBrowser,
-        private placeSvc: PlaceService
-    ) { }
-
-    ngOnInit() {
-
-        this.placeSvc.place_selected
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((res) => {
-                this.place = res;
-
-                if (this.place.telefonos.length > 0) {
-                    this.place.telefonos.forEach((tel: String) => {
-                        this.callTel = tel["numero"];
-                    });
-                }
-            });
-
-        if (this.place.web == null) {
-            let elem: HTMLElement = document.getElementById("web");
-            elem.setAttribute("style", "display:none");
-        }
-
-        if (this.place.facebook == null) {
-            let elem: HTMLElement = document.getElementById("facebook");
-            elem.setAttribute("style", "display:none");
-        }
-
-        if (this.place.instagram == null) {
-            let elem: HTMLElement = document.getElementById("instagram");
-            elem.setAttribute("style", "display:none");
-        }
-
-        if (this.place.whatsapp == null) {
-            let elem: HTMLElement = document.getElementById("whatsapp");
-            elem.setAttribute("style", "display:none");
-        }
-
-        if (this.callTel == null) {
-            let elem: HTMLElement = document.getElementById("phone");
-            elem.setAttribute("style", "display:none");
-        }
+    if (
+      this.place.web === null ||
+      this.place.web === undefined ||
+      this.place.web === "" ||
+      this.place.web === " "
+    ) {
+      let elem: HTMLElement = document.getElementById("web");
+      elem.setAttribute("style", "display:none");
     }
 
-    ngOnDestroy(): void {
-        this.unsubscribe$.next();
-        this.unsubscribe$.complete();
+    if (
+      this.place.facebook == null ||
+      this.place.facebook === undefined ||
+      this.place.facebook === "" ||
+      this.place.facebook === " "
+    ) {
+      let elem: HTMLElement = document.getElementById("facebook");
+      elem.setAttribute("style", "display:none");
     }
 
-    callPhone() {
-        this.callNumber
-            .callNumber(this.callTel, true)
-            .then((res) => console.log("Llamando!", res))
-            .catch((err) => console.log("Error en llamada", err));
+    if (
+      this.place.instagram == null ||
+      this.place.instagram === undefined ||
+      this.place.instagram === "" ||
+      this.place.instagram === " "
+    ) {
+      let elem: HTMLElement = document.getElementById("instagram");
+      elem.setAttribute("style", "display:none");
     }
 
-    openWeb() {
-        this.browser.create(this.place.web, "_system");
+    if (
+      this.place.whatsapp === null ||
+      this.place.whatsapp === undefined ||
+      this.place.whatsapp === "" ||
+      this.place.whatsapp === " "
+    ) {
+      let elem: HTMLElement = document.getElementById("whatsapp");
+      elem.setAttribute("style", "display:none");
     }
 
-    openFacebook() {
-        this.browser.create(this.place.facebook, "_system");
+    if (this.telefonos.length === 0) {
+      let elem: HTMLElement = document.getElementById("phone");
+      elem.setAttribute("style", "display:none");
     }
+  }
 
+  ngAfterViewInit(): void {
+    this.descripcionText = this.descripcionHtml.nativeElement.innerText;
+  }
 
-    limpiarTexto(text: string): string {
-        let _txt: string;
-        _txt = text.replace(/<[^>]*>?/g, "");
-        return _txt;
-    }
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 
+  callPhone() {
+    this.callNumber
+      .callNumber(this.telefonos[0], true)
+      .then((res) => console.log("Llamando!", res))
+      .catch((err) => console.log("Error en llamada", err));
+  }
 
+  openWeb() {
+    Browser.open({url: this.place.web});
+  }
+
+  openFacebook() {
+    Browser.open({url: this.place.facebook});
+  }
 }

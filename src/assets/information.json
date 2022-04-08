@@ -1,0 +1,68 @@
+{
+  "items": [
+    {
+      "name": "Números de Emergencia",
+      "children": [
+        {
+          "nameLocalidad": "San José de Mayo",
+          "children": [
+            {
+              "info": "Policia",
+              "number": 911
+            },
+            {
+              "info": "Bomberos",
+              "number": "104 / 43422055"
+            },
+            {
+              "info": "UDEMM",
+              "number": 43423000
+            },
+            {
+              "info": "UCOR",
+              "number": 43424444
+            },
+            {
+              "info": "Hospital (Emergencia)",
+              "number": 43422175
+            },
+            {
+              "info": "AMSJ",
+              "number": 43423718
+            },
+            {
+              "info": "Jefatura",
+              "number": 4342141
+            }
+          ]
+        },
+        {
+          "nameLocalidad": "Libertad",
+          "children": [
+            {
+              "info": "TAMED (Emergencia Móvil)",
+              "number": "43452400"
+            },
+            {
+              "info": "TAMED (Emergencia Móvil)",
+              "number": "091651753"
+            },
+            {
+              "info": "Hospital",
+              "number": 43454070
+            }
+          ]
+        },
+        {
+          "nameLocalidad": "Ecilda Paullier",
+          "children": [
+            {
+              "info": "ISAPRE (Evangelico)",
+              "number": 43492165
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

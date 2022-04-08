@@ -1,47 +1,46 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { InAppBrowser } from "@awesome-cordova-plugins/in-app-browser/ngx";
+import { Browser } from '@capacitor/browser';
 
 @Component({
-    selector: 'app-selling-points',
-    templateUrl: './selling-points.page.html',
-    styleUrls: ['./selling-points.page.scss'],
+  selector: 'app-selling-points',
+  templateUrl: './selling-points.page.html',
+  styleUrls: ['./selling-points.page.scss'],
 })
 export class SellingPointsPage implements OnInit {
 
-    @Input() instagram: string;
-    @Input() tickAntel: string;
-    @Input() facebook: string;
-    @Input() whatsapp: string;
+  @Input() instagram: string;
+  @Input() tickAntel: string;
+  @Input() facebook: string;
+  @Input() whatsapp: string;
+  
+  constructor(
+    private modalCtrl: ModalController,
+  ) { }
 
-    constructor(
-        private modalCtrl: ModalController,
-        private browser: InAppBrowser,
-    ) { }
+  ngOnInit() {
+    console.log(this.instagram, this.tickAntel, this.facebook, this.whatsapp)
+  }
 
-    ngOnInit() {
-        console.log(this.instagram, this.tickAntel, this.facebook, this.whatsapp)
-    }
+  cancelar() {
+    const modal = this.modalCtrl.dismiss()
+  }
 
-    cancelar() {
-        const modal = this.modalCtrl.dismiss()
-    }
+  openTickAntel() {
+    Browser.open({ url: this.tickAntel});
+  }
 
-    openTickAntel() {
-        this.browser.create(this.tickAntel, "_system");
-    }
+  openInstagram() {
+    Browser.open({ url: this.instagram});
+  }
 
-    openInstagram() {
-        this.browser.create(this.instagram, "_system");
-    }
+  openFacebook() {
+    Browser.open({ url: this.facebook});
+  }
 
-    openFacebook() {
-        this.browser.create(this.facebook, "_system");
-    }
-
-    openWhatsapp() {
-        this.browser.create(this.whatsapp, "_system");
-    }
+  openWhatsapp() {
+    Browser.open({ url: this.whatsapp});
+  }
 
 
 }

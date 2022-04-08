@@ -1,11 +1,34 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
 
+.list-md {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 50px;
+  width: auto;
+}
+
+.text_empty {
+  color: #d6d2d1;
+  text-align: center;
+  padding-bottom: 15px;
+  font-size: 1.2em;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+.icon_empty {
+  font-size: 5em;
+  color: #d6d2d1;
+}
+
 .slider {
   width: 100%;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  z-index: 10;
 }
 
 .sliderPrimero,
@@ -15,32 +38,49 @@
   width: 100%;
 }
 
+.sliderPrimero {
+  background-color: #eeeeee;
+}
+
+.link {
+  z-index: 1500;
+}
+
+.icon-link {
+  margin: 0 !important;
+}
+
 .artist {
   display: flex;
   flex-direction: row;
   margin: 10px 4%;
   border-radius: 5px;
-  background-color: rgb(243, 243, 243);
+  background-color: var(--ion-color-light);
 }
 
 .imgArtist {
-  width: 35%;
-  height: auto;
+  width: 40%;
+  /*height: auto; */
+  min-height: calc((100vw - (100vw * 0.08)) * 0.4);
 }
 
 .infoArtist {
+  width: 60%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: left;
+  //align-items: start;
   padding-left: 25px;
 }
 
-.img-elem {
-  border-top-left-radius: 5px !important;
-  border-bottom-left-radius: 5px !important;
-  overflow: hidden;
+#info-art:nth-child(1) {
+  font-weight: bold;
 }
+
+#info-art:nth-child(2) {
+  color: rgb(29, 29, 29);
+}
+
 
 .netArtist > img {
   padding: 6px 1em 3px 0;
@@ -54,7 +94,7 @@
 
 .name {
   font-family: "Poppins", sans-serif;
-  color: #999;
+  color: var(--ion-color-dark) !important;
   padding-right: 3px;
 }
 
@@ -64,7 +104,7 @@
   }
 }
 
-// filtro 
+// filtro
 .filter_place {
   display: flex;
   flex-direction: row;
@@ -118,17 +158,12 @@ ion-label {
   height: 35px;
   font-size: 0.9em;
   font-family: "Poppins", sans-serif;
-  color: rgba(116, 108, 108, 0.75);
+  color: var(--ion-color-dark);
 }
 
 .filter_type {
   border-top: 2px solid #ddd;
   width: 100%;
-}
-
-.icon_arrow {
-  float: right;
-  margin-right: 15px;
 }
 
 .type_border > .last:last-child {
@@ -139,10 +174,13 @@ ion-label {
 .list_type {
   border-bottom-left-radius: 16px !important;
   border-bottom-right-radius: 16px !important;
+  min-height: 30px;
+  max-height: 200px;
+  overflow-y: scroll;
 }
 
 .open_filter {
-  color: #fc67ff
+  color: #fc67ff;
 }
 
 ion-radio {

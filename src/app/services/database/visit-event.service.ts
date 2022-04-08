@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from "@angular/fire/compat/firestore";
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { TipoDiaVisita as DiaVisita } from 'src/app/shared/tipo-dia-visita';
 import { TipoVisitaEvento as VisitaEvento } from 'src/app/shared/tipo-visita-evento';
 

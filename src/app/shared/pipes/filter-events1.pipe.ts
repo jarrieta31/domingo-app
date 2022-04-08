@@ -1,91 +1,100 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import { Eventos } from '../eventos';
-import { format, parseISO } from 'date-fns';
+import { Pipe, PipeTransform } from "@angular/core";
+import { Eventos } from "../eventos";
 
 @Pipe({
-  name: 'filterEvents1'
+  name: "filterEvents1",
 })
 export class FilterEvents1Pipe implements PipeTransform {
-
-  transform(eventos: Eventos[], dataform: any): Eventos[] {
-
-    if ( dataform.length === 0 ) {
+  transform(eventos: Eventos[], dataform: any): Eventos[] | any[] {
+    let dist: string = localStorage.getItem("distanceActivo");
+    let distFound: boolean = false;
+    if (dataform.length === 0) {
       return eventos;
     }
 
-    if ( dataform.localidad !== null )  dataform.localidad = dataform.localidad.toLowerCase();
+    if (dataform.localidad !== null)
+      dataform.localidad = dataform.localidad.toLowerCase();
     else dataform.localidad = "";
-    
-    if ( dataform.tipo !== null )  dataform.tipo = dataform.tipo.toLowerCase();
+
+    if (dataform.tipo !== null) dataform.tipo = dataform.tipo.toLowerCase();
     else dataform.tipo = "";
-/**Filtro por tipo de moneda es descartado por el cliente. Para que funcione descomentar estas lines
-    if ( dataform.moneda === null || dataform.moneda === undefined || dataform.moneda === false )  dataform.moneda = "$";
-    else dataform.moneda = "u$s";
-*/
 
-/**Filtro xFecha Inicio: Si no selecciona fechaIncio, toma la fecha del dia. */
-    if ( dataform.fecha_inicio === null || dataform.fecha_inicio === undefined || dataform.fecha_inicio === "")  dataform.fecha_inicio = new Date();
-    else {
-      if(typeof dataform.fecha_inicio === 'object')
-        dataform.fecha_inicio = new Date(format(dataform.fecha_inicio,'MM/dd/yyy'))
-      else      
-        dataform.fecha_inicio = new Date(format(parseISO(dataform.fecha_inicio),'MM/dd/yyy'))
+    let fec_ini = new Date();
+
+    if (
+      dataform.fecha_inicio === "" ||
+      dataform.fecha_inicio === undefined ||
+      dataform.fecha_inicio === null
+    ) {
+      dataform.fecha_inicio = new Date(fec_ini);
     }
 
-/**Filtro xFechaFin: Si no se selecciona fechaFin, toma la fechaInicio + 90 dias. */
-    if ( dataform.fecha_fin === null || dataform.fecha_fin === undefined || dataform.fecha_fin === "")  {
-      const dias = 90;
-      let fecha_fin : Date = new Date(dataform.fecha_inicio)
-      fecha_fin.setDate( fecha_fin.getDate() + dias ); 
-      dataform.fecha_fin =  new Date(format(fecha_fin, 'MM/dd/yy'));
+    let fec_has =
+      "Fri Dec 31 2100 00:00:00 GMT-0300 (hora estándar de Uruguay)";
+
+    if (
+      dataform.fecha_fin === "" ||
+      dataform.fecha_fin === undefined ||
+      dataform.fecha_fin === null
+    ) {
+      dataform.fecha_fin = new Date(fec_has);
     }
-    else {
-      if(typeof dataform.fecha_fin === 'object')
-        dataform.fecha_fin = new Date(format(dataform.fecha_fin,'MM/dd/yyy'));
-      else
-        dataform.fecha_fin = new Date(format(parseISO(dataform.fecha_fin),'MM/dd/yyy'));
-      if( dataform.fecha_inicio.getTime() >= dataform.fecha_fin.getTime() ){
-        const dias = 90;
-        let fecha_fin : Date = new Date(dataform.fecha_inicio)
-        fecha_fin.setDate( fecha_fin.getDate() + dias ); 
-        dataform.fecha_fin =  new Date(format(fecha_fin, 'MM/dd/yy'));
+
+    if (dataform.fecha_inicio !== "") {
+      dataform.fecha_inicio = new Date(dataform.fecha_inicio);
+      let year = dataform.fecha_inicio.getFullYear();
+      let month = dataform.fecha_inicio.getMonth();
+      let day = dataform.fecha_inicio.getDate();
+      let fullDate = new Date(year, month, day);
+      dataform.fecha_inicio = fullDate;
+    }
+
+    if (dataform.fecha_fin !== "") {
+      dataform.fecha_fin = new Date(dataform.fecha_fin);
+      let year = dataform.fecha_fin.getFullYear();
+      let month = dataform.fecha_fin.getMonth();
+      let day = dataform.fecha_fin.getDate();
+      let fullDate = new Date(year, month, day, 23, 59, 59);
+      dataform.fecha_fin = fullDate;
+    }
+
+    if (dataform.fecha_inicio > dataform.fecha_fin) {
+      dataform.fecha_inicio = "";
+      dataform.fecha_fin = "";
+      return eventos;
+    }
+
+    const ev = eventos.filter((ev) => {
+      return (
+        ev.tipo.toLowerCase().includes(dataform.tipo) &&
+        ev.localidad.toLowerCase().includes(dataform.localidad) &&
+        dataform.fecha_inicio <= ev.fechaInicio &&
+        dataform.fecha_fin >= ev.fechaFin
+      );
+    });
+
+    const vacio: any[] = [
+      {
+        vacio: 1,
+      },
+    ];
+
+    if (dist !== null) {
+      if (ev.length > 0) {
+        ev.forEach((event) => {
+          if (event.distancia < parseInt(dist)) {
+            distFound = true;
+          }
+        });
+      }
+
+      if (distFound === false) {
+        return vacio;
       }
     }
 
-/**Filtro por precio. */      
-    // if ( dataform.precio === null || dataform.precio < 0 || dataform.precio === undefined )   dataform.precio = 0;
-    return eventos.filter((ev) => {
-      return(
-            ev.tipo.toLowerCase().includes( dataform.tipo)  
-        &&  ev.localidad.toLowerCase().includes( dataform.localidad) 
-        &&  dataform.fecha_inicio.getTime() <= ev.fechaInicio.getTime()
-        &&  dataform.fecha_fin.getTime() >= ev.fechaInicio.getTime()
-/**Filtro por tipo de moneda es descartado por el cliente.*/
-        // &&  ev.moneda.toLowerCase() === dataform.moneda.toLowerCase()  
-        )
-      });
-}  
-
-
-/**Filtro por rango de precio. */
-  filtroxPrecio( eventos: Eventos[], precioMax: number, precioMin: number ){
-    return eventos.filter(ev => ev.precio < precioMax && ev.precio > precioMin);
-  }
-/**Ordena por precio de Max a Min */
-  ordenarxPrecioDsc( eventos: Eventos[] ){
-    return eventos.sort(( a, b ) => {
-      if( a > b ) return  1;
-      if( a = b ) return  0;
-      if( a < b ) return -1;
-    })
-
-  }
-  /**Ordena por precio de Min a Max */
-  ordenarxPrecioAsc( eventos: Eventos[] ){
-    return eventos.sort(( a, b ) => {
-      if( a < b ) return  1;
-      if( a = b ) return  0;
-      if( a > b ) return -1;
-    })
+    if (ev.length === 0) {
+      return vacio;
+    } else return ev;
   }
 }

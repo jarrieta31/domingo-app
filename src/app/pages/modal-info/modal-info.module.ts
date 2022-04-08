@@ -7,15 +7,17 @@ import { IonicModule } from '@ionic/angular';
 import { ModalInfoPageRoutingModule } from './modal-info-routing.module';
 
 import { ModalInfoPage } from './modal-info.page';
-import { ComponentsModule } from '../../components/components.module';
+import { ComponentsModule } from 'src/app/components/components.module';
+// Import ionic-rating module
+
 
 @NgModule({
   imports: [
     CommonModule,
-    ComponentsModule,
     FormsModule,
     IonicModule,
-    ModalInfoPageRoutingModule
+    ModalInfoPageRoutingModule,
+    ComponentsModule,
   ],
   declarations: [ModalInfoPage]
 })

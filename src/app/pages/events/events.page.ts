@@ -1,58 +1,77 @@
-import { Component, OnInit } from '@angular/core';
-import { ModalController } from "@ionic/angular";
+import { Component } from "@angular/core";
+import { AlertController, ModalController } from "@ionic/angular";
 import { Eventos } from "../../shared/eventos";
 import { EventDetailPage } from "../event-detail/event-detail.page";
 import { DatabaseService } from "src/app/services/database.service";
-import { BehaviorSubject, Subject, Subscription } from "rxjs";
+import { forkJoin, of, Subject, Subscription } from "rxjs";
 import { VisitEventService } from "src/app/services/database/visit-event.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { takeUntil } from "rxjs/operators";
+import { map, switchMap, takeUntil } from "rxjs/operators";
 import { SlidesService } from "src/app/services/database/slides.service";
 import { Slider } from "src/app/shared/slider";
-import { JsonPipe } from "@angular/common";
+import { GeolocationService } from "src/app/services/geolocation.service";
+import { HttpClient } from "@angular/common/http";
+import { Point } from "src/app/shared/point";
+import { environment } from "src/environments/environment";
 
 @Component({
-  selector: 'app-events',
-  templateUrl: './events.page.html',
-  styleUrls: ['./events.page.scss'],
+  selector: "app-events",
+  templateUrl: "./events.page.html",
+  styleUrls: ["./events.page.scss"],
 })
+// export class EventsPage implements OnInit, OnDestroy {
 export class EventsPage {
-
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
   private unsubscribe$: Subject<void>;
 
-  now = new Date();
   textoBuscar = "";
   today: Date = new Date();
+  now: Date = new Date();
 
+  /**url load  */
+  preloadImage: string = "/assets/load.gif";
+  /**url load  */
+  preloadImage_list: string = "/assets/load_1.30.gif";
+  /** clase de preload list */
+  preloadClase: string = "img-evento";
   eventos: Eventos[] = [];
   eventos_xdptoSelection: Eventos[] = [];
   eventosSuscription: Subscription;
-  dpto_select: String;
+  dep: string = null;
   /**captura los datos del formulario de filtros */
-  dataform: string = "";
+  dataform: any = "";
   /**controla si se muestra o no el filtro general de lugares */
-  isFilterLocation = false;
-  isFilterType = false;
-  isFilterDate = false;
-  /**control de acordeon de filtros */
-  isOpenLocation: boolean = false;
-  isOpenType: boolean = false;
-  isOpenDate: boolean = false;
-  /**varibles de filtro por fecha */
-  fecha_inicio: Date = new Date();
-  fecha_fin   : Date = new Date(this.fecha_inicio.getDate()+90);
+  isFilterLocation: boolean = false;
+  isFilterType: boolean = false;
+  isFilterDate: boolean = false;
+  /**guardan filtos seleccionados */
+  optionLocation: string = null;
+  optionType: string = null;
+  optionDateStart: string = null;
+  optionDateEnd: string = null;
+  /**guarda la distancia del usuario a cada lugar en tiempo real */
+  distancia: string | number;
+  /**cantidad de horas para llegar a cada lugar */
+  hora: string | number;
+  /**cantidad de minutos para llegar a cada lugar */
+  minuto: string | number;
+  /**filtro seleccionado distancia*/
+  dist: number = null;
+  /**chequea si en el array de lugares hay algo para mostrar en pantalla, si no lo hay se muestra msgEmptyPlace */
+  checkDistance: boolean = false;
+  /**departamente seleccionado actualmente */
+  currentDepto: string = this.dbService.selectionDepto;
+  /**dia siguiente al actual */
+  nextDay: any;
 
   /**se guardan los sliders de la pantalla eventos */
   sliderEvents: Slider[] = [];
 
   filterForm: FormGroup = this.fb.group({
-    tipo        : ["", Validators.required],
-    localidad   : ["", Validators.required],
-    fecha_fin   : ["", Validators.required],
+    tipo: ["", Validators.required],
+    localidad: ["", Validators.required],
+    fecha_fin: ["", Validators.required],
     fecha_inicio: ["", Validators.required],
-    // moneda   : ["", Validators.required],
-    // precio: [, Validators.required],
   });
 
   isFilter: boolean = false;
@@ -60,70 +79,39 @@ export class EventsPage {
   constructor(
     private veService: VisitEventService, //Servicio contador de visitas eventos.
     private modalCtrl: ModalController,
-    private dbService: DatabaseService,
+    public dbService: DatabaseService,
     private sliderSvc: SlidesService,
-    private        fb: FormBuilder,
-  ) {}
-
-  ionViewWillEnter() {
-    this.unsubscribe$ = new Subject<void>();
-
-    this.sliderSvc.getSliders();
-
-    this.sliderSvc.slider
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((res) => {
-        res.forEach((item) => {
-          if (item.pantalla == "eventos") this.sliderEvents.push(item);
-        });
-      });
-
-    this.eventosSuscription = this.dbService
-      .getObservable()
-      .subscribe((eventos) => {(this.eventos = eventos)
-      console.log(eventos)});
-
-    if (this.eventos.length > 0) {
-      if (this.eventos[0].departamento != this.dbService.selectionDepto) {
-        this.dbService.getEventos();
-      }
-    } else {
-      this.dbService.getEventos();
-    }
-    /**Se suscribe al array de eventos, si se genera cambios al estar en la pantalla
-     * se van a actulizar
-     */
-
-    /** */
-    this.dbService.getEventsLocal();
-    /** Actualizo el dpto seleccionado */
-    this.dpto_select = this.dbService.selectionDepto;
+    private fb: FormBuilder,
+    private geolocationSvc: GeolocationService,
+    private http: HttpClient,
+    private alertCtrl: AlertController
+  ) {
+    this.nextDay = this.sumarDias(this.now, 1);
   }
 
-  ionViewDidLeave() {
-    this.eventosSuscription.unsubscribe();
-  }
+  anioActual: number = 0;
+  customYearValues = [];
+  customDayShortNames = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+  monthShortNames = [
+    "Ene, Feb, Mar, Abr, May, Jun, Jul, Ago, Set, Oct, Nov, Dic",
+  ];
+  month: number = 0;
+  day: string;
+  fullDay: string = "";
+  fullDayNext: string = "";
+  month_aux: string = "";
+  month_auxNext: string = "";
 
   /**
    * Slide
    */
   slideOpts = {
     initialSlide: 0,
-    speed: 600,
+    speed: 2000,
     slidesPerView: 1,
     spaceBetween: 0,
     autoplay: true,
   };
-  /**para decodificar texto en base64 */
-  decodeDescEventos(){
-    this.eventos.forEach(ev => {
-      console.log(`descEnCode:: ${ev.descripcion}`);
-      const descripcion = atob(ev.descripcion);
-      ev.descripcion = descripcion;
-      console.log(`desc:: ${ev.descripcion}`);
-
-    })
-  }
 
   /**
    * Muestra el modal con descripción más detallada del evento seleccionado
@@ -149,15 +137,9 @@ export class EventsPage {
     whatsapp: string,
     moneda: string,
     precio: number,
-    precioUnico: boolean
+    precioUnico: boolean,
+    direccion: string
   ) {
-    
-    if (descripcion.length > 250) {
-      var desc = descripcion.substring(0, 250) + " ...";
-    } else {
-      desc = descripcion;
-    }
-
     this.contadorVisitas(id);
 
     const modal = await this.modalCtrl.create({
@@ -169,8 +151,7 @@ export class EventsPage {
         id: id,
         fecha: fecha,
         titulo: titulo,
-        descripcion: desc,
-        descripcion_completa: descripcion,
+        descripcion: descripcion,
         imagen: imagen,
         lugar: lugar,
         latitud: latitud,
@@ -182,115 +163,122 @@ export class EventsPage {
         whatsapp: whatsapp,
         moneda: moneda,
         precio: precio,
-        precioUnico: precioUnico
+        precioUnico: precioUnico,
+        direccion: direccion,
       },
     });
 
     await modal.present();
   }
 
-
   contadorVisitas(id: string) {
     this.veService.contadorVisitasEvento(id);
+  }
+
+  getLocation(lng: number, lat: number) {
+    return this.http
+      .get<any>(
+        `${environment.urlMopboxDepto}${lng},${lat}.json?access_token=${environment.mapBoxToken}`
+      )
+      .pipe(
+        map((depto) => depto.features[depto.features.length - 2].text),
+        takeUntil(this.unsubscribe$)
+      );
+  }
+
+  /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
+  getDistance(
+    lngUser: number,
+    latUser: number,
+    lngPlace: number,
+    latPlace: number
+  ) {
+    return this.http.get(
+      "https://api.mapbox.com/directions/v5/mapbox/driving/" +
+        lngUser +
+        "," +
+        latUser +
+        ";" +
+        lngPlace +
+        "," +
+        latPlace +
+        "?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
+    );
   }
 
   /** ===========>=>=>=> Metodos Para Filtro de Eventos ===========>=>=>=>*/
   changeFilterLocation() {
     this.isFilterLocation = !this.isFilterLocation;
-    this.isOpenLocation = !this.isOpenLocation;
-    if (this.isFilterType || this.isFilterDate) {
-      this.isFilterType = false;
-      this.isOpenType = false;
-      this.isFilterDate = false;
-      this.isOpenDate = false;
-    }
+
+    if (this.isFilterType) this.isFilterType = false;
+    if (this.isFilterDate) this.isFilterDate = false;
   }
 
   changeFilterType() {
     this.isFilterType = !this.isFilterType;
-    this.isOpenType = !this.isOpenType;
-    if (this.isFilterLocation || this.isFilterDate) {
-      this.isFilterLocation = false;
-      this.isOpenLocation = false;
-      this.isFilterDate = false;
-      this.isOpenDate = false;
-    }
+
+    if (this.isFilterLocation) this.isFilterLocation = false;
+    if (this.isFilterDate) this.isFilterDate = false;
   }
 
   changeFilterDate() {
     this.isFilterDate = !this.isFilterDate;
-    this.isOpenDate = !this.isOpenDate;
-    if (this.isFilterLocation || this.isFilterType) {
-      this.isFilterLocation = false;
-      this.isOpenLocation = false;
-      this.isFilterType = false;
-      this.isOpenType = false;
-    }
+
+    if (this.isFilterType) this.isFilterType = false;
+    if (this.isFilterLocation) this.isFilterLocation = false;
   }
 
-  changeLocation() {
-    this.isOpenLocation = !this.isOpenLocation;
-    if (this.isOpenType || this.isOpenDate) {
-      this.isOpenType = false;
-      this.isOpenDate = false;
-    }
-  }
-
-  changeType() {
-    this.isOpenType = !this.isOpenType;
-    if (this.isOpenLocation || this.isOpenDate) {
-      this.isOpenLocation = false;
-      this.isOpenDate = false;
-    }
-  }
-
-  changeDate() {
-    this.isOpenDate = !this.isOpenDate;
-    if (this.isOpenLocation || this.isOpenType) {
-      this.isOpenLocation = false;
-      this.isOpenType = false;
-    }
-  }
-  /**
-   * Metodo que se encarga de chequar si el array de TipoEventos ya tiene un Tipo guardado.
-   * @param tipoEventos Arreglo de tipos de eventos. String
-   * @param evento nombre del tipo de evento a verificar.
-   * @returns true o false.
-   */
-  tipoEventoGuradado(tipoEventos: string[], evento: string): boolean {
-    let evento_save: boolean = false;
-    tipoEventos.forEach((ev) => {
-      if (ev == evento) evento_save = true;
+  async presentAlert() {
+    const alert = await this.alertCtrl.create({
+      cssClass: "my-custom-class",
+      header: "FECHA INCORRECTA",
+      message:
+        "Fecha desde no puede ser mayor que fecha hasta. Se reiniciará la lista",
+      mode: "ios",
+      animated: true,
+      buttons: [
+        {
+          text: "Cerrar",
+        },
+      ],
     });
-    return evento_save;
+
+    await alert.present();
   }
 
   filterEvento() {
     this.dataform = this.filterForm.value;
-    this.actualizarFechas();
-  }
 
-  actualizarFechas(){
-    this.fecha_inicio = this.filterForm.get("fecha_inicio").value;
-    this.fecha_fin    = this.filterForm.get("fecha_fin").value;
-  }
+    if (this.isFilterLocation) this.isFilterLocation = false;
+    if (this.isFilterType) this.isFilterType = false;
+    if (this.isFilterDate) this.isFilterDate = false;
 
-  /**Ordeno los eventos alfabeticamente por el "Tipo"
-   *  0 : son iguales
-   *  1 : antes
-   * -1 : despues
-   */
-  get eventos_ordenados_asc_xlocalidad(): Eventos[] {
-    let result: Eventos[] = [];
-    const eventos = this.eventos;
-    result = eventos.sort((a, b) => {
-      if (a.tipo.toLocaleLowerCase() > b.tipo.toLocaleLowerCase()) return 1;
+    this.optionLocation = this.dataform.localidad;
+    this.optionType = this.dataform.tipo;
+    this.optionDateStart = this.dataform.fecha_inicio;
+    this.optionDateEnd = this.dataform.fecha_fin;
 
-      if (a.tipo.toLocaleLowerCase() < b.tipo.toLocaleLowerCase()) return -1;
+    if (this.optionDateStart !== "" && this.optionDateEnd !== "") {
+      if (
+        this.optionDateStart > this.optionDateEnd ||
+        this.optionDateEnd < this.optionDateStart
+      ) {
+        this.optionDateStart = null;
+        this.optionDateEnd = null;
+        this.presentAlert();
+      } else {
+        this.optionDateStart = this.dataform.fecha_inicio;
+        this.optionDateEnd = this.dataform.fecha_fin;
+      }
+    } else {
+      this.optionDateStart = this.dataform.fecha_inicio;
+      this.optionDateEnd = this.dataform.fecha_fin;
+    }
 
-      if (a.tipo.toLocaleLowerCase() == b.tipo.toLocaleLowerCase()) return 0;
-    });
-    return result;
+    if (this.dataform.localidad === "") this.optionLocation = "localidad";
+    if (this.dataform.tipo === "") this.optionType = "tipo";
+
+    console.log("form", this.filterForm.value);
   }
 
   /**Retorna un arreglo con los tipos de eventos existentes por Departamento. */
@@ -309,6 +297,7 @@ export class EventsPage {
         }
       });
     }
+    tipos_eventos = tipos_eventos.sort();
     return tipos_eventos;
   }
 
@@ -328,14 +317,15 @@ export class EventsPage {
         }
       });
     }
+    localidades_eventos = localidades_eventos.sort();
     return localidades_eventos;
   }
 
   /**retorna true si se selecciono Distancia como filtro principal */
-  get selectdistancia(){
-    return localStorage.getItem('distanceActivo') ? true : false;
+  get selectdistancia() {
+    return localStorage.getItem("distanceActivo") ? true : false;
   }
-  
+
   /**
    *
    * @param tipo Nombre del "tipo" Evento. Usado como criterio de buscanda.
@@ -368,4 +358,135 @@ export class EventsPage {
   }
   /** <=<=<=<=========== Metodos Para Filtro de Eventos <=<=<=<===========*/
 
+  sumarDias(fecha, dias) {
+    fecha.setDate(fecha.getDate() + dias);
+    return fecha;
+  }
+
+  ionViewWillEnter() {
+    this.sliderSvc.getSliders();
+    this.anioActual = new Date().getFullYear();
+    this.month = this.today.getMonth() + 1;
+    this.day = this.today.getDate().toString();
+
+    if (this.day.length === 1) {
+      this.day = ("0" + this.today.getDate()).toString();
+    } else {
+      this.day = this.today.getDate().toString();
+    }
+
+    if (this.month < 10) {
+      this.month_aux = ("0" + (this.today.getMonth() + 1)).toString();
+    } else {
+      this.month_aux = (this.today.getMonth() + 1).toString();
+    }
+
+    this.fullDay = (
+      this.anioActual +
+      "-" +
+      this.month_aux +
+      "-" +
+      this.day
+    ).toString();
+
+    let yearNext: string = this.nextDay.getFullYear();
+    let monthNext: number = this.nextDay.getMonth() + 1;
+    let nextDate: string = this.nextDay.getDate().toString();
+
+    if (nextDate.length === 1) {
+      nextDate = ("0" + this.nextDay.getDate()).toString();
+    } else {
+      nextDate = this.nextDay.getDate().toString();
+    }
+
+    if (monthNext < 10) {
+      this.month_auxNext = ("0" + (this.nextDay.getMonth() + 1)).toString();
+    } else {
+      this.month_auxNext = (this.nextDay.getMonth() + 1).toString();
+    }
+
+    this.fullDayNext = (
+      yearNext +
+      "-" +
+      this.month_auxNext +
+      "-" +
+      nextDate
+    ).toString();
+
+    this.customYearValues = [];
+    for (let i = 0; i < 3; i++) {
+      this.customYearValues.push(this.anioActual);
+      this.anioActual = this.anioActual + 1;
+    }
+
+    this.unsubscribe$ = new Subject<void>();
+
+    if (
+      localStorage.getItem("deptoActivo") != undefined &&
+      localStorage.getItem("deptoActivo") != null
+    ) {
+      this.dist = null;
+      this.dep = localStorage.getItem("deptoActivo");
+    } else if (
+      localStorage.getItem("distanceActivo") != undefined &&
+      localStorage.getItem("distanceActivo") != null
+    ) {
+      this.dep = null;
+      this.dist = parseInt(localStorage.getItem("distanceActivo"));
+    }
+
+    if (localStorage.getItem("deptoActivo") != this.currentDepto) {
+      this.currentDepto = localStorage.getItem("deptoActivo");
+      this.filterForm.reset();
+      this.dataform = "";
+      this.optionLocation = "localidad";
+      this.optionDateEnd = "";
+      this.optionDateStart = "";
+      this.optionType = "tipo";
+    }
+
+    this.sliderSvc.slider
+      .pipe(
+        map((slider) => slider.filter((s) => s.pantalla === "eventos")),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe((res) => {
+        this.sliderEvents = res;
+      });
+
+    /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
+    let posDep = this.geolocationSvc.posicion$.pipe(
+      switchMap((pos: Point) => {
+        return forkJoin(of(pos), this.getLocation(pos.longitud, pos.latitud));
+      }),
+      takeUntil(this.unsubscribe$)
+    );
+
+    let dto = posDep.pipe(
+      switchMap((res) => this.dbService.getEventos(res[1])),
+      takeUntil(this.unsubscribe$)
+    );
+
+    if (this.geolocationSvc.posicion$.value !== null) {
+      dto.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
+        this.eventos = [];
+        this.eventos = res;
+      });
+    } else {
+      this.dbService.getEventos(this.dep).pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
+        this.eventos = [];
+        this.eventos = res;
+      });
+    }
+    /************************************************************************************ */
+  }
+
+  ionViewDidLeave() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+
+    this.isFilterLocation = false;
+    this.isFilterType = false;
+    this.isFilterDate = false;
+  }
 }

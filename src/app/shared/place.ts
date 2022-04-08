@@ -1,9 +1,9 @@
     export interface Place {
     id: string;
-    distancia?: string,
-    distanciaNumber: number,
-    hora: string | number,
-    minuto: string | number,
+    distancia?: string | number,
+    distanciaNumber: number | string,
+    //hora: string | number,
+    //minuto: string | number,
     nombre: string,
     prioridad: number,
     publicado: boolean,
@@ -13,7 +13,7 @@
     bicicleta: boolean,
     caminar: boolean,
     patrimonial: boolean,
-    accesibilidad: boolean,
+    accesibilidad?: Accesibilidad,
     descripcion: string,
     descripcionCorta: string,
     imagenHome: {
@@ -38,4 +38,9 @@
     valoraciones?: [],
     videos?: [],
     carpeta: string,
+}
+
+export interface Accesibilidad{
+    banios?: boolean;
+    rampas?: boolean;
 }

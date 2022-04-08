@@ -1,107 +1,117 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 import { timer } from "rxjs";
-import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { SellingPointsPage } from "../selling-points/selling-points.page";
+import { Browser } from '@capacitor/browser';
 
 @Component({
-    selector: 'app-event-detail',
-    templateUrl: './event-detail.page.html',
-    styleUrls: ['./event-detail.page.scss'],
+  selector: "app-event-detail",
+  templateUrl: "./event-detail.page.html",
+  styleUrls: ["./event-detail.page.scss"],
 })
-export class EventDetailPage {
+export class EventDetailPage implements OnInit {
+  @Input("id") id: number;
+  @Input("fecha") fecha: string;
+  @Input("titulo") titulo: string;
+  @Input("descripcion") descripcion: string;
+  @Input("imagen") imagen: string;
+  @Input("lugar") lugar: string;
+  @Input("latitud") latitud: number;
+  @Input("longitud") longitud: number;
+  @Input("fechaFin") fechaFin: string;
+  @Input("instagram") instagram: string;
+  @Input("tickAntel") tickAntel: string;
+  @Input("facebook") facebook: string;
+  @Input("whatsapp") whatsapp: string;
+  @Input("moneda") moneda: string;
+  @Input("precio") precio: number;
+  @Input("precioUnico") precioUnico: boolean;
+  @Input("direccion") direccion: boolean;
 
-    @Input() id: number;
-    @Input() fecha: string;
-    @Input() titulo: string;
-    @Input() descripcion: string;
-    @Input() imagen: string;
-    @Input() lugar: string;
-    @Input() latitud: number;
-    @Input() longitud: number;
-    @Input() fechaFin: string;
-    @Input() instagram: string;
-    @Input() tickAntel: string;
-    @Input() facebook: string;
-    @Input() whatsapp: string;
-    @Input() moneda: string;
-    @Input() precio: number;
-    @Input() precioUnico: boolean;
+  _second = 1000;
+  _minute = this._second * 60;
+  _hour = this._minute * 60;
+  _day = this._hour * 24;
+  end: any;
+  now: any;
+  day: any;
+  hours: any;
+  minutes: any;
+  seconds: any;
+  source = timer(0, 1000);
+  clock: any;
 
-    _second = 1000;
-    _minute = this._second * 60;
-    _hour = this._minute * 60;
-    _day = this._hour * 24;
-    end: any;
-    now: any;
-    day: any;
-    hours: any;
-    minutes: any;
-    seconds: any;
-    source = timer(0, 1000);
-    clock: any;
+  /**url load  */
+  preloadImage: string = "/assets/load_1.30.gif";
+  /**clase preload */
+  preloadClass: string = "img-principal";
 
-    constructor(
-        private modalCtrl: ModalController,
-        private browser: InAppBrowser
-    ) { }
+  /**controla si fecha inicio es igual a fecha fin */
+  dateControl: boolean = false;
+  /**controla si fecha inicio es identica a fecha fin  */
+  controlHour: boolean = false;
 
-    ngOnInit() {
-        this.clock = this.source.subscribe((t) => {
-            this.now = new Date();
-            this.end = new Date(this.fecha);
-            this.showDate();
-        });
+  constructor(
+    private modalCtrl: ModalController,
+  ) {}
+
+  ngOnInit() {
+    this.clock = this.source.subscribe((t) => {
+      this.now = new Date();
+      this.end = new Date(this.fecha);
+      this.showDate();
+    });
+
+    const f = new Date(this.fecha);
+    const ff = new Date(this.fechaFin);
+    const fi = f.getDate() + "-" + f.getMonth() + "-" + f.getFullYear();
+    const ffn = ff.getDate() + "-" + ff.getMonth() + "-" + ff.getFullYear();
+
+    if (fi === ffn) this.dateControl = true;
+
+    if(this.fecha.valueOf() === this.fechaFin.valueOf()) this.controlHour = true;
+  }
+
+  /**
+   * Cierra el modal del detalle del evento
+   */
+  salir() {
+    this.modalCtrl.dismiss();
+  }
+
+  showDate() {
+    let distance = this.end - this.now;
+    if (distance > 0) {
+      this.day = Math.floor(distance / this._day);
+      this.hours = Math.floor((distance % this._day) / this._hour);
+      this.minutes = Math.floor((distance % this._hour) / this._minute);
+      this.seconds = Math.floor((distance % this._minute) / this._second);
+    } else {
+      this.day = 0;
+      this.hours = 0;
+      this.minutes = 0;
+      this.seconds = 0;
     }
+  }
 
-    /**
-     * Cierra el modal del detalle del evento
-     */
-    salir() {
-        this.modalCtrl.dismiss();
-    }
+  openMap() {
+    Browser.open({url: "https://www.google.com/maps/search/?api=1&query=" + this.latitud +"," + this.longitud} );
+  }
 
-    showDate() {
-        let distance = this.end - this.now;
-        if (distance > 0) {
-            this.day = Math.floor(distance / this._day);
-            this.hours = Math.floor((distance % this._day) / this._hour);
-            this.minutes = Math.floor((distance % this._hour) / this._minute);
-            this.seconds = Math.floor((distance % this._minute) / this._second);
-        } else {
-            this.day = 0;
-            this.hours = 0;
-            this.minutes = 0;
-            this.seconds = 0;
-        }
-    }
+  async openModalSellingPoint() {
+    const modalSellingPoint = await this.modalCtrl.create({
+      component: SellingPointsPage,
+      cssClass: "modal-selling-point",
+      backdropDismiss: false,
+      showBackdrop: true,
+      componentProps: {
+        instagram: this.instagram,
+        tickAntel: this.tickAntel,
+        facebook: this.facebook,
+        whatsapp: this.whatsapp,
+      },
+    });
 
-    openMap() {
-        this.browser.create(
-            "https://www.google.com/maps/search/?api=1&query=" +
-            this.latitud +
-            "," +
-            this.longitud,
-            "_system"
-        );
-    }
-
-    async openModalSellingPoint(
-
-    ) {
-        const modalSellingPoint = await this.modalCtrl.create({
-            component: SellingPointsPage,
-            cssClass: "modal-selling-point",
-            backdropDismiss: false,
-            showBackdrop: true,
-            componentProps: {
-                instagram: this.instagram,
-                tickAntel: this.tickAntel,
-                facebook: this.facebook,
-                whatsapp: this.whatsapp,
-            },
-        });
-
-        await modalSellingPoint.present();
-    }
+    await modalSellingPoint.present();
+  }
 }

@@ -14,7 +14,6 @@
   
   .diva {
     width: 100%;
-    height: auto;
   }
   
   .divb {
@@ -26,7 +25,7 @@
   .divc {
     width: 100%;
     height: auto;
-    background-color: var(--ion-color-light);
+    background-color: var(--ion-color-text);
   }
   
   .divd {
@@ -56,7 +55,6 @@
   }
   
   .slideHijo,
-  .imagenMini,
   .slidePadre {
     height: 100%;
     width: 100%;
@@ -93,6 +91,7 @@
   .sugerencia {
     width: 50%;
     display: flex;
+    text-decoration: none;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: flex-start;
@@ -101,11 +100,6 @@
   .sug {
     border-radius: 3px;
     width: 46%;
-  }
-  
-  .sug_img {
-    border-radius: 3px;
-    width: 100%;
   }
   
   .interes {

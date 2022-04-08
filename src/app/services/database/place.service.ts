@@ -1,10 +1,12 @@
 import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { Place } from "src/app/shared/place";
 import distance from "@turf/distance";
 import { Point } from "src/app/shared/point";
 import { GeolocationService } from "../geolocation.service";
+
+export declare type Units = "meters" | "millimeters" | "centimeters" | "kilometers" | "acres" | "miles" | "nauticalmiles" | "inches" | "yards" | "feet" | "radians" | "degrees" | "hectares";
 
 @Injectable({
   providedIn: "root",
@@ -13,17 +15,17 @@ export class PlaceService {
   /**Se guardan los lugares del departamento seleccionado */
   places: BehaviorSubject<Place[]>;
   /**Nombre del departamento seleccionado actualmente*/
-  depto: String = null;
+  depto: string = null;
   /**Distancia seleccionada actualmente */
   distance: number = null;
   /**Departamento actual para usar cuando se selecciona filtro por distancia */
-  currentDpto: String = null;
+  currentDpto: string = null;
   /**Guarda todos los lugares del departamento seleccionado actualmente*/
   allLugares: Place[] = [];
   /**Se van acumulando todos los lugares de los departamentos seleccionados */
   initPlace: Place[] = [];
   /** Guarda el nombre de los departamentos que ya fueron seleccionados por el usuario*/
-  save_depto: String[] = [];
+  save_depto: string[] = [];
   /**Lugar seleccionado*/
   place_selected: BehaviorSubject<Place>;
   /**Lugar seleccionado para utilizar en búsuqeda de lugares cercanos */
@@ -36,6 +38,10 @@ export class PlaceService {
   posicion$: Observable<Point>;
   /**se guardan los lugares recibidos desde el filtro distancia */
   distancePlaces: Place[] = [];
+  /**controla si la base devuelve datos */
+  noData: boolean = false;
+  /**controla que existen lugares en el rango de distancia */
+  controlDistance: boolean = false;
 
   deptoLimit: any[] = [
     { nameDepto: "Artigas", limit: ["Artigas", "Salto", "Rivera"] },
@@ -192,22 +198,21 @@ export class PlaceService {
     this.places = new BehaviorSubject<Place[]>(this.initPlace);
   }
 
-    
   /**
    * Devuelve los lugares del departamento seleccionado por el usuario
    * @param searchDepto se utiliza para chequear si el departamento ya fue seleccionado anteriormente
    */
-  getPlaces() {
-
-    let checkDepto = this.geolocationSvc.currentDepto;
+  getPlaces(checkDepto: string) {
     this.depto = localStorage.getItem("deptoActivo");
     this.distance = parseInt(localStorage.getItem("distanceActivo"));
     this.allLugares = [];
     this.distancePlaces = [];
 
-    this.places = new BehaviorSubject<Place[]>(this.distancePlaces);
+    this.controlDistance = false;
 
     let searchDepto: boolean = false;
+
+    const options:Units = "kilometers";
 
     if (this.depto != null) {
       this.save_depto.forEach((search) => {
@@ -225,15 +230,56 @@ export class PlaceService {
         .orderBy("prioridad")
         .get()
         .then((querySnapshot) => {
-          const arrPlaces: Place[] = [];
+          const mapPlaces = new Map();
           querySnapshot.forEach((item) => {
             const data: any = item.data();
-            arrPlaces.push({ id: item.id, ...data });
-            this.initPlace.push({ id: item.id, ...data });
+
+            let placesRequest = { id: item.id, ...data };
+            mapPlaces.set(placesRequest.id, { ...data });
+
+            let test = this.initPlace.find(function (element) {
+              return element.id === placesRequest.id;
+            });
+
+            if (test === undefined) {
+              this.initPlace.push(placesRequest);
+            }
           });
-          this.allLugares = arrPlaces;
+          this.allLugares = JSON.parse(JSON.stringify([...mapPlaces.values()]));
+
+          if (
+            this.geolocationSvc.posicion !== undefined &&
+            this.geolocationSvc.posicion !== null
+          ) {
+            this.allLugares.forEach((dist) => {
+              let calcDist = distance(
+                [
+                  this.geolocationSvc.posicion.longitud,
+                  this.geolocationSvc.posicion.latitud,
+                ],
+                [dist.ubicacion.lng, dist.ubicacion.lat],
+                {units: options}
+              );
+              dist.distancia = calcDist;
+              dist.distanciaNumber = calcDist;
+            });
+          } else if (
+            this.geolocationSvc.posicion === undefined ||
+            this.geolocationSvc.posicion === null
+          ) {
+            this.allLugares.forEach((dist) => {
+              dist.distancia = "Ubicación no activa";
+              dist.distanciaNumber = "Ubicación no activa";
+            });
+          }
+
+          if (querySnapshot.size !== 0) {
+            this.save_depto.push(this.depto);
+            this.noData = false;
+          } else this.noData = true;
+
           this.places.next(this.allLugares);
-          this.save_depto.push(this.depto);
+
           searchDepto = false;
         })
         .catch((err) => {
@@ -246,20 +292,41 @@ export class PlaceService {
           this.allLugares.push(res);
         }
       });
+
+      if (
+        this.geolocationSvc.posicion !== undefined &&
+        this.geolocationSvc.posicion !== null
+      ) {
+        this.allLugares.forEach((dist) => {
+          let calcDist = distance(
+            [
+              this.geolocationSvc.posicion.longitud,
+              this.geolocationSvc.posicion.latitud,
+            ],
+            [dist.ubicacion.lng, dist.ubicacion.lat],
+            {units: options}
+          );
+          dist.distancia = calcDist;
+          dist.distanciaNumber = calcDist;
+        });
+      }
+
+      this.allLugares.length !== 0 ? (this.noData = false) : this.noData;
+
       this.places.next(this.allLugares);
     } else if (this.distance != null) {
       let deptoSearch: boolean = false;
-      let limitCurrent: String[] = [];
+      let limitCurrent: string[] = [];
 
       this.deptoLimit.forEach((res) => {
         if (res.nameDepto == checkDepto) {
-          res.limit.forEach((dep: String) => {
+          res.limit.forEach((dep: string) => {
             limitCurrent.push(dep);
           });
         }
       });
 
-      limitCurrent.forEach((dep: String) => {
+      limitCurrent.forEach((dep: string) => {
         if (this.save_depto.length != 0) {
           this.save_depto.forEach((search) => {
             if (dep == search) {
@@ -272,6 +339,29 @@ export class PlaceService {
           this.initPlace.forEach((init: any) => {
             if (init.departamento == dep) this.distancePlaces.push(init);
           });
+
+          if (
+            this.geolocationSvc.posicion !== undefined &&
+            this.geolocationSvc.posicion !== null
+          ) {
+            this.distancePlaces.forEach((dist) => {
+              let calcDist = distance(
+                [
+                  this.geolocationSvc.posicion.longitud,
+                  this.geolocationSvc.posicion.latitud,
+                ],
+                [dist.ubicacion.lng, dist.ubicacion.lat],
+                {units: options}
+              );
+              dist.distancia = calcDist;
+              dist.distanciaNumber = calcDist;
+
+              if (calcDist <= this.distance) {
+                this.controlDistance = true;
+              }
+            });
+          }
+
           deptoSearch = false;
         } else {
           this.afs
@@ -283,10 +373,43 @@ export class PlaceService {
             .then((querySnapshot) => {
               querySnapshot.forEach((item) => {
                 const data: any = item.data();
-                this.initPlace.push({ id: item.id, ...data });
-                this.distancePlaces.push({ id: item.id, ...data });
+
+                let placeDist = { id: item.id, ...data };
+
+                let test = this.initPlace.find(function (element) {
+                  return element.id === placeDist.id;
+                });
+
+                if (test === undefined) {
+                  this.initPlace.push(placeDist);
+                  this.distancePlaces.push(placeDist);
+                }
               });
-              if (!searchDepto) this.save_depto.push(dep);
+
+              if (
+                this.geolocationSvc.posicion !== undefined &&
+                this.geolocationSvc.posicion !== null
+              ) {
+                this.distancePlaces.forEach((dist) => {
+                  let calcDist = distance(
+                    [
+                      this.geolocationSvc.posicion.longitud,
+                      this.geolocationSvc.posicion.latitud,
+                    ],
+                    [dist.ubicacion.lng, dist.ubicacion.lat],
+                    {units: options}
+                  );
+                  dist.distancia = calcDist;
+                  dist.distanciaNumber = calcDist;
+
+                  if (calcDist <= this.distance) {
+                    this.controlDistance = true;
+                  }
+                });
+              }
+
+              if (!searchDepto && querySnapshot.size !== 0)
+                this.save_depto.push(dep);
             })
             .catch((err) => {
               console.log(err);
@@ -295,8 +418,14 @@ export class PlaceService {
           deptoSearch = false;
         }
       });
+      this.distancePlaces.length !== 0
+        ? (this.noData = false)
+        : (this.noData = true);
+
       this.places.next(this.distancePlaces);
     }
+
+    return this.places;
   }
 
   /**Devuelve un lugar específico
@@ -310,7 +439,8 @@ export class PlaceService {
       if (res.id == id) {
         res.descripcionCorta =
           res.descripcion.replace(/<\/?[^>]+(>|$)/g, "").substring(0, 140) +
-          "..." + `<a>Ver más</a>`;
+          "..." +
+          `<a>Ver más</a>`;
         this.near_place = res;
         this.place_selected.next(res);
       }
@@ -321,15 +451,14 @@ export class PlaceService {
   getPlaceNear() {
     this.near_places = new BehaviorSubject<any[]>(null);
     this.distance_place = [];
-    //let options = { units: "kilometers" };
-    let options:any = { units: "kilometers" };
+    let options:Units = "kilometers";
 
     this.initPlace.forEach((res) => {
       if (res.id != this.near_place.id && res.departamento == this.depto) {
         let dist = distance(
           [this.near_place.ubicacion.lng, this.near_place.ubicacion.lat],
           [res.ubicacion.lng, res.ubicacion.lat],
-          options
+          {units: options}
         );
 
         this.distance_place.push({
@@ -342,7 +471,7 @@ export class PlaceService {
         let dist = distance(
           [this.near_place.ubicacion.lng, this.near_place.ubicacion.lat],
           [res.ubicacion.lng, res.ubicacion.lat],
-          options
+          {units: options}
         );
 
         this.distance_place.push({

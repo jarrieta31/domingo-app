@@ -7,10 +7,9 @@ import { IonicModule } from '@ionic/angular';
 import { ArtistPageRoutingModule } from './artist-routing.module';
 
 import { ArtistPage } from './artist.page';
-
-//Modulos propios
+import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { VideoPageModule } from '../video/video.module';
-import { PipesModule } from '../../shared/pipes/pipes.module';
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
   imports: [
@@ -21,6 +20,7 @@ import { PipesModule } from '../../shared/pipes/pipes.module';
     ReactiveFormsModule,
     VideoPageModule,
     PipesModule,
+    ComponentsModule,
   ],
   declarations: [ArtistPage]
 })

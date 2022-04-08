@@ -5,8 +5,10 @@ import { Place } from "../place";
   name: "filterPlaces",
 })
 export class FilterPlacesPipe implements PipeTransform {
+  transform(places: Place[], data: any): Place[] | any[] {
+    let dist: string = localStorage.getItem("distanceActivo");
+    let distFound: boolean = false;
 
-  transform(places: Place[], data: any): Place[] {
     if (data.length === 0) {
       return places;
     }
@@ -17,11 +19,35 @@ export class FilterPlacesPipe implements PipeTransform {
     if (data.tipo !== null) data.tipo = data.tipo.toLowerCase();
     else data.tipo = "";
 
-    return places.filter((item) => {
+    const pl = places.filter((item) => {
       return (
         item.localidad.toLowerCase().includes(data.localidad) &&
         item.tipo.toLowerCase().includes(data.tipo)
       );
     });
+
+    const vacio: any[] = [
+      {
+        vacio: 1,
+      },
+    ];
+
+    if (dist !== null) {
+      if (pl.length > 0) {
+        pl.forEach((places) => {
+          if (places.distancia < parseInt(dist)) {
+            distFound = true;
+          }
+        });
+      }
+
+      if (distFound === false) {
+        return vacio;
+      }
+    }
+
+    if (pl.length === 0) {
+      return vacio;
+    } else return pl;
   }
 }

@@ -4,15 +4,17 @@ export interface DondeComer {
   departamento: string;
   localidad: string;
   direccion: string;
-  telefonos: Telefono[];
+  telefonos: Telefono;
   imagen: Imagen;
   publicado: boolean;
   ubicacion: Posicion;
-  distancia?: string ;
+  distancia?: string | number;
   distanciaNumber: number;
   hora: string | number;
   minuto: string | number;
   mostrar?: boolean;
+  instagram: string;
+  whatsapp: string;
 }
 
 export interface Imagen {

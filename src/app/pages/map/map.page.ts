@@ -8,19 +8,17 @@ import { GeolocationService } from "../../services/geolocation.service";
 import { Observable, Subject, Subscription } from "rxjs";
 import * as Mapboxgl from "mapbox-gl";
 import { takeUntil, tap } from "rxjs/operators";
-import { ActionSheetController, LoadingController, NavController } from "@ionic/angular";
-
+import { ActionSheetController, LoadingController } from "@ionic/angular";
 
 @Component({
-  selector: 'app-map',
-  templateUrl: './map.page.html',
-  styleUrls: ['./map.page.scss'],
+  selector: "app-map",
+  templateUrl: "./map.page.html",
+  styleUrls: ["./map.page.scss"],
 })
-export class MapPage implements OnInit {
-
+export class MapPage implements OnInit, OnDestroy {
   posicion$: Observable<Point>;
   subscripcionPosition: Subscription;
-  distancia: string;
+  distancia: number;
   longitud: number = null;
   latitud: number = null;
   nombre: string = null;
@@ -28,12 +26,11 @@ export class MapPage implements OnInit {
   place: Place;
   points: Point[] = [];
   myPositionMarker: Mapboxgl.Marker = null;
-  id: number;
+  id: string;
   mapa: Mapboxgl.Map; //Mapa para mostrar
   directions: MapboxDirections = null; //Buscador de direcciones para indicar recorrido
   profile: string = "mapbox/walking";
   posicion: Point;
-  //casaDominga: Point = environment.casaDominga;
   icon: string;
 
   private uns$ = new Subject<void>();
@@ -43,13 +40,8 @@ export class MapPage implements OnInit {
     private geolocationService: GeolocationService,
     private router: Router,
     private loadingController: LoadingController,
-    private navControler: NavController,
     public actionSheetController: ActionSheetController
   ) {
-    // this.geolocationService.iniciarSubscriptionClock();
-    // this.posicion$ = this.geolocationService.getPosicionActual$();
-    //Obtiene el observable con la posicion del usuario
-    //this.posicion$ = this.geolocationService.getPosicionActual$();
     if (this.geolocationService.posicion$.getValue() != null) {
       this.posicion = this.geolocationService.posicion$.getValue();
     } 
@@ -64,16 +56,15 @@ export class MapPage implements OnInit {
     await loading.present();
 
     const { role, data } = await loading.onDidDismiss();
-    console.log("Loading dismissed!");
   }
 
   regresar() {
-    this.router.navigate(["/places", this.id]);
+    this.router.navigate(["/place-selected", this.id]);
   }
 
   ngOnInit() {
     //Obtiene el observable con la posicion del usuario
-    this.posicion$ = this.geolocationService.getPosicionActual$();
+    this.posicion$ = this.geolocationService.getObsPosicion$();
     Mapboxgl.accessToken = environment.mapBoxToken;
 
     //Datos recibidos desde places
@@ -82,7 +73,7 @@ export class MapPage implements OnInit {
       this.activatedRoute.snapshot.paramMap.get("longitud")
     );
     this.latitud = Number(this.activatedRoute.snapshot.paramMap.get("latitud"));
-    this.id = Number(this.activatedRoute.snapshot.paramMap.get("id"));
+    this.id = this.activatedRoute.snapshot.paramMap.get("id");
     this.profile = this.activatedRoute.snapshot.paramMap.get("profile");
     this.tipo = this.activatedRoute.snapshot.paramMap.get("tipo");
 
@@ -153,15 +144,6 @@ export class MapPage implements OnInit {
       .setLngLat([this.longitud, this.latitud])
       .addTo(this.mapa);
 
-    if (this.tipo == "Rural" && this.nombre != "Mal Abrigo") {
-      const markerMalAbrigo = new Mapboxgl.Marker({
-        draggable: false,
-        color: "#006400",
-      })
-        .setLngLat([-56.952087, -34.147616])
-        .addTo(this.mapa);
-    }
-
     this.posicion$
       .pipe(
         tap((posicionUser) => {
@@ -188,7 +170,7 @@ export class MapPage implements OnInit {
     //Subscripcion para ver la ruta
     this.directions.on("route", (e) => {
       let routes = e.route;
-      this.distancia = String(routes.map((r) => r.distance / 1000));
+      this.distancia = Number(routes.map((r) => r.distance / 1000));
     });
   }
 
@@ -217,16 +199,6 @@ export class MapPage implements OnInit {
     this.myPositionMarker = new Mapboxgl.Marker(el, { draggable: false })
       .setLngLat([longitud, latitud])
       .addTo(this.mapa);
-    //Agrega la posición del usuario a la lista de puntos
-    //this.points.push(this.posicion as Point);
-    //Recalcula los puntos extremos
-    //let maxmin: TwoPoints = this.getMaxMinPoints(this.points);
-    //Recalcula el centro del mapa
-    // let centro: Point = this.getCenterPoints(maxmin);
-    // this.distancia = this.calculateDistance(maxmin);
-    // let zoom = this.calculateZoom(this.distancia);
-    // this.mapa.setCenter([centro.longitud, centro.latitud]);
-    // this.mapa.setZoom(zoom);
   }
 
   centrarMapa(longitud: number, latitud: number) {
@@ -234,7 +206,6 @@ export class MapPage implements OnInit {
   }
 
   actualizarRuta(longUser: number, latUser: number) {
-    console.log(this.directions)
     if (this.directions.getOrigin() == null) {
       this.mapa.on("load", () => {
         this.directions.setOrigin([longUser, latUser]);
@@ -247,9 +218,5 @@ export class MapPage implements OnInit {
       this.directions.setDestination([this.longitud, this.latitud]);
     }
   }
-
-  volver(){
-    this.navControler.back();
-  }
-
 }
+

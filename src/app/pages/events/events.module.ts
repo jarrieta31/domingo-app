@@ -8,20 +8,20 @@ import { EventsPageRoutingModule } from './events-routing.module';
 
 import { EventsPage } from './events.page';
 import { EventDetailPage } from '../event-detail/event-detail.page';
-
-// Modulos propios
 import { EventDetailPageModule } from '../event-detail/event-detail.module';
-import { PipesModule } from '../../shared/pipes/pipes.module';
+import { PipesModule } from 'src/app/shared/pipes/pipes.module';
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
   imports: [
-    CommonModule,
+  CommonModule,
     FormsModule,
     IonicModule,
     EventsPageRoutingModule,
-     EventDetailPageModule,
+    EventDetailPageModule,
     PipesModule,
-    ReactiveFormsModule   
+    ReactiveFormsModule,
+    ComponentsModule,
   ],
   declarations: [EventsPage],
   entryComponents: [

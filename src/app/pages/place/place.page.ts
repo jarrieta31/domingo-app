@@ -1,42 +1,59 @@
-import { Component, NgZone } from "@angular/core";
-import { InAppBrowser } from "@awesome-cordova-plugins/in-app-browser/ngx";
-import { Observable, Subject } from "rxjs";
-import { takeUntil, tap } from "rxjs/operators";
+import { Component } from "@angular/core";
+import { forkJoin, Observable, of, Subject } from "rxjs";
+import { map, switchMap, takeUntil, tap } from "rxjs/operators";
 import { PlaceService } from "src/app/services/database/place.service";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { Place } from "src/app/shared/place";
 //import distance from "@turf/distance";
 import { Point } from "src/app/shared/point";
-import { LoadingController } from "@ionic/angular";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 import { DatabaseService } from "src/app/services/database.service";
 import { VisitPlaceService } from "src/app/services/database/visit-place.service";
 import { Slider } from "src/app/shared/slider";
 import { SlidesService } from "src/app/services/database/slides.service";
-import { Geolocation, Position, PositionOptions, GeolocationPermissionType } from '@capacitor/geolocation';
-import { Capacitor } from '@capacitor/core';
-import { Device } from '@capacitor/device';
+import { environment } from "src/environments/environment";
+import { Browser } from '@capacitor/browser';
+
+export interface Papa {
+  type: string;
+  query: string[];
+  features: Texto[];
+  attribution: string;
+}
+
+export interface Texto {
+  text: string;
+}
+
+export interface RequestDist {
+  weight_name: string;
+  weight: number;
+  duration: number;
+  distance: number;
+}
+
+export interface DataDist {
+  distance: number;
+  hora: number;
+  minuto: number;
+}
 
 @Component({
-  selector: 'app-place',
-  templateUrl: './place.page.html',
-  styleUrls: ['./place.page.scss'],
+  selector: "app-place",
+  templateUrl: "./place.page.html",
+  styleUrls: ["./place.page.scss"],
 })
 export class PlacePage {
-  preload: string = "/assets/casaDominga.jpeg";
   constructor(
     private geolocationSvc: GeolocationService,
     private visitPlaceSvc: VisitPlaceService,
-    private loadingCtrl: LoadingController,
     private databaseSvc: DatabaseService,
-    private placeSvc: PlaceService,
-    private browser: InAppBrowser,
+    public placeSvc: PlaceService,
     private http: HttpClient,
     private fb: FormBuilder,
-    private sliderSvc: SlidesService,
-    private zone: NgZone,
-  ) { }
+    private sliderSvc: SlidesService
+  ) {}
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
   private unsubscribe$: Subject<void>;
@@ -44,12 +61,14 @@ export class PlacePage {
   /**Configuración de slider mini galeria */
   slideOpts = {
     initialSlide: 0,
-    speed: 600,
+    speed: 2000,
     slidesPerView: 1,
     spaceBetween: 0,
     autoplay: true,
   };
 
+  departamento: string;
+  posicion: Point;
   /**guarda los lugares activos en la subscription del servicio */
   places: Place[] = [];
   /**guarda las localidades con lugares publicados */
@@ -65,20 +84,14 @@ export class PlacePage {
   /**guarda la posición actual del usuario */
   posicion$: Observable<Point>;
   /**departamente seleccionado actualmente */
-  currentDepto: String = this.databaseSvc.selectionDepto;
-  /**instance del spinner de carga */
-  loading: any;
+  currentDepto: string = this.databaseSvc.selectionDepto;
   /**captura los datos del formulario de filtros */
   dataForm: any = "";
   /**se guardan los sliders de la pantalla lugares */
   sliderPlace: Slider[] = [];
   /**filtro seleccionado, distancia o departamento */
   dist: number = null;
-  dep: String = null;
-  /**chequea si en el array de lugares hay algo para mostrar en pantalla, si no lo hay se muestra msgEmptyPlace */
-  checkDistance: boolean = false;
-  /**mensaje para mostrar en pantalla si no hay lugares para mostrar */
-  msgEmptyPlace: String = null;
+  dep: string = null;
   /**formulario que obtiene datos para filtrar */
   filterForm: FormGroup = this.fb.group({
     localidad: ["", Validators.required],
@@ -90,12 +103,10 @@ export class PlacePage {
   /**guardan filtos seleccionados */
   optionLocation: string = null;
   optionType: string = null;
-
-  // para geolocalizacion
-  coordinate: any;
-  watchCoordinate: any;
-  watchId: any;
-  platform: string;
+  /**url load  */
+  preloadImage: string = "/assets/load.gif";
+  /** clase para lista de preload */
+  preload_card: string = "img_card_place"
 
   filterPlace() {
     this.dataForm = this.filterForm.value;
@@ -111,7 +122,7 @@ export class PlacePage {
   }
 
   pageDominga() {
-    this.browser.create("https://casadominga.com.uy", "_system");
+    Browser.open( {url: "https://casadominga.com.uy" } );
   }
 
   getPlace(id: string) {
@@ -128,6 +139,17 @@ export class PlacePage {
     if (this.isFilterLocation) this.isFilterLocation = false;
   }
 
+  getLocation(lng: number, lat: number) {
+    return this.http
+      .get<any>(
+        `${environment.urlMopboxDepto}${lng},${lat}.json?access_token=${environment.mapBoxToken}`
+      )
+      .pipe(
+        map((depto) => depto.features[depto.features.length - 2].text),
+        takeUntil(this.unsubscribe$)
+      );
+  }
+
   /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
   getDistance(
     lngUser: number,
@@ -136,33 +158,8 @@ export class PlacePage {
     latPlace: number
   ) {
     return this.http.get(
-      "https://api.mapbox.com/directions/v5/mapbox/driving/" +
-      lngUser +
-      "," +
-      latUser +
-      ";" +
-      lngPlace +
-      "," +
-      latPlace +
-      "?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
+      `${environment.urlMapboxDistance}${lngUser},${latUser};${lngPlace},${latPlace}?overview=full&geometries=geojson&access_token=${environment.mapBoxToken}`
     );
-  }
-
-  /**
-   * Spinner de carga
-   * @param message - mensaje de spinner
-   */
-  async show(message: string) {
-    this.loading = await this.loadingCtrl.create({
-      message,
-      spinner: "bubbles",
-    });
-
-    this.loading.present();
-  }
-
-  loadImage() {
-//    this.loading.dismiss();
   }
 
   /** Devuelve una lista de localidades */
@@ -176,6 +173,8 @@ export class PlacePage {
         }
       });
     }
+
+    localidades = localidades.sort();
     return localidades;
   }
 
@@ -190,6 +189,8 @@ export class PlacePage {
         }
       });
     }
+
+    tipos = tipos.sort();
     return tipos;
   }
 
@@ -198,122 +199,23 @@ export class PlacePage {
     return localStorage.getItem("distanceActivo") ? true : false;
   }
 
-
-  async getPlatform() {
-    const deviceInfo = await Device.getInfo();
-    this.platform = deviceInfo.platform
-  }
-
-  async requestPermissions() {
-    const permResult = await Geolocation.requestPermissions();
-    console.log('Perm location: ', permResult.location);
-    console.log('Perm coarseLocation: ', permResult.coarseLocation);
-    if (permResult.location == 'granted' && permResult.coarseLocation == 'granted') {
-
-    } else {
-
-    }
-  }
-
-  getCurrentCoordinate() {
-    if (!Capacitor.isPluginAvailable('Geolocation')) {
-      console.log('Plugin geolocation not available');
-      return;
-    }
-    Geolocation.getCurrentPosition().then(data => {
-      this.coordinate = {
-        latitude: data.coords.latitude,
-        longitude: data.coords.longitude,
-        accuracy: data.coords.accuracy
-      };
-    }).catch(err => {
-      console.error(err);
-    });
-  }
-
-
-  async watchPosition(places: Place[]) {
-    try {
-      this.watchId = await Geolocation.watchPosition({}, (position, err) => {
-        console.log('Watch', position);
-        this.zone.run(() => {
-
-          if (position !== null) {
-//            console.log(places)
-            this.places.forEach((calcDist) => {
-              this.getDistance(
-                position.coords.longitude,
-                position.coords.latitude,
-                calcDist.ubicacion.lng,
-                calcDist.ubicacion.lat
-              )
-                .pipe(takeUntil(this.unsubscribe$))
-                .subscribe((res) => {
-                  this.distancia = res["routes"]["0"].distance / 1000;
-
-                  this.hora = Math.trunc(res["routes"]["0"].duration / 60 / 60);
-                  this.minuto = Math.trunc(
-                    (res["routes"]["0"].duration / 60) % 60
-                  );
-
-                  let distFormat: string | number, placeDistance: string;
-                  if (this.distancia >= 1) {
-                    distFormat = parseFloat(String(this.distancia)).toFixed(3);
-                    placeDistance = "Estás a " + distFormat;
-                  } else {
-                    distFormat = parseFloat(String(this.distancia)).toFixed(2);
-                    placeDistance = "Estás a " + distFormat;
-                  }
-
-                  calcDist.distanciaNumber = this.distancia;
-                  calcDist.distancia = placeDistance;
-                  calcDist.hora = String(this.hora + " h");
-                  calcDist.minuto = String(this.minuto + " min");
-
-                  if (this.dist != null) {
-                    if (this.dist >= calcDist.distanciaNumber) {
-                      this.checkDistance = true;
-                    }
-                  } else this.checkDistance = true;
-                });
-            });
-
-          } else this.checkDistance = true;
-
-        });
-
-//    if (this.places.length == 0) this.loading.dismiss();
-//    else if (this.dep == null && this.checkDistance == false)  this.loading.dismiss();
-      });
-
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
   /**se ejecuta cada vez que se ingresa a la tab */
   ionViewWillEnter() {
     if (
-      localStorage.getItem("deptoActivo") != undefined &&
-      localStorage.getItem("deptoActivo") != null
+      localStorage.getItem("deptoActivo") !== undefined &&
+      localStorage.getItem("deptoActivo") !== null
     ) {
       this.dist = null;
       this.dep = localStorage.getItem("deptoActivo");
-      this.msgEmptyPlace =
-        "No hay lugares para mostrar en el departamento de " + this.dep;
     } else if (
-      localStorage.getItem("distanceActivo") != undefined &&
-      localStorage.getItem("distanceActivo") != null
+      localStorage.getItem("distanceActivo") !== undefined &&
+      localStorage.getItem("distanceActivo") !== null
     ) {
       this.dep = null;
       this.dist = parseInt(localStorage.getItem("distanceActivo"));
-      this.msgEmptyPlace =
-        "No hay lugares para mostrar en el rango de " + this.dist + " km";
     }
 
-   // this.show("Cargando lugares...");
-
-    if (localStorage.getItem("deptoActivo") != this.currentDepto) {
+    if (localStorage.getItem("deptoActivo") !== this.currentDepto) {
       this.currentDepto = localStorage.getItem("deptoActivo");
       this.filterForm.reset();
       this.dataForm = "";
@@ -322,27 +224,43 @@ export class PlacePage {
     }
 
     this.unsubscribe$ = new Subject<void>();
-    this.placeSvc.getPlaces();
     this.sliderSvc.getSliders();
 
     this.sliderSvc.slider
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(
+        map((slider) => slider.filter((s) => s.pantalla === "lugares")),
+        takeUntil(this.unsubscribe$),
+      )
       .subscribe((res) => {
-        res.forEach((item) => {
-          if (item.pantalla == "lugares") this.sliderPlace.push(item);
-        });
+        this.sliderPlace = res;
       });
 
-    this.placeSvc.places.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
-      this.places = res;
-      console.log(res)
-      // llamada a la funcion de localizacion
-      this.watchPosition(res)
-    });
+    /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
+    let posDep = this.geolocationSvc.posicion$.pipe(
+      switchMap((pos: Point) => {
+        return forkJoin(of(pos), this.getLocation(pos.longitud, pos.latitud));
+      }),
+      takeUntil(this.unsubscribe$)
+    );
 
-//    if (this.places.length == 0) this.loading.dismiss();
-//    else if (this.dep == null && this.checkDistance == false)  this.loading.dismiss();
+    let dto = posDep.pipe(
+      switchMap((res) => this.placeSvc.getPlaces(res[1])),
+      takeUntil(this.unsubscribe$)
+    );
 
+    if (this.geolocationSvc.posicion$.value !== null) {
+      dto.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
+        this.places = [];
+        this.places = res;
+      });
+    } else {
+      this.placeSvc.getPlaces(this.dep).pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
+        this.places = [];
+        this.places = res;
+      });
+    }
+
+    /************************************************************************************ */
   }
 
   /**se ejecuta cada vez que se sale de la tab */
@@ -351,12 +269,10 @@ export class PlacePage {
     this.unsubscribe$.complete();
     this.isFilterLocation = false;
     this.isFilterType = false;
-    this.checkDistance = false;
   }
 
   /**Contador de visitas de Lugares */
   sumaVisitaLugar(lugar_id: string) {
     this.visitPlaceSvc.contadorVistasPlace(lugar_id);
   }
-
 }

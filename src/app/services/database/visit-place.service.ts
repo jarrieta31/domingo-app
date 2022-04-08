@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from "@angular/fire/compat/firestore";
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { TipoDiaVisita as DiaVisita } from 'src/app/shared/tipo-dia-visita';
 import { TipoMesVisita as MesVisita } from 'src/app/shared/tipo-mes-visita';
 import { VisitEventService } from './visit-event.service';
@@ -121,7 +121,7 @@ export class VisitPlaceService {
          "Error en al traer la informacion de Place ::getVisitasLugar" + err
        );
      })
-     .finally(() => console.log("Finally"));
+     .finally(() => "Finally");
  }
  /**
   * Funcion privada. Se encarga de actualizar los registros de Visitas a Lugares.

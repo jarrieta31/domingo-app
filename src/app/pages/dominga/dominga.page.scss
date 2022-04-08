@@ -1,0 +1,51 @@
+ion-slides {
+  height: calc(96vh - 56px);
+  margin: 2vh 3%;
+  border-radius: 10px !important;
+}
+
+ion-slide {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border-radius: 10px !important;
+  background-color: var(--ion-color-back) !important;
+}
+
+.slide_skeleton {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.info_dominga {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0 10px 0;
+  background-color: var(--ion-color-back) !important;
+}
+
+.info_detalle_dominga {
+  padding: 10px 8px 0 8px;
+  height: calc((96vh - 5vh - 76px) - ((100vw - (100vw * 0.06)) / 1.33));
+  font-family: "Poppins", sans-serif;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  color: var(--ion-color-dark);
+}
+
+.titulo_dominga {
+  height: 5vh;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--ion-color-dark);
+}
+
+ion-avatar, .img_skeletom {
+  width: 100%;
+  height: auto;
+  min-height: calc((100vw - (100vw * 0.06)) / 1.33);
+  --border-radius: 10px 10px 0 0;
+}

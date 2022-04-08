@@ -1,93 +1,67 @@
-import { Component } from '@angular/core';
-import { Platform } from "@ionic/angular";
-//import { SplashScreen } from '@awesome-cordova-plugins/splash-screen/ngx';
-//import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
-
-import { Subject, timer } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-import { GeolocationService } from "./services/geolocation.service";
-import { Geolocation } from '@capacitor/geolocation';
-import { Capacitor } from '@capacitor/core';
-import { Posicion } from './shared/donde-comer';
-import { DatabaseService } from './services/database.service';
-import { Point } from './shared/point';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { AlertController, Platform } from "@ionic/angular";
+import { StatusBar, Style } from '@capacitor/status-bar';
+import { timer } from "rxjs";
+import { SplashScreen } from '@capacitor/splash-screen';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: 'app.component.html',
-    styleUrls: ['app.component.scss'],
+  selector: "app-root",
+  templateUrl: "app.component.html",
+  styleUrls: ["app.component.scss"],
 })
-export class AppComponent {
-    showSplash = true;
-    modo: boolean;
-    dyslexic: boolean;
+export class AppComponent implements OnInit, OnDestroy {
+  showSplash = true;
+  modo: boolean;
+  dyslexic: boolean;
 
-    gps: any = null;
+  gps: any = null;
 
-    /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
-    private unsubscribe$: Subject<void>;
+  constructor(
+    private platform: Platform,
+    public alertController: AlertController,
+  ) {
+    this.initializeApp();
+  }
 
-    constructor(
-        private platform: Platform,
-        //    private splashScreen: SplashScreen,
-        //    private statusBar: StatusBar,
-        private geolocationSvc: GeolocationService
-    ) {
-        this.initializeApp();
+  ngOnInit(): void {}
+
+  ngOnDestroy(): void {}
+
+  async initializeApp() {
+    this.checkReady();
+  }
+
+  checkReady = async () => {
+    try {
+      console.log("checkReady");
+      await this.platform.ready();
+      //StatusBar.styleDefault();
+      SplashScreen.hide();
+      timer(3000).subscribe(() => (this.showSplash = false));
+      this.checkDarkMode();
+      this.modeDyslexic();
+    } catch (error) {
+      console.log("Error de Platform Ready: ", error);
     }
+  };
 
-    getCurrentCoordinate() {
-        if (!Capacitor.isPluginAvailable('Geolocation')) {
-            console.log('Plugin geolocation no available');
-            return;
-        }
-        Geolocation.getCurrentPosition().then(data => {
-            let posicion: Point = { longitud: data.coords.longitude, latitud: data.coords.latitude }
-            this.geolocationSvc.posicion$.next( posicion )
-            console.log("posicion iniciada")
-        }).catch(err => {
-            console.error(err);
-        });
+  checkDarkMode() {
+    if (localStorage.getItem("modoOscuro") == "true") {
+      try {
+        document.body.classList.toggle("dark");
+      } catch (error) {
+        console.log(error);
+      }
     }
+  }
 
-    ngOnInit(): void {
-        this.unsubscribe$ = new Subject<void>();
-
-        setTimeout(() => {
-            this.unsubscribe$.next();
-            this.unsubscribe$.complete();
-        }, 5000)
+  modeDyslexic() {
+    if (localStorage.getItem("dyslexic") == "true") {
+      try {
+        document.body.classList.toggle("dyslexic");
+      } catch (error) {
+        console.log(error);
+      }
     }
-
-    initializeApp() {
-        this.getCurrentCoordinate();
-        this.platform.ready().then(() => {
-            //   this.statusBar.styleDefault();
-            //   this.splashScreen.hide();
-
-            timer(3000).subscribe(() => (this.showSplash = false));
-            this.checkDarkMode();
-            this.modeDyslexic();
-        });
-    }
-
-    checkDarkMode() {
-        if (localStorage.getItem("modoOscuro") == "true") {
-            try {
-                document.body.classList.toggle("dark");
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    }
-
-    modeDyslexic() {
-        if (localStorage.getItem("dyslexic") == "true") {
-            try {
-                document.body.classList.toggle("dyslexic");
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    }
+  }
 }

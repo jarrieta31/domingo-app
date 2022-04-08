@@ -40,18 +40,9 @@ const routes: Routes = [
           ),
       },
       {
-        path: "info",
-        loadChildren: () =>
-          import("../information/information.module").then(
-            (m) => m.InformationPageModule
-          ),
-      },
-      {
         path: "artist",
         loadChildren: () =>
-          import("../artist/artist.module").then(
-            (m) => m.ArtistPageModule
-          ),
+          import("../artist/artist.module").then((m) => m.ArtistPageModule),
       },
     ],
   },

@@ -12,9 +12,9 @@ import { HomeMenuPage } from './home-menu.page';
   imports: [
     CommonModule,
     FormsModule,
-    HomeMenuPageRoutingModule,
-    IonicModule,
     ReactiveFormsModule,
+    IonicModule,
+    HomeMenuPageRoutingModule
   ],
   declarations: [HomeMenuPage]
 })

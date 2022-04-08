@@ -7,9 +7,9 @@ import { Place } from 'src/app/shared/place';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-minimapa',
-  templateUrl: './minimapa.component.html',
-  styleUrls: ['./minimapa.component.scss'],
+    selector: 'app-minimapa',
+    templateUrl: './minimapa.component.html',
+    styleUrls: ['./minimapa.component.scss'],
 })
 export class MinimapaComponent implements AfterViewInit {
 
@@ -17,7 +17,7 @@ export class MinimapaComponent implements AfterViewInit {
 
     mapa: Mapboxgl.Map;
 
-    @Input('lugarActual') place: Place;
+    @Input('lugarActual') private place: Place;
 
     constructor(
         private router: Router,
