@@ -8,11 +8,14 @@ import { Point } from "../shared/point";
 import { takeUntil } from "rxjs/operators";
 import { GpsProvider } from "../providers/gps-provider.service";
 import { Geolocation, PositionOptions, Position } from '@capacitor/geolocation';
+import { Device, DeviceInfo } from '@capacitor/device';
 
 @Injectable({
   providedIn: "root",
 })
 export class GeolocationService {
+
+  deviceInfo: DeviceInfo;
   items: Place[] = [];
   sourceMatch$: Observable<any>;
   mapa: Mapboxgl.Map;
@@ -41,6 +44,7 @@ export class GeolocationService {
   ) {
     this.unsubscribeGPS$ = new Subject<void>();
     this.gps = this.gpsProvider.gps;
+    this.deviceInfo = this.gpsProvider.deviceInfo;
     this.posicion = this.gpsProvider.posicion;
     if (this.gps) {
       this.posicion$ = new BehaviorSubject<Point>(this.posicion);
@@ -57,25 +61,30 @@ export class GeolocationService {
         .pipe(takeUntil(this.unsubscribeGPS$))
         .subscribe((res) => {
           console.log(res);
-          Geolocation
-            .getCurrentPosition(this.options)
-            .then((p) => {
-              if (p !== null) {
-                this.posicion = {
-                  longitud: p.coords.longitude,
-                  latitud: p.coords.latitude,
-                };
-                this.posicion$.next(this.posicion);
-                this.actualizarMarcador();
-              }
-            })
-            .catch((error) => {
-              //this.posicion = environment.casaDominga;
-              this.actualizarPosicion$(null);
-              if (this.myPositionMarker != null) this.myPositionMarker.remove();
-              this.gps = false;
-              console.log("Error al obtener la ubicación" + error);
-            });
+          if (!this.deviceInfo.isVirtual) {
+            Geolocation.getCurrentPosition(this.options)
+              .then((p) => {
+                if (p !== null) {
+                  this.posicion = {
+                    longitud: p.coords.longitude,
+                    latitud: p.coords.latitude,
+                  };
+                  this.posicion$.next(this.posicion);
+                  this.actualizarMarcador();
+                }
+              })
+              .catch((error) => {
+                //this.posicion = environment.casaDominga;
+                this.actualizarPosicion$(null);
+                if (this.myPositionMarker != null) this.myPositionMarker.remove();
+                this.gps = false;
+                console.log("Error al obtener la ubicación" + error);
+              });
+
+          } else {
+            this.posicion$.next({ latitud: -34.33940051728305, longitud: -56.713930578444064 })
+            this.actualizarMarcador();
+          }
         });
     }
   }
@@ -242,7 +251,7 @@ export class GeolocationService {
       (c(pts.latitud2 * p) *
         c(pts.latitud1 * p) *
         (1 - c((pts.longitud1 - pts.longitud2) * p))) /
-        2;
+      2;
     let dis = 12742 * Math.asin(Math.sqrt(a));
     return Math.trunc(dis);
   }
