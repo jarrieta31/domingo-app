@@ -102,7 +102,6 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
    * @param url - URL del video que se va a ejecutar
    */
   async verVideo(url: string) {
-    console.log(url);
     const video = await this.modalCtrl.create({
       component: VideoPage,
       cssClass: "modal-video",
@@ -111,6 +110,7 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
       componentProps: {
         url: url,
       },
+      mode: 'ios',
     });
 
     await video.present();

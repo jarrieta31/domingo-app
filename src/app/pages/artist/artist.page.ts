@@ -158,6 +158,7 @@ export class ArtistPage {
       componentProps: {
         url: url,
       },
+      mode: 'ios',
     });
 
     await video.present();

@@ -110,6 +110,7 @@ export class EventDetailPage implements OnInit {
         facebook: this.facebook,
         whatsapp: this.whatsapp,
       },
+      mode: 'ios',
     });
 
     await modalSellingPoint.present();
