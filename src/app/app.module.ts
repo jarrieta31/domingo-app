@@ -20,7 +20,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 //Plugins
 import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
-import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
 
 // Modulos propios de la app
 import { ComponentsModule } from './components/components.module';
@@ -54,7 +53,6 @@ export function gpsProviderFactory(provider: GpsProvider){
         {provide: APP_INITIALIZER, useFactory: gpsProviderFactory, deps: [GpsProvider], multi: true},
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
         CallNumber,
-        ScreenOrientation,
     ],
     bootstrap: [AppComponent],
 })
