@@ -26,6 +26,8 @@ import { ComponentsModule } from './components/components.module';
 import { PipesModule } from './shared/pipes/pipes.module';
 
 import { GpsProvider } from './providers/gps-provider.service';
+import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
+
 
 
 export function gpsProviderFactory(provider: GpsProvider){
@@ -53,6 +55,7 @@ export function gpsProviderFactory(provider: GpsProvider){
         {provide: APP_INITIALIZER, useFactory: gpsProviderFactory, deps: [GpsProvider], multi: true},
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
         CallNumber,
+        ScreenOrientation,
     ],
     bootstrap: [AppComponent],
 })

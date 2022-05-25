@@ -3,6 +3,8 @@ import { AlertController, Platform } from "@ionic/angular";
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { timer } from "rxjs";
 import { SplashScreen } from '@capacitor/splash-screen';
+import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
+
 
 @Component({
   selector: "app-root",
@@ -19,8 +21,10 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private platform: Platform,
     public alertController: AlertController,
+    private screenOrientation: ScreenOrientation,
   ) {
     this.initializeApp();
+    this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT)
   }
 
   ngOnInit(): void {}
