@@ -85,9 +85,9 @@
           <div *ngIf="isFilterDate">
             <!-- Filtro por Fecha  -->
             <div class="filter_name">
-              <span>Fecha</span>
+              <span>Fecha (desde - hasta)</span>
             </div>
-            <div>
+            <ion-list class="list_type_date">
               <div>
                 <ion-datetime
                   (ionChange)="filterEvento()"
@@ -101,7 +101,6 @@
                   formControlName="fecha_inicio"
                   presentation="date"
                 >
-                  <!-- [ngModel]="fecha_inicio"   -->
                 </ion-datetime>
               </div>
               <div>
@@ -117,10 +116,9 @@
                   formControlName="fecha_fin"
                   presentation="date"
                 >
-                  <!-- [ngModel]="fecha_fin"   -->
                 </ion-datetime>
               </div>
-            </div>
+            </ion-list>
           </div>
           <!-- Filtro por Fecha  -->
           <!-- Filtro por Localidad  -->
