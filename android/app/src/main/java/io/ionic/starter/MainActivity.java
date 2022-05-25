@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package io.ionic.domingo;
 
 import com.getcapacitor.BridgeActivity;
 
