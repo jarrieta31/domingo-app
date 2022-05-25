@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="domingo">domingo!</string>
-    <string name="title_activity_main">domingo!</string>
+    <string name="app_name">domingo</string>
+    <string name="title_activity_main">domingo</string>
     <string name="package_name">io.ionic.domingo</string>
     <string name="custom_url_scheme">io.ionic.domingo</string>
 </resources>
