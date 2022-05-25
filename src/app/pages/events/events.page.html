@@ -88,14 +88,13 @@
               <span>Fecha</span>
             </div>
             <div>
-              <div class="filter_list">
+              <div>
                 <ion-datetime
                   (ionChange)="filterEvento()"
                   mode="ios"
                   placeholder="desde"
                   doneText="Seleccionar"
                   cancelText="Cancelar"
-                  monthShortNames="{{monthShortNames}}"
                   min="{{ fullDay }}"
                   displayFormat="DD MMM YYYY"
                   yearValues="{{ customYearValues }}"
@@ -104,14 +103,13 @@
                   <!-- [ngModel]="fecha_inicio"   -->
                 </ion-datetime>
               </div>
-              <div class="filter_list">
+              <div>
                 <ion-datetime
                   (ionChange)="filterEvento()"
                   mode="ios"
                   placeholder="hasta"
                   doneText="Seleccionar"
                   cancelText="Cancelar"
-                  monthShortNames="{{monthShortNames}}"
                   min="{{ fullDayNext }}"
                   displayFormat="DD MMM YYYY"
                   yearValues="{{ customYearValues }}"
