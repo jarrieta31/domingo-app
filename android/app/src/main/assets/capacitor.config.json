@@ -1,6 +1,6 @@
 {
 	"appId": "io.ionic.domingo",
-	"appName": "domingo!",
+	"appName": "domingo",
 	"webDir": "www",
 	"bundledWebRuntime": false,
 	"plugins": {
