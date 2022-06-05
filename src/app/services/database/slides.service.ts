@@ -60,7 +60,6 @@ export class SlidesService {
       })
       this.slider.next(this.allSlider);
     } else if(!this.ckeckDist) {
-
       this.init_slider = [];
       this.ckeckDist = true;
 
@@ -76,6 +75,16 @@ export class SlidesService {
             this.init_slider.push({ id: item.id, ...data });
           });
           this.allSlider = JSON.parse(JSON.stringify(arrSlider));
+
+          this.allSlider.forEach( saveDepto => {
+            let deptoExist: boolean = false;
+
+            this.save_depto.forEach( search => {
+              if(saveDepto.departamento == search) deptoExist = true;
+            })
+
+            if(!deptoExist) this.save_depto.push(saveDepto.departamento);
+          })
           this.slider.next(this.allSlider);
         })
         .catch((err) => {
