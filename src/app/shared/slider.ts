@@ -3,7 +3,8 @@ export interface Slider {
     linkTipo: string,
     pantalla: string,
     publicado: boolean,
-    imagen: Imagen
+    imagen: Imagen,
+    departamento: string,
 }
 
 export interface Imagen {
