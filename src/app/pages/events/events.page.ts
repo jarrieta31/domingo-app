@@ -1,45 +1,45 @@
-import { Component } from "@angular/core";
-import { AlertController, ModalController } from "@ionic/angular";
-import { Eventos } from "../../shared/eventos";
-import { EventDetailPage } from "../event-detail/event-detail.page";
-import { DatabaseService } from "src/app/services/database.service";
-import { forkJoin, of, Subject, Subscription } from "rxjs";
-import { VisitEventService } from "src/app/services/database/visit-event.service";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { map, switchMap, takeUntil } from "rxjs/operators";
-import { SlidesService } from "src/app/services/database/slides.service";
-import { Slider } from "src/app/shared/slider";
-import { GeolocationService } from "src/app/services/geolocation.service";
-import { HttpClient } from "@angular/common/http";
-import { Point } from "src/app/shared/point";
-import { environment } from "src/environments/environment";
+import { Component } from '@angular/core';
+import { AlertController, ModalController } from '@ionic/angular';
+import { Eventos } from '../../shared/eventos';
+import { EventDetailPage } from '../event-detail/event-detail.page';
+import { DatabaseService } from 'src/app/services/database.service';
+import { forkJoin, of, Subject, Subscription } from 'rxjs';
+import { VisitEventService } from 'src/app/services/database/visit-event.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
+import { SlidesService } from 'src/app/services/database/slides.service';
+import { Slider } from 'src/app/shared/slider';
+import { GeolocationService } from 'src/app/services/geolocation.service';
+import { HttpClient } from '@angular/common/http';
+import { Point } from 'src/app/shared/point';
+import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: "app-events",
-  templateUrl: "./events.page.html",
-  styleUrls: ["./events.page.scss"],
+  selector: 'app-events',
+  templateUrl: './events.page.html',
+  styleUrls: ['./events.page.scss'],
 })
 // export class EventsPage implements OnInit, OnDestroy {
 export class EventsPage {
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
   private unsubscribe$: Subject<void>;
 
-  textoBuscar = "";
+  textoBuscar = '';
   today: Date = new Date();
   now: Date = new Date();
 
   /**url load  */
-  preloadImage: string = "/assets/load.gif";
+  preloadImage: string = '/assets/load.gif';
   /**url load  */
-  preloadImage_list: string = "/assets/load_1.30.gif";
+  preloadImage_list: string = '/assets/load_1.30.gif';
   /** clase de preload list */
-  preloadClase: string = "img-evento";
+  preloadClase: string = 'img-evento';
   eventos: Eventos[] = [];
   eventos_xdptoSelection: Eventos[] = [];
   eventosSuscription: Subscription;
   dep: string = null;
   /**captura los datos del formulario de filtros */
-  dataform: any = "";
+  dataform: any = '';
   /**controla si se muestra o no el filtro general de lugares */
   isFilterLocation: boolean = false;
   isFilterType: boolean = false;
@@ -63,15 +63,18 @@ export class EventsPage {
   currentDepto: string = this.dbService.selectionDepto;
   /**dia siguiente al actual */
   nextDay: any;
+  /**controla datetime */
+  isDatetimeDesde: boolean = false;
+  isDatetimeHasta: boolean = false;
 
   /**se guardan los sliders de la pantalla eventos */
   sliderEvents: Slider[] = [];
 
   filterForm: FormGroup = this.fb.group({
-    tipo: ["", Validators.required],
-    localidad: ["", Validators.required],
-    fecha_fin: ["", Validators.required],
-    fecha_inicio: ["", Validators.required],
+    tipo: ['', Validators.required],
+    localidad: ['', Validators.required],
+    fecha_fin: ['', Validators.required],
+    fecha_inicio: ['', Validators.required],
   });
 
   isFilter: boolean = false;
@@ -91,16 +94,16 @@ export class EventsPage {
 
   anioActual: number = 0;
   customYearValues = [];
-  customDayShortNames = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+  customDayShortNames = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
   monthShortNames = [
-    "Ene, Feb, Mar, Abr, May, Jun, Jul, Ago, Set, Oct, Nov, Dic",
+    'Ene, Feb, Mar, Abr, May, Jun, Jul, Ago, Set, Oct, Nov, Dic',
   ];
   month: number = 0;
   day: string;
-  fullDay: string = "";
-  fullDayNext: string = "";
-  month_aux: string = "";
-  month_auxNext: string = "";
+  fullDay: string = '';
+  fullDayNext: string = '';
+  month_aux: string = '';
+  month_auxNext: string = '';
 
   /**
    * Slide
@@ -144,7 +147,7 @@ export class EventsPage {
 
     const modal = await this.modalCtrl.create({
       component: EventDetailPage,
-      cssClass: "modal-event",
+      cssClass: 'modal-event',
       backdropDismiss: false,
       showBackdrop: true,
       componentProps: {
@@ -194,15 +197,15 @@ export class EventsPage {
     latPlace: number
   ) {
     return this.http.get(
-      "https://api.mapbox.com/directions/v5/mapbox/driving/" +
+      'https://api.mapbox.com/directions/v5/mapbox/driving/' +
         lngUser +
-        "," +
+        ',' +
         latUser +
-        ";" +
+        ';' +
         lngPlace +
-        "," +
+        ',' +
         latPlace +
-        "?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
+        '?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA'
     );
   }
 
@@ -230,15 +233,15 @@ export class EventsPage {
 
   async presentAlert() {
     const alert = await this.alertCtrl.create({
-      cssClass: "my-custom-class",
-      header: "FECHA INCORRECTA",
+      cssClass: 'my-custom-class',
+      header: 'FECHA INCORRECTA',
       message:
-        "Fecha desde no puede ser mayor que fecha hasta. Se reiniciará la lista",
-      mode: "ios",
+        'Fecha desde no puede ser mayor que fecha hasta. Se reiniciará la lista',
+      mode: 'ios',
       animated: true,
       buttons: [
         {
-          text: "Cerrar",
+          text: 'Cerrar',
         },
       ],
     });
@@ -258,7 +261,7 @@ export class EventsPage {
     this.optionDateStart = this.dataform.fecha_inicio;
     this.optionDateEnd = this.dataform.fecha_fin;
 
-    if (this.optionDateStart !== "" && this.optionDateEnd !== "") {
+    if (this.optionDateStart !== '' && this.optionDateEnd !== '') {
       if (
         this.optionDateStart > this.optionDateEnd ||
         this.optionDateEnd < this.optionDateStart
@@ -275,10 +278,25 @@ export class EventsPage {
       this.optionDateEnd = this.dataform.fecha_fin;
     }
 
-    if (this.dataform.localidad === "") this.optionLocation = "localidad";
-    if (this.dataform.tipo === "") this.optionType = "tipo";
+    if (this.dataform.localidad === '') this.optionLocation = 'localidad';
+    if (this.dataform.tipo === '') this.optionType = 'tipo';
 
-    console.log("form", this.filterForm.value);
+    if (this.isDatetimeDesde) this.isDatetimeDesde = false;
+    if (this.isDatetimeHasta) this.isDatetimeHasta = false;
+
+    console.log('form', this.filterForm.value);
+  }
+
+  datetimeDesde() {
+    this.isDatetimeDesde = !this.isDatetimeDesde;
+
+    if (this.isDatetimeHasta) this.isDatetimeHasta = false;
+  }
+
+  datetimeHasta() {
+    this.isDatetimeHasta = !this.isDatetimeHasta;
+
+    if (this.isDatetimeDesde) this.isDatetimeDesde = false;
   }
 
   /**Retorna un arreglo con los tipos de eventos existentes por Departamento. */
@@ -323,7 +341,7 @@ export class EventsPage {
 
   /**retorna true si se selecciono Distancia como filtro principal */
   get selectdistancia() {
-    return localStorage.getItem("distanceActivo") ? true : false;
+    return localStorage.getItem('distanceActivo') ? true : false;
   }
 
   /**
@@ -370,22 +388,22 @@ export class EventsPage {
     this.day = this.today.getDate().toString();
 
     if (this.day.length === 1) {
-      this.day = ("0" + this.today.getDate()).toString();
+      this.day = ('0' + this.today.getDate()).toString();
     } else {
       this.day = this.today.getDate().toString();
     }
 
     if (this.month < 10) {
-      this.month_aux = ("0" + (this.today.getMonth() + 1)).toString();
+      this.month_aux = ('0' + (this.today.getMonth() + 1)).toString();
     } else {
       this.month_aux = (this.today.getMonth() + 1).toString();
     }
 
     this.fullDay = (
       this.anioActual +
-      "-" +
+      '-' +
       this.month_aux +
-      "-" +
+      '-' +
       this.day
     ).toString();
 
@@ -394,22 +412,22 @@ export class EventsPage {
     let nextDate: string = this.nextDay.getDate().toString();
 
     if (nextDate.length === 1) {
-      nextDate = ("0" + this.nextDay.getDate()).toString();
+      nextDate = ('0' + this.nextDay.getDate()).toString();
     } else {
       nextDate = this.nextDay.getDate().toString();
     }
 
     if (monthNext < 10) {
-      this.month_auxNext = ("0" + (this.nextDay.getMonth() + 1)).toString();
+      this.month_auxNext = ('0' + (this.nextDay.getMonth() + 1)).toString();
     } else {
       this.month_auxNext = (this.nextDay.getMonth() + 1).toString();
     }
 
     this.fullDayNext = (
       yearNext +
-      "-" +
+      '-' +
       this.month_auxNext +
-      "-" +
+      '-' +
       nextDate
     ).toString();
 
@@ -422,32 +440,32 @@ export class EventsPage {
     this.unsubscribe$ = new Subject<void>();
 
     if (
-      localStorage.getItem("deptoActivo") != undefined &&
-      localStorage.getItem("deptoActivo") != null
+      localStorage.getItem('deptoActivo') != undefined &&
+      localStorage.getItem('deptoActivo') != null
     ) {
       this.dist = null;
-      this.dep = localStorage.getItem("deptoActivo");
+      this.dep = localStorage.getItem('deptoActivo');
     } else if (
-      localStorage.getItem("distanceActivo") != undefined &&
-      localStorage.getItem("distanceActivo") != null
+      localStorage.getItem('distanceActivo') != undefined &&
+      localStorage.getItem('distanceActivo') != null
     ) {
       this.dep = null;
-      this.dist = parseInt(localStorage.getItem("distanceActivo"));
+      this.dist = parseInt(localStorage.getItem('distanceActivo'));
     }
 
-    if (localStorage.getItem("deptoActivo") != this.currentDepto) {
-      this.currentDepto = localStorage.getItem("deptoActivo");
+    if (localStorage.getItem('deptoActivo') != this.currentDepto) {
+      this.currentDepto = localStorage.getItem('deptoActivo');
       this.filterForm.reset();
-      this.dataform = "";
-      this.optionLocation = "localidad";
-      this.optionDateEnd = "";
-      this.optionDateStart = "";
-      this.optionType = "tipo";
+      this.dataform = '';
+      this.optionLocation = 'localidad';
+      this.optionDateEnd = '';
+      this.optionDateStart = '';
+      this.optionType = 'tipo';
     }
 
     this.sliderSvc.slider
       .pipe(
-        map((slider) => slider.filter((s) => s.pantalla === "eventos")),
+        map((slider) => slider.filter((s) => s.pantalla === 'eventos')),
         takeUntil(this.unsubscribe$)
       )
       .subscribe((res) => {
@@ -473,10 +491,13 @@ export class EventsPage {
         this.eventos = res;
       });
     } else {
-      this.dbService.getEventos(this.dep).pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
-        this.eventos = [];
-        this.eventos = res;
-      });
+      this.dbService
+        .getEventos(this.dep)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((res) => {
+          this.eventos = [];
+          this.eventos = res;
+        });
     }
     /************************************************************************************ */
   }

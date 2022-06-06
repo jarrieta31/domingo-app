@@ -82,17 +82,29 @@
 
       <div>
         <form [formGroup]="filterForm" class="form_filter">
+          <!-- Filtro por Fecha  -->
           <div *ngIf="isFilterDate">
-            <!-- Filtro por Fecha  -->
             <div class="filter_name">
-              <span>Fecha (desde - hasta)</span>
+              <span>Fecha</span>
             </div>
             <ion-list class="list_type_date">
-              <div>
+              <ion-item
+                *ngIf="(optionDateStart === null || optionDateStart === 'fecha' || optionDateStart === '')"
+                (click)="datetimeDesde()"
+                >desde</ion-item
+              >
+              <ion-item
+                *ngIf="optionDateStart !== null && optionDateStart !== ''"
+                (click)="datetimeDesde()"
+                >desde
+                <span class="date-selected"
+                  >&nbsp;&nbsp;{{ optionDateStart | date:'dd.MM' }}</span
+                ></ion-item
+              >
+              <ion-item *ngIf="isDatetimeDesde">
                 <ion-datetime
                   (ionChange)="filterEvento()"
                   mode="ios"
-                  placeholder="desde"
                   doneText="Seleccionar"
                   cancelText="Cancelar"
                   min="{{ fullDay }}"
@@ -102,12 +114,24 @@
                   presentation="date"
                 >
                 </ion-datetime>
-              </div>
-              <div>
+              </ion-item>
+              <ion-item
+                *ngIf="(optionDateEnd === null || optionDateEnd === 'fecha' || optionDateEnd === '')"
+                (click)="datetimeHasta()"
+                >hasta</ion-item
+              >
+              <ion-item
+                *ngIf="optionDateEnd !== null && optionDateEnd !== ''"
+                (click)="datetimeHasta()"
+                >hasta
+                <span class="date-selected"
+                  >&nbsp;&nbsp;{{ optionDateEnd | date:'dd.MM' }}</span
+                ></ion-item
+              >
+              <ion-item *ngIf="isDatetimeHasta">
                 <ion-datetime
                   (ionChange)="filterEvento()"
                   mode="ios"
-                  placeholder="hasta"
                   doneText="Seleccionar"
                   cancelText="Cancelar"
                   min="{{ fullDayNext }}"
@@ -117,7 +141,7 @@
                   presentation="date"
                 >
                 </ion-datetime>
-              </div>
+              </ion-item>
             </ion-list>
           </div>
           <!-- Filtro por Fecha  -->

@@ -102,7 +102,7 @@ export class EventDetailPage implements OnInit {
     const modalSellingPoint = await this.modalCtrl.create({
       component: SellingPointsPage,
       cssClass: "modal-selling-point",
-      backdropDismiss: false,
+      backdropDismiss: true,
       showBackdrop: true,
       componentProps: {
         instagram: this.instagram,

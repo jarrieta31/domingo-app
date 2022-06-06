@@ -85,7 +85,6 @@ ion-title {
   font-family: "Poppins", sans-serif;
 }
 
-
 .event > .info-event {
   align-self: flex-start;
 }
@@ -215,8 +214,15 @@ ion-label {
 .list_type_date {
   border-bottom-left-radius: 16px !important;
   border-bottom-right-radius: 16px !important;
-  max-height: 230px;
+  max-height: 400px;
   overflow-y: scroll;
+}
+
+.list_type_date > ion-item {
+  font-family: "Poppins", sans-serif;
+  font-size: 0.9em;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .open_acordeon {
@@ -235,6 +241,7 @@ ion-radio {
   padding: 0 !important;
 }
 
-ion-datetime {
-  --placeholder-color: var(--ion-color-dark);
+.date-selected {
+  font-weight: bold;
+  color: #fc67ff;
 }
