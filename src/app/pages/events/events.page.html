@@ -91,17 +91,19 @@
               <ion-item
                 *ngIf="(optionDateStart === null || optionDateStart === 'fecha' || optionDateStart === '')"
                 (click)="datetimeDesde()"
+                class="filter_list"
                 >desde</ion-item
               >
               <ion-item
                 *ngIf="optionDateStart !== null && optionDateStart !== ''"
                 (click)="datetimeDesde()"
+                class="filter_list"
                 >desde
                 <span class="date-selected"
                   >&nbsp;&nbsp;{{ optionDateStart | date:'dd.MM' }}</span
                 ></ion-item
               >
-              <ion-item *ngIf="isDatetimeDesde">
+              <ion-item *ngIf="isDatetimeDesde" class="back-date">
                 <ion-datetime
                   (ionChange)="filterEvento()"
                   mode="ios"
@@ -112,23 +114,26 @@
                   yearValues="{{ customYearValues }}"
                   formControlName="fecha_inicio"
                   presentation="date"
+                  size="cover"
                 >
                 </ion-datetime>
               </ion-item>
               <ion-item
                 *ngIf="(optionDateEnd === null || optionDateEnd === 'fecha' || optionDateEnd === '')"
                 (click)="datetimeHasta()"
+                class="filter_list"
                 >hasta</ion-item
               >
               <ion-item
                 *ngIf="optionDateEnd !== null && optionDateEnd !== ''"
                 (click)="datetimeHasta()"
+                class="filter_list"
                 >hasta
                 <span class="date-selected"
                   >&nbsp;&nbsp;{{ optionDateEnd | date:'dd.MM' }}</span
                 ></ion-item
               >
-              <ion-item *ngIf="isDatetimeHasta">
+              <ion-item *ngIf="isDatetimeHasta" class="back-date">
                 <ion-datetime
                   (ionChange)="filterEvento()"
                   mode="ios"
@@ -139,6 +144,7 @@
                   yearValues="{{ customYearValues }}"
                   formControlName="fecha_fin"
                   presentation="date"
+                  size="cover"
                 >
                 </ion-datetime>
               </ion-item>
@@ -151,7 +157,7 @@
               <span>Localidad</span>
             </div>
             <div>
-              <ion-list class="list_type" inset="true">
+              <ion-list class="list_type">
                 <ion-radio-group
                   (ionChange)="filterEvento()"
                   formControlName="localidad"
@@ -181,7 +187,7 @@
               <span>Tipo</span>
             </div>
             <div>
-              <ion-list class="list_type" inset="true">
+              <ion-list class="list_type">
                 <ion-radio-group
                   (ionChange)="filterEvento()"
                   formControlName="tipo"

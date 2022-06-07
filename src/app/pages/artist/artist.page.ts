@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { forkJoin, of, Subject } from "rxjs";
 import { map, switchMap, takeUntil, tap } from "rxjs/operators";
@@ -14,6 +14,7 @@ import { GeolocationService } from "src/app/services/geolocation.service";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { Browser } from '@capacitor/browser';
+import { IonSlides } from "@ionic/angular";
 
 @Component({
   selector: "app-artist",
@@ -81,6 +82,16 @@ export class ArtistPage {
     localidad: ["", Validators.required],
     categoria: ["", Validators.required],
   });
+
+  @ViewChild(IonSlides) slide: IonSlides;
+
+  resetSlide() {
+    this.slide.startAutoplay();
+  }
+
+  endSlide() {
+    this.slide.stopAutoplay();
+  }
 
   filterArtist() {
     this.dataForm = this.filterForm.value;
@@ -184,6 +195,9 @@ export class ArtistPage {
   }
 
   ionViewWillEnter() {
+
+    this.resetSlide();
+
     if (
       localStorage.getItem("deptoActivo") != undefined &&
       localStorage.getItem("deptoActivo") != null
@@ -253,5 +267,7 @@ export class ArtistPage {
 
     this.isFilterLocation = false;
     this.isFilterType = false;
+
+    this.endSlide();
   }
 }

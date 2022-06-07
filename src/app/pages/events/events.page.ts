@@ -509,5 +509,7 @@ export class EventsPage {
     this.isFilterLocation = false;
     this.isFilterType = false;
     this.isFilterDate = false;
+    this.isDatetimeDesde = false;
+    this.isDatetimeHasta = false;
   }
 }
