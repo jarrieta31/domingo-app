@@ -1,6 +1,6 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { forkJoin, Observable, of, Subject } from "rxjs";
-import { map, switchMap, takeUntil, tap } from "rxjs/operators";
+import { map, switchMap, takeUntil } from "rxjs/operators";
 import { PlaceService } from "src/app/services/database/place.service";
 import { GeolocationService } from "src/app/services/geolocation.service";
 import { Place } from "src/app/shared/place";
@@ -14,6 +14,7 @@ import { Slider } from "src/app/shared/slider";
 import { SlidesService } from "src/app/services/database/slides.service";
 import { environment } from "src/environments/environment";
 import { Browser } from '@capacitor/browser';
+import { IonSlides } from "@ionic/angular";
 
 export interface Papa {
   type: string;
@@ -107,6 +108,16 @@ export class PlacePage {
   preloadImage: string = "/assets/load.gif";
   /** clase para lista de preload */
   preload_card: string = "img_card_place"
+
+  @ViewChild(IonSlides) slide: IonSlides;
+
+  resetSlide() {
+    this.slide.startAutoplay();
+  }
+
+  endSlide() {
+    this.slide.stopAutoplay();
+  }
 
   filterPlace() {
     this.dataForm = this.filterForm.value;
@@ -235,6 +246,8 @@ export class PlacePage {
         this.sliderPlace = res;
       });
 
+      this.resetSlide();
+
     /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
     let posDep = this.geolocationSvc.posicion$.pipe(
       switchMap((pos: Point) => {
@@ -269,6 +282,8 @@ export class PlacePage {
     this.unsubscribe$.complete();
     this.isFilterLocation = false;
     this.isFilterType = false;
+
+    this.endSlide();
   }
 
   /**Contador de visitas de Lugares */

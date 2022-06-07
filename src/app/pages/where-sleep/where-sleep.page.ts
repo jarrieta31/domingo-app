@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { DondeDormir } from "../../shared/donde-dormir";
 import { LoadingController } from "@ionic/angular";
 import { WhereSleepService } from "src/app/services/database/where-sleep.service";
@@ -13,6 +13,7 @@ import { DatabaseService } from "src/app/services/database.service";
 import { Point } from "src/app/shared/point";
 import { environment } from "src/environments/environment";
 import { Browser } from '@capacitor/browser';
+import { IonSlides } from "@ionic/angular";
 
 @Component({
   selector: "app-where-sleep",
@@ -69,6 +70,8 @@ export class WhereSleepPage {
   /**se guardan los sliders de la pantalla donde_comer */
   sliderSleep: Slider[] = [];
 
+  @ViewChild(IonSlides) slide: IonSlides;
+
   constructor(
     private loadingCtrl: LoadingController,
     public sleepSvc: WhereSleepService,
@@ -78,6 +81,14 @@ export class WhereSleepPage {
     private http: HttpClient,
     private databaseSvc: DatabaseService,
   ) {}
+
+  resetSlide() {
+    this.slide.startAutoplay();
+  }
+
+  endSlide() {
+    this.slide.stopAutoplay();
+  }
 
   async show(message: string) {
     this.loading = await this.loadingCtrl.create({
@@ -200,6 +211,8 @@ export class WhereSleepPage {
         this.sliderSleep = res;
       });
 
+      this.resetSlide();
+
     /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
     let posDep = this.geolocationSvc.posicion$.pipe(
       switchMap((pos: Point) => {
@@ -236,5 +249,7 @@ export class WhereSleepPage {
     this.unsubscribe$.complete();
 
     this.isFilterLocation = false;
+
+    this.endSlide();
   }
 }

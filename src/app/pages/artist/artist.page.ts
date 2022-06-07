@@ -195,9 +195,6 @@ export class ArtistPage {
   }
 
   ionViewWillEnter() {
-
-    this.resetSlide();
-
     if (
       localStorage.getItem("deptoActivo") != undefined &&
       localStorage.getItem("deptoActivo") != null
@@ -231,6 +228,8 @@ export class ArtistPage {
       .subscribe((res) => {
         this.sliderArtist = res;
       });
+
+      this.resetSlide();
 
     /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
     let posDep = this.geolocationSvc.posicion$.pipe(

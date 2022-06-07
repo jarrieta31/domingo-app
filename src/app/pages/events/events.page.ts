@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { Eventos } from '../../shared/eventos';
 import { EventDetailPage } from '../event-detail/event-detail.page';
@@ -13,6 +13,7 @@ import { GeolocationService } from 'src/app/services/geolocation.service';
 import { HttpClient } from '@angular/common/http';
 import { Point } from 'src/app/shared/point';
 import { environment } from 'src/environments/environment';
+import { IonSlides } from "@ionic/angular";
 
 @Component({
   selector: 'app-events',
@@ -79,6 +80,8 @@ export class EventsPage {
 
   isFilter: boolean = false;
 
+  @ViewChild(IonSlides) slide: IonSlides;
+
   constructor(
     private veService: VisitEventService, //Servicio contador de visitas eventos.
     private modalCtrl: ModalController,
@@ -115,6 +118,14 @@ export class EventsPage {
     spaceBetween: 0,
     autoplay: true,
   };
+
+  resetSlide() {
+    this.slide.startAutoplay();
+  }
+
+  endSlide() {
+    this.slide.stopAutoplay();
+  }
 
   /**
    * Muestra el modal con descripción más detallada del evento seleccionado
@@ -472,6 +483,8 @@ export class EventsPage {
         this.sliderEvents = res;
       });
 
+      this.resetSlide();
+
     /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
     let posDep = this.geolocationSvc.posicion$.pipe(
       switchMap((pos: Point) => {
@@ -511,5 +524,7 @@ export class EventsPage {
     this.isFilterDate = false;
     this.isDatetimeDesde = false;
     this.isDatetimeHasta = false;
+
+    this.endSlide();
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { DondeComer } from "../../shared/donde-comer";
 import { WhereEatService } from "src/app/services/database/where-eat.service";
 import { LoadingController } from "@ionic/angular";
@@ -13,6 +13,7 @@ import { DatabaseService } from "src/app/services/database.service";
 import { Point } from "src/app/shared/point";
 import { environment } from "src/environments/environment";
 import { Browser } from '@capacitor/browser';
+import { IonSlides } from "@ionic/angular";
 
 @Component({
   selector: "app-where-eat",
@@ -73,6 +74,8 @@ export class WhereEatPage {
   /** clase de preload list */
   preloadClase: string = "img-comer";
 
+  @ViewChild(IonSlides) slide: IonSlides;
+
   constructor(
     private loadingCtrl: LoadingController,
     public eatSvc: WhereEatService,
@@ -82,6 +85,14 @@ export class WhereEatPage {
     private geolocationSvc: GeolocationService,
     private databaseSvc: DatabaseService,
   ) {}
+
+  resetSlide() {
+    this.slide.startAutoplay();
+  }
+
+  endSlide() {
+    this.slide.stopAutoplay();
+  }
 
   async show(message: string) {
     this.loading = await this.loadingCtrl.create({
@@ -200,6 +211,8 @@ export class WhereEatPage {
         this.sliderEat = res;
       });
 
+      this.resetSlide();
+
     /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
     let posDep = this.geolocationSvc.posicion$.pipe(
       switchMap((pos: Point) => {
@@ -235,5 +248,7 @@ export class WhereEatPage {
     this.unsubscribe$.complete();
 
     this.isFilterLocation = false;
+
+    this.endSlide();
   }
 }
