@@ -72,10 +72,10 @@
           class="open_acordeon date_filter"
         >
           <span *ngIf="optionDateStart !== null && optionDateStart !== ''"
-            >desde {{ optionDateStart | date:'dd.MM' }}</span
+            >desde {{ optionDateStart | date:'dd.MM.yyyy' }}</span
           ><br />
           <span *ngIf="optionDateEnd !== null && optionDateEnd !== ''"
-            >hasta {{ optionDateEnd | date:'dd.MM' }}</span
+            >hasta {{ optionDateEnd | date:'dd.MM.yyyy' }}</span
           ></ion-label
         >
       </div>
@@ -89,65 +89,85 @@
             </div>
             <ion-list class="list_type_date">
               <ion-item
+                id="modal-desde"
                 *ngIf="(optionDateStart === null || optionDateStart === 'fecha' || optionDateStart === '')"
-                (click)="datetimeDesde()"
                 class="filter_list"
                 >desde</ion-item
               >
               <ion-item
+                id="modal-desde"
                 *ngIf="optionDateStart !== null && optionDateStart !== ''"
-                (click)="datetimeDesde()"
                 class="filter_list"
                 >desde
                 <span class="date-selected"
-                  >&nbsp;&nbsp;{{ optionDateStart | date:'dd.MM' }}</span
+                  >&nbsp;&nbsp;{{ optionDateStart | date:'dd.MM.yyyy' }}</span
                 ></ion-item
               >
-              <ion-item *ngIf="isDatetimeDesde" class="back-date">
-                <ion-datetime
-                  (ionChange)="filterEvento()"
-                  mode="ios"
-                  doneText="Seleccionar"
-                  cancelText="Cancelar"
-                  min="{{ fullDay }}"
-                  displayFormat="DD MMM YYYY"
-                  yearValues="{{ customYearValues }}"
-                  formControlName="fecha_inicio"
-                  presentation="date"
-                  size="cover"
-                >
-                </ion-datetime>
-              </ion-item>
+              <ion-modal trigger="modal-desde">
+                <ng-template>
+                  <ion-content>
+                    <ion-datetime
+                      (ionChange)="filterEvento()"
+                      mode="ios"
+                      min="{{ fullDay }}"
+                      displayFormat="DD MMM YYYY"
+                      yearValues="{{ customYearValues }}"
+                      formControlName="fecha_inicio"
+                      presentation="date"
+                      size="cover"
+                    >
+                      <ion-buttons slot="buttons">
+                        <ion-button color="danger" (click)="close()"
+                          >Cancelar</ion-button
+                        >
+                        <ion-button color="primary" (click)="confirm()"
+                          >Seleccionar</ion-button
+                        >
+                      </ion-buttons>
+                    </ion-datetime>
+                  </ion-content>
+                </ng-template>
+              </ion-modal>
               <ion-item
+                id="modal-hasta"
                 *ngIf="(optionDateEnd === null || optionDateEnd === 'fecha' || optionDateEnd === '')"
-                (click)="datetimeHasta()"
                 class="filter_list"
                 >hasta</ion-item
               >
               <ion-item
+                id="modal-hasta"
                 *ngIf="optionDateEnd !== null && optionDateEnd !== ''"
-                (click)="datetimeHasta()"
                 class="filter_list"
                 >hasta
                 <span class="date-selected"
-                  >&nbsp;&nbsp;{{ optionDateEnd | date:'dd.MM' }}</span
+                  >&nbsp;&nbsp;{{ optionDateEnd | date:'dd.MM.yyyy' }}</span
                 ></ion-item
               >
-              <ion-item *ngIf="isDatetimeHasta" class="back-date">
-                <ion-datetime
-                  (ionChange)="filterEvento()"
-                  mode="ios"
-                  doneText="Seleccionar"
-                  cancelText="Cancelar"
-                  min="{{ fullDayNext }}"
-                  displayFormat="DD MMM YYYY"
-                  yearValues="{{ customYearValues }}"
-                  formControlName="fecha_fin"
-                  presentation="date"
-                  size="cover"
-                >
-                </ion-datetime>
-              </ion-item>
+              <ion-modal trigger="modal-hasta">
+                <ng-template>
+                  <ion-content>
+                    <ion-datetime
+                      (ionChange)="filterEvento()"
+                      mode="ios"
+                      min="{{ fullDayNext }}"
+                      displayFormat="DD MMM YYYY"
+                      yearValues="{{ customYearValues }}"
+                      formControlName="fecha_fin"
+                      presentation="date"
+                      size="cover"
+                    >
+                      <ion-buttons slot="buttons">
+                        <ion-button color="danger" (click)="close()"
+                          >Cancelar</ion-button
+                        >
+                        <ion-button color="primary" (click)="confirm()"
+                          >Seleccionar</ion-button
+                        >
+                      </ion-buttons>
+                    </ion-datetime>
+                  </ion-content>
+                </ng-template>
+              </ion-modal>
             </ion-list>
           </div>
           <!-- Filtro por Fecha  -->

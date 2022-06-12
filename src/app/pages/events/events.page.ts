@@ -1,5 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
+import {
+  AlertController,
+  IonDatetime,
+  IonSlides,
+  ModalController,
+} from '@ionic/angular';
 import { Eventos } from '../../shared/eventos';
 import { EventDetailPage } from '../event-detail/event-detail.page';
 import { DatabaseService } from 'src/app/services/database.service';
@@ -13,7 +18,7 @@ import { GeolocationService } from 'src/app/services/geolocation.service';
 import { HttpClient } from '@angular/common/http';
 import { Point } from 'src/app/shared/point';
 import { environment } from 'src/environments/environment';
-import { IonSlides } from "@ionic/angular";
+import {formatDate} from '@angular/common';
 
 @Component({
   selector: 'app-events',
@@ -64,9 +69,8 @@ export class EventsPage {
   currentDepto: string = this.dbService.selectionDepto;
   /**dia siguiente al actual */
   nextDay: any;
-  /**controla datetime */
-  isDatetimeDesde: boolean = false;
-  isDatetimeHasta: boolean = false;
+
+  formatDateEnd: string = null;
 
   /**se guardan los sliders de la pantalla eventos */
   sliderEvents: Slider[] = [];
@@ -81,6 +85,7 @@ export class EventsPage {
   isFilter: boolean = false;
 
   @ViewChild(IonSlides) slide: IonSlides;
+  @ViewChild(IonDatetime) datetime: IonDatetime;
 
   constructor(
     private veService: VisitEventService, //Servicio contador de visitas eventos.
@@ -125,6 +130,14 @@ export class EventsPage {
 
   endSlide() {
     this.slide.stopAutoplay();
+  }
+
+  close() {
+    this.datetime.cancel(true);
+  }
+
+  confirm() {
+    this.datetime.confirm(true);
   }
 
   /**
@@ -246,8 +259,7 @@ export class EventsPage {
     const alert = await this.alertCtrl.create({
       cssClass: 'my-custom-class',
       header: 'FECHA INCORRECTA',
-      message:
-        'Fecha desde no puede ser mayor que fecha hasta. Se reiniciará la lista',
+      message: 'Fecha desde no puede ser mayor que fecha hasta. Seleccione una fecha menor o igual a ' + this.formatDateEnd,
       mode: 'ios',
       animated: true,
       buttons: [
@@ -278,7 +290,8 @@ export class EventsPage {
         this.optionDateEnd < this.optionDateStart
       ) {
         this.optionDateStart = null;
-        this.optionDateEnd = null;
+        this.dataform.fecha_inicio = null;
+        this.formatDateEnd = new Date(this.optionDateEnd).toLocaleDateString();
         this.presentAlert();
       } else {
         this.optionDateStart = this.dataform.fecha_inicio;
@@ -292,22 +305,7 @@ export class EventsPage {
     if (this.dataform.localidad === '') this.optionLocation = 'localidad';
     if (this.dataform.tipo === '') this.optionType = 'tipo';
 
-    if (this.isDatetimeDesde) this.isDatetimeDesde = false;
-    if (this.isDatetimeHasta) this.isDatetimeHasta = false;
-
     console.log('form', this.filterForm.value);
-  }
-
-  datetimeDesde() {
-    this.isDatetimeDesde = !this.isDatetimeDesde;
-
-    if (this.isDatetimeHasta) this.isDatetimeHasta = false;
-  }
-
-  datetimeHasta() {
-    this.isDatetimeHasta = !this.isDatetimeHasta;
-
-    if (this.isDatetimeDesde) this.isDatetimeDesde = false;
   }
 
   /**Retorna un arreglo con los tipos de eventos existentes por Departamento. */
@@ -372,7 +370,7 @@ export class EventsPage {
 
   /**
    *
-   * @param tipo Nombre de la "localidad" donde se realiza el Evento.
+   * @param localidad Nombre de la "localidad" donde se realiza el Evento.
    *  Es usado como criterio de buscanda.
    * @returns Arreglo de Eventos que se realizaran en esa "localidad".
    */
@@ -387,7 +385,7 @@ export class EventsPage {
   }
   /** <=<=<=<=========== Metodos Para Filtro de Eventos <=<=<=<===========*/
 
-  sumarDias(fecha, dias) {
+  sumarDias(fecha: Date, dias: number) {
     fecha.setDate(fecha.getDate() + dias);
     return fecha;
   }
@@ -483,7 +481,7 @@ export class EventsPage {
         this.sliderEvents = res;
       });
 
-      this.resetSlide();
+    this.resetSlide();
 
     /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
     let posDep = this.geolocationSvc.posicion$.pipe(
@@ -522,8 +520,6 @@ export class EventsPage {
     this.isFilterLocation = false;
     this.isFilterType = false;
     this.isFilterDate = false;
-    this.isDatetimeDesde = false;
-    this.isDatetimeHasta = false;
 
     this.endSlide();
   }
