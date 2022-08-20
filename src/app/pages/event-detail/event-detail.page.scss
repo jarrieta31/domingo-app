@@ -58,6 +58,13 @@ ion-title {
   font-family: "Poppins", sans-serif;
 }
 
+.lugar {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+}
+
 .fecha,
 .hora {
   width: 49%;

@@ -22,7 +22,10 @@
       ></app-preload-details>
     </div>
     <section>
-      <div class="cuenta-regresiva" *ngIf="day !== 0 || hours !== 0 || minutes !== 0 || seconds !== 0, else start">
+      <div
+        class="cuenta-regresiva"
+        *ngIf="day !== 0 || hours !== 0 || minutes !== 0 || seconds !== 0, else start"
+      >
         <div class="time">
           <ul class="time-list">
             <li id="event-detail-container" class="count-bg-one radius">
@@ -41,9 +44,7 @@
         </div>
       </div>
       <ng-template #start>
-        <div class="event_start">
-          Evento en curso
-        </div>
+        <div class="event_start">Evento en curso</div>
       </ng-template>
     </section>
     <div class="ubicacion">
@@ -55,7 +56,13 @@
         >
           {{ lugar }}
         </div>
-        <i class="fi fi-rr-map-marker mark-info"></i>{{ direccion }}
+        <div class="lugar">
+          <div><i class="fi fi-rr-map-marker mark-info"></i><br /></div>
+          <div>
+            <div>{{ direccion }}</div>
+            <div>{{ localidad }} - {{ departamento }}</div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="fecha-hora">
@@ -65,10 +72,7 @@
           <ion-icon name="calendar-outline" class="mark-info"></ion-icon>{{fecha
           | date: 'dd.MM.yyyy'}}
         </div>
-        <div
-          class="fecha-hora_div"
-          *ngIf="!dateControl"
-        >
+        <div class="fecha-hora_div" *ngIf="!dateControl">
           <ion-icon name="calendar-outline" class="mark-info"></ion-icon
           >{{fechaFin | date: 'dd.MM.yyyy'}}
         </div>
@@ -77,7 +81,8 @@
         <div id="event-detail-container" class="div-hora">Hora</div>
         <div class="fecha-hora_div" *ngIf="fecha !== fechaFin">
           <ion-icon name="time-outline" class="mark-info"></ion-icon>{{fecha |
-          date:'HH:mm'}} <span *ngIf="!controlHour">a {{fechaFin | date:'HH:mm'}}</span>
+          date:'HH:mm'}}
+          <span *ngIf="!controlHour">a {{fechaFin | date:'HH:mm'}}</span>
         </div>
       </div>
     </div>
@@ -106,10 +111,7 @@
       <div id="event-detail-container" class="entradas_div">Entrada</div>
       <div id="event-detail-container" class="precios_div">Gratis</div>
     </div>
-    <div
-      class="precio"
-      (click)="openModalSellingPoint()"
-    >
+    <div class="precio" (click)="openModalSellingPoint()">
       <div><i class="fas fa-ticket-alt mark-info"></i></div>
       <div id="event-detail-container" class="puntos-venta">
         ver puntos de venta
