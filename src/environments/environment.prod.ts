@@ -1,16 +1,15 @@
 export const environment = {
   production: false,
   firebaseConfig: {
-    apiKey: "AIzaSyDhM4nqR6sQ9bDVZjc2zSSnRGoPKCJRFcM",
-    authDomain: "appdominga.firebaseapp.com",
-    databaseURL: "https://appdominga.firebaseio.com",
-    projectId: "appdominga",
-    storageBucket: "appdominga.appspot.com",
-    messagingSenderId: "99878739465",
-    appId: "1:99878739465:web:b831cd823949fc045be2d8",
-    measurementId: "G-BPNTCZ1PC9"
+    apiKey: "AIzaSyALYzXkGTPXdlEb23pnIqU4NykVLuVieM0",
+    authDomain: "developer-dominga.firebaseapp.com",
+    projectId: "developer-dominga",
+    storageBucket: "developer-dominga.appspot.com",
+    messagingSenderId: "161489449929",
+    appId: "1:161489449929:web:c4dbe31ec2902f5ffaae18",
+    measurementId: "G-94TRQJ0LTH"
   },
-  firebaseAPIKey: "AIzaSyDhM4nqR6sQ9bDVZjc2zSSnRGoPKCJRFcM",
+  firebaseAPIKey: "AIzaSyALYzXkGTPXdlEb23pnIqU4NykVLuVieM0",
   mapBoxToken: "pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA",
   urlMopboxDepto: "https://api.mapbox.com/geocoding/v5/mapbox.places/",
   urlMapboxDistance: "https://api.mapbox.com/directions/v5/mapbox/driving/" 

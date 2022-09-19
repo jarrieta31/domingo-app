@@ -7,8 +7,7 @@ import { VideoPage } from "../video/video.page";
 import * as Mapboxgl from "mapbox-gl";
 import { Router } from "@angular/router";
 import { PreloadDetailsComponent } from "../../components/preload-details/preload-details.component";
-
-declare var $: any;
+import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 
 @Component({
   selector: "app-place-selected",
@@ -45,12 +44,15 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   preloadClassGaleria: string = "img-galeria";
   /**clase preload interes*/
   preloadClassInteres: string = "img-interes";
+  /**url para compartir */
+  shareURL: string = "https://appdominga.web.app/lugares/";
 
   constructor(
     private placeSvc: PlaceService,
     private modalCtrl: ModalController,
     private router: Router,
-    private actionSheetController: ActionSheetController
+    private actionSheetController: ActionSheetController,
+    private socialSharing: SocialSharing
   ) {}
 
   ngOnInit() {
@@ -84,6 +86,16 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   /**selecciona lugar actual */
   getPlace(id: string) {
     this.placeSvc.getPlaceId(id);
+  }
+
+  socialSharingShare(nombre: string, id: string) {
+    console.log(nombre, id)
+    this.socialSharing.share(
+      nombre,
+      null,
+      null,
+      this.shareURL+id
+    );
   }
 
   /**

@@ -10,5 +10,9 @@
     <param name="android-package" value="cordova.plugins.screenorientation.CDVOrientation"/>
   </feature>
 
+  <feature name="SocialSharing">
+    <param name="android-package" value="nl.xservices.plugins.SocialSharing"/>
+  </feature>
+
   
 </widget>
