@@ -1,34 +1,35 @@
-import { Component, ViewChild } from "@angular/core";
-import { DondeComer } from "../../shared/donde-comer";
-import { WhereEatService } from "src/app/services/database/where-eat.service";
-import { LoadingController } from "@ionic/angular";
-import { forkJoin, of, Subject } from "rxjs";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { map, switchMap, takeUntil } from "rxjs/operators";
-import { SlidesService } from "src/app/services/database/slides.service";
-import { Slider } from "src/app/shared/slider";
-import { HttpClient } from "@angular/common/http";
-import { GeolocationService } from "src/app/services/geolocation.service";
-import { DatabaseService } from "src/app/services/database.service";
-import { Point } from "src/app/shared/point";
-import { environment } from "src/environments/environment";
+import { Component, ViewChild } from '@angular/core';
+import { DondeComer } from '../../shared/donde-comer';
+import { WhereEatService } from 'src/app/services/database/where-eat.service';
+import { LoadingController } from '@ionic/angular';
+import { forkJoin, of, Subject } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
+import { SlidesService } from 'src/app/services/database/slides.service';
+import { Slider } from 'src/app/shared/slider';
+import { HttpClient } from '@angular/common/http';
+import { GeolocationService } from 'src/app/services/geolocation.service';
+import { DatabaseService } from 'src/app/services/database.service';
+import { Point } from 'src/app/shared/point';
+import { environment } from 'src/environments/environment';
 import { Browser } from '@capacitor/browser';
-import { IonSlides } from "@ionic/angular";
+import { IonSlides } from '@ionic/angular';
+import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 
 @Component({
-  selector: "app-where-eat",
-  templateUrl: "./where-eat.page.html",
-  styleUrls: ["./where-eat.page.scss"],
+  selector: 'app-where-eat',
+  templateUrl: './where-eat.page.html',
+  styleUrls: ['./where-eat.page.scss'],
 })
 export class WhereEatPage {
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
   private unsubscribe$: Subject<void>;
 
   /**captura los datos del formulario de filtros */
-  dataForm: any = "";
+  dataForm: any = '';
 
   filterForm: FormGroup = this.fb.group({
-    localidad: ["", Validators.required],
+    localidad: ['', Validators.required],
   });
 
   loading: any;
@@ -68,11 +69,11 @@ export class WhereEatPage {
   /**departamente seleccionado actualmente */
   currentDepto: string = this.databaseSvc.selectionDepto;
   /**url load  */
-  preloadImage: string = "/assets/load.gif";
+  preloadImage: string = '/assets/load.gif';
   /**url load  */
-  preloadImage_list: string = "/assets/load_cuadrada.gif";
+  preloadImage_list: string = '/assets/load_cuadrada.gif';
   /** clase de preload list */
-  preloadClase: string = "img-comer";
+  preloadClase: string = 'img-comer';
 
   @ViewChild(IonSlides) slide: IonSlides;
 
@@ -84,6 +85,7 @@ export class WhereEatPage {
     private http: HttpClient,
     private geolocationSvc: GeolocationService,
     private databaseSvc: DatabaseService,
+    private socialSharing: SocialSharing
   ) {}
 
   resetSlide() {
@@ -94,10 +96,19 @@ export class WhereEatPage {
     this.slide.stopAutoplay();
   }
 
+  socialSharingShare(nombre: string, imagen: string) {
+    this.socialSharing.share(
+      nombre,
+      null,
+      null,
+      imagen
+    );
+  }
+
   async show(message: string) {
     this.loading = await this.loadingCtrl.create({
       message,
-      spinner: "bubbles",
+      spinner: 'bubbles',
     });
 
     this.loading.present().then(() => {
@@ -123,8 +134,17 @@ export class WhereEatPage {
   }
 
   get selectdistancia() {
-    return localStorage.getItem("distanceActivo") ? true : false;
+    return localStorage.getItem('distanceActivo') ? true : false;
   }
+
+  // async share(lugar: string) {
+  //   await Share.share({
+  //     title: lugar,
+  //     text: lugar,
+  //     url: '',
+  //     dialogTitle: 'Share with buddies',
+  //   });
+  // }
 
   getLocation(lng: number, lat: number) {
     return this.http
@@ -145,15 +165,15 @@ export class WhereEatPage {
     latPlace: number
   ) {
     return this.http.get(
-      "https://api.mapbox.com/directions/v5/mapbox/driving/" +
+      'https://api.mapbox.com/directions/v5/mapbox/driving/' +
         lngUser +
-        "," +
+        ',' +
         latUser +
-        ";" +
+        ';' +
         lngPlace +
-        "," +
+        ',' +
         latPlace +
-        "?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
+        '?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA'
     );
   }
 
@@ -161,7 +181,7 @@ export class WhereEatPage {
     this.dataForm = this.filterForm.value;
     if (this.isFilterLocation) this.isFilterLocation = false;
     this.optionLocation = this.dataForm.localidad;
-    if (this.dataForm.localidad === "") this.optionLocation = "localidad";
+    if (this.dataForm.localidad === '') this.optionLocation = 'localidad';
   }
 
   changeFilterEat() {
@@ -169,33 +189,33 @@ export class WhereEatPage {
   }
 
   openInstagram(url: string) {
-    Browser.open({ url: url});
+    Browser.open({ url: url });
   }
 
   openWhatsapp(url: string) {
-    Browser.open({ url: url});
+    Browser.open({ url: url });
   }
 
   ionViewWillEnter() {
     if (
-      localStorage.getItem("deptoActivo") != undefined &&
-      localStorage.getItem("deptoActivo") != null
+      localStorage.getItem('deptoActivo') != undefined &&
+      localStorage.getItem('deptoActivo') != null
     ) {
       this.dist = null;
-      this.dep = localStorage.getItem("deptoActivo");
+      this.dep = localStorage.getItem('deptoActivo');
     } else if (
-      localStorage.getItem("distanceActivo") != undefined &&
-      localStorage.getItem("distanceActivo") != null
+      localStorage.getItem('distanceActivo') != undefined &&
+      localStorage.getItem('distanceActivo') != null
     ) {
       this.dep = null;
-      this.dist = parseInt(localStorage.getItem("distanceActivo"));
+      this.dist = parseInt(localStorage.getItem('distanceActivo'));
     }
 
-    if (localStorage.getItem("deptoActivo") != this.currentDepto) {
-      this.currentDepto = localStorage.getItem("deptoActivo");
+    if (localStorage.getItem('deptoActivo') != this.currentDepto) {
+      this.currentDepto = localStorage.getItem('deptoActivo');
       this.filterForm.reset();
-      this.dataForm = "";
-      this.optionLocation = "localidad";
+      this.dataForm = '';
+      this.optionLocation = 'localidad';
     }
 
     this.unsubscribe$ = new Subject<void>();
@@ -204,14 +224,14 @@ export class WhereEatPage {
 
     this.sliderSvc.slider
       .pipe(
-        map((slider) => slider.filter((s) => s.pantalla === "donde_comer")),
+        map((slider) => slider.filter((s) => s.pantalla === 'donde_comer')),
         takeUntil(this.unsubscribe$)
       )
       .subscribe((res) => {
         this.sliderEat = res;
       });
 
-      this.resetSlide();
+    this.resetSlide();
 
     /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
     let posDep = this.geolocationSvc.posicion$.pipe(

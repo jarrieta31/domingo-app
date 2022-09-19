@@ -27,36 +27,39 @@ import { PipesModule } from './shared/pipes/pipes.module';
 
 import { GpsProvider } from './providers/gps-provider.service';
 import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
+import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx'
 
-
-
-export function gpsProviderFactory(provider: GpsProvider){
+export function gpsProviderFactory(provider: GpsProvider) {
   return () => provider.getUbicacionInicial();
 }
 
 @NgModule({
-    declarations: [
-        AppComponent,
-    ],
-    entryComponents: [],
-    imports: [
-        AngularFireModule.initializeApp(environment.firebaseConfig),
-        AngularFireStorageModule,
-        AngularFirestoreModule.enablePersistence(),
-        AppRoutingModule,
-        BrowserModule,
-        ComponentsModule,
-        HttpClientModule,
-        IonicModule.forRoot(),
-        PipesModule,
-        ReactiveFormsModule,
-    ],
-    providers: [
-        {provide: APP_INITIALIZER, useFactory: gpsProviderFactory, deps: [GpsProvider], multi: true},
-        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-        CallNumber,
-        ScreenOrientation,
-    ],
-    bootstrap: [AppComponent],
+  declarations: [AppComponent],
+  entryComponents: [],
+  imports: [
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireStorageModule,
+    AngularFirestoreModule.enablePersistence(),
+    AppRoutingModule,
+    BrowserModule,
+    ComponentsModule,
+    HttpClientModule,
+    IonicModule.forRoot(),
+    PipesModule,
+    ReactiveFormsModule,
+  ],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: gpsProviderFactory,
+      deps: [GpsProvider],
+      multi: true,
+    },
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    CallNumber,
+    ScreenOrientation,
+    SocialSharing,
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

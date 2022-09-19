@@ -81,7 +81,7 @@ export class HomeMenuPage {
       cssClass: 'my-custom-class',
       header: 'SELECCIONAR FILTRO',
       message:
-        'Debe seleccionar un departamento para continuar, no ha proporcionado permisos de ubicación',
+        'Debe seleccionar un departamento para continuar',
       mode: 'ios',
       animated: true,
       buttons: [
@@ -142,8 +142,6 @@ export class HomeMenuPage {
   }
 
   ionViewWillEnter() {
-    this.country = this.gpsProv.pais;
-    console.log(this.country);
     this.unsubscribe$ = new Subject<void>();
 
     if (
@@ -164,6 +162,8 @@ export class HomeMenuPage {
     this.gps = this.geolocationSvc.gps;
 
     setTimeout(() => {
+      this.country = this.gpsProv.pais;
+      console.log(this.country);
       this.presentAlert();
       this.presentAlertDepto();
     }, 2500);
