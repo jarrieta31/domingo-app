@@ -45,7 +45,7 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   /**clase preload interes*/
   preloadClassInteres: string = "img-interes";
   /**url para compartir */
-  shareURL: string = "https://appdominga.web.app/lugares/";
+  shareURL: string = "https://developer-dominga.web.app/lugares/";
 
   constructor(
     private placeSvc: PlaceService,
@@ -89,7 +89,6 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   }
 
   socialSharingShare(nombre: string, id: string) {
-    console.log(nombre, id)
     this.socialSharing.share(
       nombre,
       null,

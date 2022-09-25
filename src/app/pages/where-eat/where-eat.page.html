@@ -121,21 +121,25 @@
                   </p>
                 </div>
                 <ion-icon
+                  color="dark"
                   class="contact"
                   *ngIf="item.instagram !== null"
                   name="logo-instagram"
                   (click)="openInstagram(item.instagram)"
                 ></ion-icon>
                 <ion-icon
+                  color="dark"
                   class="contact"
                   *ngIf="item.whatsapp !== null"
                   name="logo-whatsapp"
                   (click)="openWhatsapp(item.whatsapp)"
                 ></ion-icon>
                 <ion-icon
+                  color="dark"
+                  slot="end"
                   class="contact"
-                  name="share"
-                  (click)="socialSharingShare(item.nombre, item.imagen.url)"
+                  name="share-social-sharp"
+                  (click)="socialSharingShare(place.nombre, place.id)"
                 ></ion-icon>
               </ion-label>
             </div>

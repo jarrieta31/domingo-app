@@ -9,6 +9,13 @@
       ></ion-back-button>
     </ion-buttons>
     <ion-title color="back" id="nombre">{{titulo}}</ion-title>
+    <ion-icon
+      color="back"
+      slot="end"
+      class="share"
+      name="share-social-sharp"
+      (click)="socialSharingShare(place.nombre, place.id)"
+    ></ion-icon>
   </ion-toolbar>
 </ion-header>
 <ion-content>

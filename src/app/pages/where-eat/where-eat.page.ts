@@ -96,12 +96,12 @@ export class WhereEatPage {
     this.slide.stopAutoplay();
   }
 
-  socialSharingShare(nombre: string, imagen: string) {
+  socialSharingShare(nombre: string, id: string) {
     this.socialSharing.share(
       nombre,
       null,
       null,
-      imagen
+      "https://developer-dominga.web.app/lugares/"+id
     );
   }
 
