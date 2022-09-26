@@ -4,6 +4,7 @@ import { Subject, timer } from 'rxjs';
 import { SellingPointsPage } from '../selling-points/selling-points.page';
 import { Browser } from '@capacitor/browser';
 import { takeUntil } from 'rxjs/operators';
+import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 
 @Component({
   selector: 'app-event-detail',
@@ -57,14 +58,19 @@ export class EventDetailPage implements OnInit, OnDestroy {
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
   private unsubscribe$: Subject<void> = new Subject<void>();
 
-  constructor(private modalCtrl: ModalController) {}
+  constructor(
+    private modalCtrl: ModalController,
+    private socialSharing: SocialSharing
+  ) {}
 
   ngOnInit() {
-    this.clock = this.source.pipe(takeUntil(this.unsubscribe$)).subscribe((t) => {
-      this.now = new Date();
-      this.end = new Date(this.fecha);
-      this.showDate();
-    });
+    this.clock = this.source
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((t) => {
+        this.now = new Date();
+        this.end = new Date(this.fecha);
+        this.showDate();
+      });
 
     const f = new Date(this.fecha);
     const ff = new Date(this.fechaFin);
@@ -80,6 +86,10 @@ export class EventDetailPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  socialSharingEvent(nombre: string, imagen: string) {
+    this.socialSharing.share(nombre, null, null, imagen);
   }
 
   /**
