@@ -68,5 +68,12 @@
         <ion-label class="fontOption">Artistas</ion-label>
       </ion-item>
     </ion-list>
+ 
   </ion-content>
+  <ion-footer class="ion-no-border">
+    <ion-item lines="none" (click)="authService.signOut(); toggleMenu()">
+      <ion-icon slot="start" name="log-out-outline"></ion-icon>
+      <ion-label class="fontOption">Cerrar Sesión</ion-label>
+    </ion-item>
+  </ion-footer>
 </ion-menu>

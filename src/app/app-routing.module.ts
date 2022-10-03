@@ -3,7 +3,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home-menu', pathMatch: 'full' },
+  { path: '', redirectTo: 'auth', pathMatch: 'full' },
   {
     path: 'map/:nombre',
     loadChildren: () => import('./pages/map/map.module').then( m => m.MapPageModule)
@@ -43,10 +43,16 @@ const routes: Routes = [
   {
     path: 'artist',
     loadChildren: () => import('./pages/artist/artist.module').then( m => m.ArtistPageModule)
-  },  {
+  },
+  {
     path: 'dominga',
     loadChildren: () => import('./pages/dominga/dominga.module').then( m => m.DomingaPageModule)
   },
+  {
+    path: 'auth',
+    loadChildren: () => import('./pages/auth/auth.module').then( m => m.AuthPageModule)
+  },
+
 
 
 
