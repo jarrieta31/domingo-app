@@ -19,6 +19,7 @@ import { HttpClient } from '@angular/common/http';
 import { Point } from 'src/app/shared/point';
 import { environment } from 'src/environments/environment';
 import {formatDate} from '@angular/common';
+import { AngularFireAnalytics } from '@angular/fire/compat/analytics';
 
 @Component({
   selector: 'app-events',
@@ -95,7 +96,8 @@ export class EventsPage {
     private fb: FormBuilder,
     private geolocationSvc: GeolocationService,
     private http: HttpClient,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private ga: AngularFireAnalytics
   ) {
     this.nextDay = this.sumarDias(this.now, 1);
   }
@@ -130,6 +132,14 @@ export class EventsPage {
 
   endSlide() {
     this.slide.stopAutoplay();
+  }
+
+  googleAnalytics() {
+    this.ga.logEvent('eventos');
+  }
+
+  googleAnalyticsVisitarEvento(nombre: string, id: string) {
+    this.ga.logEvent('eventos_visitados', { nombre, id })
   }
 
   close() {
@@ -395,6 +405,9 @@ export class EventsPage {
   }
 
   ionViewWillEnter() {
+    document.title = "Eventos";
+    this.googleAnalytics();
+    
     this.sliderSvc.getSliders();
     this.anioActual = new Date().getFullYear();
     this.month = this.today.getMonth() + 1;

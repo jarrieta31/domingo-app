@@ -15,6 +15,7 @@ import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { Browser } from '@capacitor/browser';
 import { IonSlides } from "@ionic/angular";
+import { AngularFireAnalytics } from "@angular/fire/compat/analytics";
 
 @Component({
   selector: "app-artist",
@@ -30,7 +31,8 @@ export class ArtistPage {
     private modalCtrl: ModalController,
     private databaseSvc: DatabaseService,
     private geolocationSvc: GeolocationService,
-    private http: HttpClient
+    private http: HttpClient,
+    private ga: AngularFireAnalytics
   ) {}
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
@@ -91,6 +93,10 @@ export class ArtistPage {
 
   endSlide() {
     this.slide.stopAutoplay();
+  }
+
+  googleAnalytics() {
+    this.ga.logEvent('artistas');
   }
 
   filterArtist() {
@@ -195,6 +201,9 @@ export class ArtistPage {
   }
 
   ionViewWillEnter() {
+    document.title = "Artistas";
+    this.googleAnalytics();
+    
     if (
       localStorage.getItem("deptoActivo") != undefined &&
       localStorage.getItem("deptoActivo") != null

@@ -9465,7 +9465,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "MapPage": () => (/* binding */ MapPage)
 /* harmony export */ });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! tslib */ 98806);
-/* harmony import */ var _home_administrador_ionic_domingo_node_modules_ngtools_webpack_src_loaders_direct_resource_js_map_page_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !./node_modules/@ngtools/webpack/src/loaders/direct-resource.js!./map.page.html */ 19882);
+/* harmony import */ var _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_map_page_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !./node_modules/@ngtools/webpack/src/loaders/direct-resource.js!./map.page.html */ 19882);
 /* harmony import */ var _map_page_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./map.page.scss */ 37749);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/core */ 14001);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/router */ 13252);
@@ -9666,7 +9666,7 @@ MapPage.ctorParameters = () => [
 MapPage = (0,tslib__WEBPACK_IMPORTED_MODULE_7__.__decorate)([
     (0,_angular_core__WEBPACK_IMPORTED_MODULE_12__.Component)({
         selector: "app-map",
-        template: _home_administrador_ionic_domingo_node_modules_ngtools_webpack_src_loaders_direct_resource_js_map_page_html__WEBPACK_IMPORTED_MODULE_0__["default"],
+        template: _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_map_page_html__WEBPACK_IMPORTED_MODULE_0__["default"],
         styles: [_map_page_scss__WEBPACK_IMPORTED_MODULE_1__]
     })
 ], MapPage);
@@ -9686,7 +9686,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-header>\n  <ion-toolbar color=\"information\">\n    <ion-buttons slot=\"start\">\n            <ion-back-button color=\"back\" (click)=\"regresar()\"></ion-back-button>\n    </ion-buttons>\n\n    <ion-title color=\"back\">Ir a {{ nombre }}</ion-title>\n\n    <ion-label slot=\"end\" color=\"back\">      \n      <ion-icon color=\"back\" name=\"{{icon}}\"></ion-icon> \n      {{distancia | formatDistancia}}       \n    </ion-label>\n    \n    \n  </ion-toolbar>\n</ion-header>\n\n<ion-content> \n\n    <div id=\"contenedor\">\n      \n      <div id=\"mapaIndicador\"></div>\n\n    </div>\n</ion-content>\n\n");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-header>\r\n  <ion-toolbar color=\"information\">\r\n    <ion-buttons slot=\"start\">\r\n            <ion-back-button color=\"back\" (click)=\"regresar()\"></ion-back-button>\r\n    </ion-buttons>\r\n\r\n    <ion-title color=\"back\">Ir a {{ nombre }}</ion-title>\r\n\r\n    <ion-label slot=\"end\" color=\"back\">      \r\n      <ion-icon color=\"back\" name=\"{{icon}}\"></ion-icon> \r\n      {{distancia | formatDistancia}}       \r\n    </ion-label>\r\n    \r\n    \r\n  </ion-toolbar>\r\n</ion-header>\r\n\r\n<ion-content> \r\n\r\n    <div id=\"contenedor\">\r\n      \r\n      <div id=\"mapaIndicador\"></div>\r\n\r\n    </div>\r\n</ion-content>\r\n\r\n");
 
 /***/ }),
 
@@ -9697,7 +9697,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ ((module) => {
 
 "use strict";
-module.exports = "#contenedor {\n  height: 100%;\n  width: 100%;\n}\n\n#mapaIndicador {\n  height: 100%;\n  width: 100%;\n}\n\n.icono {\n  margin-top: 20px;\n  margin-right: 15px;\n}\n\nion-label {\n  margin-right: 8px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm1hcC5wYWdlLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDSSxZQUFBO0VBQ0EsV0FBQTtBQUNKOztBQUNBO0VBQ0ksWUFBQTtFQUNBLFdBQUE7QUFFSjs7QUFDQTtFQUNJLGdCQUFBO0VBQ0Esa0JBQUE7QUFFSjs7QUFDQTtFQUNJLGlCQUFBO0FBRUoiLCJmaWxlIjoibWFwLnBhZ2Uuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIiNjb250ZW5lZG9ye1xuICAgIGhlaWdodDogMTAwJTtcbiAgICB3aWR0aDogMTAwJTtcbn1cbiNtYXBhSW5kaWNhZG9yIHtcbiAgICBoZWlnaHQ6IDEwMCU7XG4gICAgd2lkdGg6IDEwMCU7XG59XG5cbi5pY29ub3tcbiAgICBtYXJnaW4tdG9wOiAyMHB4O1xuICAgIG1hcmdpbi1yaWdodDogMTVweDtcbn1cblxuaW9uLWxhYmVsIHtcbiAgICBtYXJnaW4tcmlnaHQ6IDhweDtcbn0iXX0= */";
+module.exports = "#contenedor {\n  height: 100%;\n  width: 100%;\n}\n\n#mapaIndicador {\n  height: 100%;\n  width: 100%;\n}\n\n.icono {\n  margin-top: 20px;\n  margin-right: 15px;\n}\n\nion-label {\n  margin-right: 8px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm1hcC5wYWdlLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDSSxZQUFBO0VBQ0EsV0FBQTtBQUNKOztBQUNBO0VBQ0ksWUFBQTtFQUNBLFdBQUE7QUFFSjs7QUFDQTtFQUNJLGdCQUFBO0VBQ0Esa0JBQUE7QUFFSjs7QUFDQTtFQUNJLGlCQUFBO0FBRUoiLCJmaWxlIjoibWFwLnBhZ2Uuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIiNjb250ZW5lZG9ye1xyXG4gICAgaGVpZ2h0OiAxMDAlO1xyXG4gICAgd2lkdGg6IDEwMCU7XHJcbn1cclxuI21hcGFJbmRpY2Fkb3Ige1xyXG4gICAgaGVpZ2h0OiAxMDAlO1xyXG4gICAgd2lkdGg6IDEwMCU7XHJcbn1cclxuXHJcbi5pY29ub3tcclxuICAgIG1hcmdpbi10b3A6IDIwcHg7XHJcbiAgICBtYXJnaW4tcmlnaHQ6IDE1cHg7XHJcbn1cclxuXHJcbmlvbi1sYWJlbCB7XHJcbiAgICBtYXJnaW4tcmlnaHQ6IDhweDtcclxufSJdfQ== */";
 
 /***/ })
 

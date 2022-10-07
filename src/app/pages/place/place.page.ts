@@ -1,20 +1,21 @@
-import { Component, ViewChild } from "@angular/core";
-import { forkJoin, Observable, of, Subject } from "rxjs";
-import { map, switchMap, takeUntil } from "rxjs/operators";
-import { PlaceService } from "src/app/services/database/place.service";
-import { GeolocationService } from "src/app/services/geolocation.service";
-import { Place } from "src/app/shared/place";
+import { Component, ViewChild } from '@angular/core';
+import { forkJoin, Observable, of, Subject } from 'rxjs';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
+import { PlaceService } from 'src/app/services/database/place.service';
+import { GeolocationService } from 'src/app/services/geolocation.service';
+import { Place } from 'src/app/shared/place';
 //import distance from "@turf/distance";
-import { Point } from "src/app/shared/point";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { HttpClient } from "@angular/common/http";
-import { DatabaseService } from "src/app/services/database.service";
-import { VisitPlaceService } from "src/app/services/database/visit-place.service";
-import { Slider } from "src/app/shared/slider";
-import { SlidesService } from "src/app/services/database/slides.service";
-import { environment } from "src/environments/environment";
+import { Point } from 'src/app/shared/point';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { DatabaseService } from 'src/app/services/database.service';
+import { VisitPlaceService } from 'src/app/services/database/visit-place.service';
+import { Slider } from 'src/app/shared/slider';
+import { SlidesService } from 'src/app/services/database/slides.service';
+import { environment } from 'src/environments/environment';
 import { Browser } from '@capacitor/browser';
-import { IonSlides } from "@ionic/angular";
+import { IonSlides } from '@ionic/angular';
+import { AngularFireAnalytics } from '@angular/fire/compat/analytics';
 
 export interface Papa {
   type: string;
@@ -41,9 +42,9 @@ export interface DataDist {
 }
 
 @Component({
-  selector: "app-place",
-  templateUrl: "./place.page.html",
-  styleUrls: ["./place.page.scss"],
+  selector: 'app-place',
+  templateUrl: './place.page.html',
+  styleUrls: ['./place.page.scss'],
 })
 export class PlacePage {
   constructor(
@@ -53,7 +54,8 @@ export class PlacePage {
     public placeSvc: PlaceService,
     private http: HttpClient,
     private fb: FormBuilder,
-    private sliderSvc: SlidesService
+    private sliderSvc: SlidesService,
+    private ga: AngularFireAnalytics
   ) {}
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
@@ -87,7 +89,7 @@ export class PlacePage {
   /**departamente seleccionado actualmente */
   currentDepto: string = this.databaseSvc.selectionDepto;
   /**captura los datos del formulario de filtros */
-  dataForm: any = "";
+  dataForm: any = '';
   /**se guardan los sliders de la pantalla lugares */
   sliderPlace: Slider[] = [];
   /**filtro seleccionado, distancia o departamento */
@@ -95,8 +97,8 @@ export class PlacePage {
   dep: string = null;
   /**formulario que obtiene datos para filtrar */
   filterForm: FormGroup = this.fb.group({
-    localidad: ["", Validators.required],
-    tipo: ["", Validators.required],
+    localidad: ['', Validators.required],
+    tipo: ['', Validators.required],
   });
   /**control la apertura de filtros */
   isFilterLocation: boolean = false;
@@ -105,9 +107,9 @@ export class PlacePage {
   optionLocation: string = null;
   optionType: string = null;
   /**url load  */
-  preloadImage: string = "/assets/load.gif";
+  preloadImage: string = '/assets/load.gif';
   /** clase para lista de preload */
-  preload_card: string = "img_card_place"
+  preload_card: string = 'img_card_place';
 
   @ViewChild(IonSlides) slide: IonSlides;
 
@@ -119,6 +121,14 @@ export class PlacePage {
     this.slide.stopAutoplay();
   }
 
+  googleAnalytics() {
+    this.ga.logEvent('lugares');
+  }
+
+  googleAnalyticsLugarVisitado(nombre: string, id: string) {
+    this.ga.logEvent('lugares_visitados', { nombre, id });
+  }
+
   filterPlace() {
     this.dataForm = this.filterForm.value;
 
@@ -128,12 +138,12 @@ export class PlacePage {
     this.optionLocation = this.dataForm.localidad;
     this.optionType = this.dataForm.tipo;
 
-    if (this.dataForm.localidad === "") this.optionLocation = "localidad";
-    if (this.dataForm.tipo === "") this.optionType = "tipo";
+    if (this.dataForm.localidad === '') this.optionLocation = 'localidad';
+    if (this.dataForm.tipo === '') this.optionType = 'tipo';
   }
 
   pageDominga() {
-    Browser.open( {url: "https://casadominga.com.uy" } );
+    Browser.open({ url: 'https://casadominga.com.uy' });
   }
 
   getPlace(id: string) {
@@ -207,31 +217,33 @@ export class PlacePage {
 
   /**retorna true si se selecciono Distancia como filtro principal */
   get selectdistancia() {
-    return localStorage.getItem("distanceActivo") ? true : false;
+    return localStorage.getItem('distanceActivo') ? true : false;
   }
 
   /**se ejecuta cada vez que se ingresa a la tab */
   ionViewWillEnter() {
+    document.title = "Lugares";
+    this.googleAnalytics();
     if (
-      localStorage.getItem("deptoActivo") !== undefined &&
-      localStorage.getItem("deptoActivo") !== null
+      localStorage.getItem('deptoActivo') !== undefined &&
+      localStorage.getItem('deptoActivo') !== null
     ) {
       this.dist = null;
-      this.dep = localStorage.getItem("deptoActivo");
+      this.dep = localStorage.getItem('deptoActivo');
     } else if (
-      localStorage.getItem("distanceActivo") !== undefined &&
-      localStorage.getItem("distanceActivo") !== null
+      localStorage.getItem('distanceActivo') !== undefined &&
+      localStorage.getItem('distanceActivo') !== null
     ) {
       this.dep = null;
-      this.dist = parseInt(localStorage.getItem("distanceActivo"));
+      this.dist = parseInt(localStorage.getItem('distanceActivo'));
     }
 
-    if (localStorage.getItem("deptoActivo") !== this.currentDepto) {
-      this.currentDepto = localStorage.getItem("deptoActivo");
+    if (localStorage.getItem('deptoActivo') !== this.currentDepto) {
+      this.currentDepto = localStorage.getItem('deptoActivo');
       this.filterForm.reset();
-      this.dataForm = "";
-      this.optionLocation = "localidad";
-      this.optionType = "tipo";
+      this.dataForm = '';
+      this.optionLocation = 'localidad';
+      this.optionType = 'tipo';
     }
 
     this.unsubscribe$ = new Subject<void>();
@@ -239,14 +251,14 @@ export class PlacePage {
 
     this.sliderSvc.slider
       .pipe(
-        map((slider) => slider.filter((s) => s.pantalla === "lugares")),
-        takeUntil(this.unsubscribe$),
+        map((slider) => slider.filter((s) => s.pantalla === 'lugares')),
+        takeUntil(this.unsubscribe$)
       )
       .subscribe((res) => {
         this.sliderPlace = res;
       });
 
-      this.resetSlide();
+    this.resetSlide();
 
     /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
     let posDep = this.geolocationSvc.posicion$.pipe(
@@ -267,10 +279,13 @@ export class PlacePage {
         this.places = res;
       });
     } else {
-      this.placeSvc.getPlaces(this.dep).pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
-        this.places = [];
-        this.places = res;
-      });
+      this.placeSvc
+        .getPlaces(this.dep)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((res) => {
+          this.places = [];
+          this.places = res;
+        });
     }
 
     /************************************************************************************ */

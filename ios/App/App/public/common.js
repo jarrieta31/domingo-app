@@ -1,40 +1,6 @@
 "use strict";
 (self["webpackChunkapp"] = self["webpackChunkapp"] || []).push([["common"],{
 
-/***/ 83450:
-/*!*****************************************************************!*\
-  !*** ./node_modules/@capacitor/browser/dist/esm/definitions.js ***!
-  \*****************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-
-
-
-/***/ }),
-
-/***/ 39337:
-/*!***********************************************************!*\
-  !*** ./node_modules/@capacitor/browser/dist/esm/index.js ***!
-  \***********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Browser": () => (/* binding */ Browser)
-/* harmony export */ });
-/* harmony import */ var _capacitor_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @capacitor/core */ 2960);
-/* harmony import */ var _definitions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./definitions */ 83450);
-
-const Browser = (0,_capacitor_core__WEBPACK_IMPORTED_MODULE_0__.registerPlugin)('Browser', {
-    web: () => __webpack_require__.e(/*! import() */ "node_modules_capacitor_browser_dist_esm_web_js").then(__webpack_require__.bind(__webpack_require__, /*! ./web */ 3765)).then(m => new m.BrowserWeb()),
-});
-
-
-
-
-/***/ }),
-
 /***/ 71821:
 /*!*********************************************************************!*\
   !*** ./node_modules/@ionic/core/dist/esm/button-active-767ae7c7.js ***!
@@ -238,7 +204,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "a": () => (/* binding */ attachComponent),
 /* harmony export */   "d": () => (/* binding */ detachComponent)
 /* harmony export */ });
-/* harmony import */ var _home_administrador_ionic_domingo_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ 62783);
+/* harmony import */ var C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ 62783);
 /* harmony import */ var _helpers_6e1e5b65_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./helpers-6e1e5b65.js */ 77074);
 
 
@@ -248,7 +214,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const attachComponent = /*#__PURE__*/function () {
-  var _ref = (0,_home_administrador_ionic_domingo_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* (delegate, container, component, cssClasses, componentProps, inline) {
+  var _ref = (0,C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* (delegate, container, component, cssClasses, componentProps, inline) {
     if (delegate) {
       return delegate.attachViewToDom(container, component, componentProps, cssClasses);
     }
@@ -295,7 +261,7 @@ const CoreDelegate = () => {
   let Reference;
 
   const attachViewToDom = /*#__PURE__*/function () {
-    var _ref2 = (0,_home_administrador_ionic_domingo_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* (parentElement, userComponent, userComponentProps = {}, cssClasses = []) {
+    var _ref2 = (0,C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* (parentElement, userComponent, userComponentProps = {}, cssClasses = []) {
       BaseComponent = parentElement;
       /**
        * If passing in a component via the `component` props
@@ -892,7 +858,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "h": () => (/* binding */ hostContext),
 /* harmony export */   "o": () => (/* binding */ openURL)
 /* harmony export */ });
-/* harmony import */ var _home_administrador_ionic_domingo_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ 62783);
+/* harmony import */ var C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ 62783);
 
 
 /*!
@@ -931,7 +897,7 @@ const getClassMap = classes => {
 const SCHEME = /^[a-z][a-z0-9+\-.]*:/;
 
 const openURL = /*#__PURE__*/function () {
-  var _ref = (0,_home_administrador_ionic_domingo_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* (url, ev, direction, animation) {
+  var _ref = (0,C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* (url, ev, direction, animation) {
     if (url != null && url[0] !== '#' && !SCHEME.test(url)) {
       const router = document.querySelector('ion-router');
 
@@ -1046,7 +1012,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "VideoPage": () => (/* binding */ VideoPage)
 /* harmony export */ });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! tslib */ 98806);
-/* harmony import */ var _home_administrador_ionic_domingo_node_modules_ngtools_webpack_src_loaders_direct_resource_js_video_page_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !./node_modules/@ngtools/webpack/src/loaders/direct-resource.js!./video.page.html */ 24672);
+/* harmony import */ var _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_video_page_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !./node_modules/@ngtools/webpack/src/loaders/direct-resource.js!./video.page.html */ 24672);
 /* harmony import */ var _video_page_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./video.page.scss */ 73588);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ 14001);
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/platform-browser */ 86219);
@@ -1079,302 +1045,10 @@ VideoPage.propDecorators = {
 VideoPage = (0,tslib__WEBPACK_IMPORTED_MODULE_5__.__decorate)([
     (0,_angular_core__WEBPACK_IMPORTED_MODULE_4__.Component)({
         selector: 'app-video',
-        template: _home_administrador_ionic_domingo_node_modules_ngtools_webpack_src_loaders_direct_resource_js_video_page_html__WEBPACK_IMPORTED_MODULE_0__["default"],
+        template: _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_video_page_html__WEBPACK_IMPORTED_MODULE_0__["default"],
         styles: [_video_page_scss__WEBPACK_IMPORTED_MODULE_1__]
     })
 ], VideoPage);
-
-
-
-/***/ }),
-
-/***/ 60696:
-/*!*****************************************************!*\
-  !*** ./src/app/services/database/slides.service.ts ***!
-  \*****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "SlidesService": () => (/* binding */ SlidesService)
-/* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! tslib */ 98806);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ 14001);
-/* harmony import */ var _angular_fire_compat_firestore__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/fire/compat/firestore */ 43059);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rxjs */ 41119);
-
-
-
-
-let SlidesService = class SlidesService {
-    constructor(afs) {
-        this.afs = afs;
-        this.init_slider = [];
-        this.allSlider = [];
-        this.slider = new rxjs__WEBPACK_IMPORTED_MODULE_0__.BehaviorSubject(this.init_slider);
-    }
-    getSliders() {
-        this.allSlider = [];
-        if (this.init_slider.length == 0) {
-            this.afs
-                .collection("sliders")
-                .ref.where("publicado", "==", true)
-                .get()
-                .then((querySnapshot) => {
-                const arrSlider = [];
-                querySnapshot.forEach((item) => {
-                    const data = item.data();
-                    arrSlider.push(Object.assign({ id: item.id }, data));
-                    this.init_slider.push(Object.assign({ id: item.id }, data));
-                });
-                this.allSlider = JSON.parse(JSON.stringify(arrSlider));
-                this.slider.next(this.allSlider);
-            })
-                .catch((err) => {
-                console.log(err);
-            })
-                .finally(() => "Fin");
-        }
-        else {
-            this.slider.next(this.init_slider);
-        }
-    }
-};
-SlidesService.ctorParameters = () => [
-    { type: _angular_fire_compat_firestore__WEBPACK_IMPORTED_MODULE_1__.AngularFirestore }
-];
-SlidesService = (0,tslib__WEBPACK_IMPORTED_MODULE_2__.__decorate)([
-    (0,_angular_core__WEBPACK_IMPORTED_MODULE_3__.Injectable)({
-        providedIn: "root",
-    })
-], SlidesService);
-
-
-
-/***/ }),
-
-/***/ 73070:
-/*!**********************************************************!*\
-  !*** ./src/app/services/database/visit-event.service.ts ***!
-  \**********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "VisitEventService": () => (/* binding */ VisitEventService)
-/* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! tslib */ 98806);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 14001);
-/* harmony import */ var _angular_fire_compat_firestore__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/fire/compat/firestore */ 43059);
-
-
-
-let VisitEventService = class VisitEventService {
-    constructor(afs) {
-        this.afs = afs;
-        this.visitasAEventos = [];
-    }
-    // >>>>>>>>>>>>>  :: CONTADOR VISITAS A EVENTOS :: <<<<<<<<<<<<<<<<<<<
-    /**
-   * funcion publica. recibe los datos del controlador.
-   * Guarda le parametro recibido en un array global "visitas : string[]".
-   * Revisa que no se repita le parametro recibido.
-   * Pasa el parametro a la funcion getVisita(id: string)
-   * @param id : string.
-   * Recibe el id de un Evento.
-   */
-    contadorVisitasEvento(id) {
-        let control = false;
-        if (this.visitasAEventos.length == 0) {
-            this.visitasAEventos.push(id);
-            this.getVisita(id);
-        }
-        else {
-            this.visitasAEventos.forEach((v) => {
-                if (v === id) {
-                    control = !control;
-                }
-            });
-            if (!control) {
-                this.visitasAEventos.push(id);
-                this.getVisita(id);
-            }
-        }
-    }
-    /**
-      * Se encarga de actulizar la visita realizada en dia para ese luegar, o de
-      * crear una visita para ese dia.
-      * @param visita_xdia
-      * @returns
-      */
-    sumarVisitaXDia(visita_xdia) {
-        let cant_dia = visita_xdia.length;
-        if (this.hoyTieneVisita(visita_xdia[cant_dia - 1])) {
-            this.incrementarVisitaXDia(visita_xdia[cant_dia - 1]);
-        }
-        else {
-            this.agregarDiaVisita(visita_xdia);
-        }
-        return visita_xdia;
-    }
-    /**
-     * Recibe los parametros de getVisita( evento_id : string )
-     * Se encarga de revisar el parametro visita recibido, luego llama a los
-     * metodos para incrementar o crear la visita.
-     * @param visita : interfaz Visita.
-     * @param evento_id : string
-     */
-    sumarVisitaEvento(visita, evento_id) {
-        if (typeof visita != "undefined") {
-            let cantDiasVisita = visita.visita_xdia.length;
-            this.sumarVisitaXDia(visita.visita_xdia);
-            this.incrementarTotalVisitaXEvento(visita);
-            this.actulizarVisita(visita);
-        }
-        else {
-            this.crearVisita(evento_id);
-            console.log(`entrando a crear visita para el evento`);
-        }
-    }
-    /**
-     * Funcion privada. Crea una objeto de Visita, y luego lo inserta en la BD.
-     * @param evento_id : string
-     */
-    crearVisita(evento_id) {
-        let visita = {
-            id_evento: evento_id,
-            total_visitas: 1,
-            visita_xdia: [
-                {
-                    dia: this.getToday(),
-                    cant_vta_xdia: 1,
-                },
-            ],
-        };
-        this.afs.collection("visitas_evento").add(visita);
-    }
-    /**
-     * Esta funcion se encarga de traer una visita asociada a un evento y
-     * setear la variable global visita: Vista.
-     * En el caso de que no exista una visita para ese evento, setea la
-     * variable global en null.
-     * @param evento_id
-     * Es de tipo string.
-     */
-    getVisita(evento_id) {
-        this.afs
-            .collection("visitas_evento")
-            .ref.where("id_evento", "==", evento_id)
-            .get()
-            .then((querySnapshot) => {
-            const arrVisita = [];
-            querySnapshot.forEach((item) => {
-                const data = item.data();
-                arrVisita.push(Object.assign({ id: item.id }, data));
-            });
-            this.visita_evento = arrVisita[0];
-            this.sumarVisitaEvento(this.visita_evento, evento_id);
-        })
-            .catch((err) => {
-            console.error("Error en al traer la visita" + err);
-        })
-            .finally(() => console.log("Finally"));
-    }
-    /**
-     * Funcion privada. Se encarga de actulizar un objeto de la BD de tipo visita
-     * @param visita : interfaz Visita
-     */
-    actulizarVisita(visita) {
-        let total_visitas = visita.total_visitas;
-        let visita_xdia = visita.visita_xdia;
-        this.afs
-            .doc(`visitas_evento/${visita.id}`)
-            .update({
-            total_visitas,
-            visita_xdia,
-        })
-            .then()
-            .catch((err) => {
-            console.error("Error en al traer la visita" + err);
-        });
-    }
-    /**
-     * funcion privada. Se encarga de crear una instancia de tipo Date con
-     * la fecha actual.
-     * @returns Date
-     */
-    getToday() {
-        let aux = new Date();
-        let dd = aux.getDate();
-        let mm = aux.getMonth();
-        let aa = aux.getFullYear();
-        return new Date(aa, mm, dd);
-    }
-    /**
-     * funcion privada. Se encarga de comparar si la fecha de la ultima visita realizada
-     * es igual a la fecha actual.
-     * @param ultimaVisita : interfaz DiaVisita
-     * @returns boolean
-     */
-    hoyTieneVisita(ultimaVisita) {
-        let diaVisita = new Date(ultimaVisita.dia["seconds"] * 1000);
-        let hoy = this.getToday();
-        if (+hoy === +diaVisita)
-            return true;
-        else
-            return false;
-    }
-    /**
-     * Funcion que devuelve un nuevo objeto de tipo interfaz DiaVisita.
-     * @returns Devuelve un Objeto de tipo DiaVisita.
-     * La cant_vta_xdia = 1, porque se asume que al crear este elemento
-     * es debido a la primera visita del dia.
-     * dia = Al dia actual de formato anio/mes/dia. Ver getToday()
-     */
-    crearDiaVisita() {
-        const visita = {
-            cant_vta_xdia: 1,
-            dia: this.getToday(),
-        };
-        return visita;
-    }
-    /**
-     * funcion privada. Agrega al arreglo un nuevo dia de visita para el evento asociado,
-     * retornando un array de DiaVisita.
-     * @param visitas : array de interfaz DiaVisita[]
-     * @returns array de interfaz DiaVisita[]
-     */
-    agregarDiaVisita(visitas) {
-        visitas.push(this.crearDiaVisita());
-        return visitas;
-    }
-    /**
-     * funcion privada. Se encarga de +1 a la variable cant_vta_xdia
-     * @param ultimaVisita : interfaz DiaVisita
-     * @returns interfaz DiaVisita
-     */
-    incrementarVisitaXDia(ultimaVisita) {
-        ultimaVisita.cant_vta_xdia++;
-        return ultimaVisita;
-    }
-    /**
-     * funcion privada. Se encarga de +1 a la variable total_visitas
-     * @param visitas : interfaz Visita
-     * @returns interfaz Visita
-     */
-    incrementarTotalVisitaXEvento(visitas) {
-        visitas.total_visitas++;
-        return visitas;
-    }
-};
-VisitEventService.ctorParameters = () => [
-    { type: _angular_fire_compat_firestore__WEBPACK_IMPORTED_MODULE_0__.AngularFirestore }
-];
-VisitEventService = (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__decorate)([
-    (0,_angular_core__WEBPACK_IMPORTED_MODULE_2__.Injectable)({
-        providedIn: 'root'
-    })
-], VisitEventService);
 
 
 
@@ -1390,7 +1064,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-header>\n\n</ion-header>\n\n<ion-content>\n  <iframe width=\"100%\" height=\"315\" [src]=\"videoUrl\" frameborder=\"0\" allowfullscreen>\n\n  </iframe>\n  <ion-button class=\"btn_salir\" (click)=\"salir()\" expand=\"full\">Cerrar</ion-button>\n</ion-content>\n");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-header>\r\n\r\n</ion-header>\r\n\r\n<ion-content>\r\n  <iframe width=\"100%\" height=\"315\" [src]=\"videoUrl\" frameborder=\"0\" allowfullscreen>\r\n\r\n  </iframe>\r\n  <ion-button class=\"btn_salir\" (click)=\"salir()\" expand=\"full\">Cerrar</ion-button>\r\n</ion-content>\r\n");
 
 /***/ }),
 
@@ -1400,7 +1074,7 @@ __webpack_require__.r(__webpack_exports__);
   \*********************************************/
 /***/ ((module) => {
 
-module.exports = ".btn_salir {\n  height: 40px;\n  margin: 0 !important;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInZpZGVvLnBhZ2Uuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNDLFlBQUE7RUFDQSxvQkFBQTtBQUNEIiwiZmlsZSI6InZpZGVvLnBhZ2Uuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi5idG5fc2FsaXJ7XG5cdGhlaWdodDogNDBweDtcblx0bWFyZ2luOiAwICFpbXBvcnRhbnQ7XG59Il19 */";
+module.exports = ".btn_salir {\n  height: 40px;\n  margin: 0 !important;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInZpZGVvLnBhZ2Uuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNDLFlBQUE7RUFDQSxvQkFBQTtBQUNEIiwiZmlsZSI6InZpZGVvLnBhZ2Uuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi5idG5fc2FsaXJ7XHJcblx0aGVpZ2h0OiA0MHB4O1xyXG5cdG1hcmdpbjogMCAhaW1wb3J0YW50O1xyXG59Il19 */";
 
 /***/ })
 

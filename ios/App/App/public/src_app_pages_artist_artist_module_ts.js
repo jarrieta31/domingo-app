@@ -1,6 +1,40 @@
 "use strict";
 (self["webpackChunkapp"] = self["webpackChunkapp"] || []).push([["src_app_pages_artist_artist_module_ts"],{
 
+/***/ 83450:
+/*!*****************************************************************!*\
+  !*** ./node_modules/@capacitor/browser/dist/esm/definitions.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+
+
+
+/***/ }),
+
+/***/ 39337:
+/*!***********************************************************!*\
+  !*** ./node_modules/@capacitor/browser/dist/esm/index.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Browser": () => (/* binding */ Browser)
+/* harmony export */ });
+/* harmony import */ var _capacitor_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @capacitor/core */ 2960);
+/* harmony import */ var _definitions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./definitions */ 83450);
+
+const Browser = (0,_capacitor_core__WEBPACK_IMPORTED_MODULE_0__.registerPlugin)('Browser', {
+    web: () => __webpack_require__.e(/*! import() */ "node_modules_capacitor_browser_dist_esm_web_js").then(__webpack_require__.bind(__webpack_require__, /*! ./web */ 3765)).then(m => new m.BrowserWeb()),
+});
+
+
+
+
+/***/ }),
+
 /***/ 52433:
 /*!*******************************************************!*\
   !*** ./src/app/pages/artist/artist-routing.module.ts ***!
@@ -101,7 +135,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ArtistPage": () => (/* binding */ ArtistPage)
 /* harmony export */ });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! tslib */ 98806);
-/* harmony import */ var _home_administrador_ionic_domingo_node_modules_ngtools_webpack_src_loaders_direct_resource_js_artist_page_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !./node_modules/@ngtools/webpack/src/loaders/direct-resource.js!./artist.page.html */ 96435);
+/* harmony import */ var _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_artist_page_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !./node_modules/@ngtools/webpack/src/loaders/direct-resource.js!./artist.page.html */ 96435);
 /* harmony import */ var _artist_page_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./artist.page.scss */ 89145);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @angular/core */ 14001);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/forms */ 18346);
@@ -121,6 +155,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @angular/common/http */ 83981);
 /* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! src/environments/environment */ 18260);
 /* harmony import */ var _capacitor_browser__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @capacitor/browser */ 39337);
+
 
 
 
@@ -185,6 +220,12 @@ let ArtistPage = class ArtistPage {
             localidad: ["", _angular_forms__WEBPACK_IMPORTED_MODULE_9__.Validators.required],
             categoria: ["", _angular_forms__WEBPACK_IMPORTED_MODULE_9__.Validators.required],
         });
+    }
+    resetSlide() {
+        this.slide.startAutoplay();
+    }
+    endSlide() {
+        this.slide.stopAutoplay();
     }
     filterArtist() {
         this.dataForm = this.filterForm.value;
@@ -301,6 +342,7 @@ let ArtistPage = class ArtistPage {
             .subscribe((res) => {
             this.sliderArtist = res;
         });
+        this.resetSlide();
         /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
         let posDep = this.geolocationSvc.posicion$.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_14__.switchMap)((pos) => {
             return (0,rxjs__WEBPACK_IMPORTED_MODULE_15__.forkJoin)((0,rxjs__WEBPACK_IMPORTED_MODULE_16__.of)(pos), this.getLocation(pos.longitud, pos.latitud));
@@ -327,6 +369,7 @@ let ArtistPage = class ArtistPage {
         this.unsubscribe$.complete();
         this.isFilterLocation = false;
         this.isFilterType = false;
+        this.endSlide();
     }
 };
 ArtistPage.ctorParameters = () => [
@@ -339,10 +382,13 @@ ArtistPage.ctorParameters = () => [
     { type: src_app_services_geolocation_service__WEBPACK_IMPORTED_MODULE_6__.GeolocationService },
     { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_19__.HttpClient }
 ];
+ArtistPage.propDecorators = {
+    slide: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_20__.ViewChild, args: [_ionic_angular__WEBPACK_IMPORTED_MODULE_18__.IonSlides,] }]
+};
 ArtistPage = (0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([
     (0,_angular_core__WEBPACK_IMPORTED_MODULE_20__.Component)({
         selector: "app-artist",
-        template: _home_administrador_ionic_domingo_node_modules_ngtools_webpack_src_loaders_direct_resource_js_artist_page_html__WEBPACK_IMPORTED_MODULE_0__["default"],
+        template: _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_artist_page_html__WEBPACK_IMPORTED_MODULE_0__["default"],
         styles: [_artist_page_scss__WEBPACK_IMPORTED_MODULE_1__]
     })
 ], ArtistPage);
@@ -502,6 +548,121 @@ ArtistService = (0,tslib__WEBPACK_IMPORTED_MODULE_3__.__decorate)([
 
 /***/ }),
 
+/***/ 60696:
+/*!*****************************************************!*\
+  !*** ./src/app/services/database/slides.service.ts ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "SlidesService": () => (/* binding */ SlidesService)
+/* harmony export */ });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! tslib */ 98806);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ 14001);
+/* harmony import */ var _angular_fire_compat_firestore__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/fire/compat/firestore */ 43059);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rxjs */ 41119);
+
+
+
+
+let SlidesService = class SlidesService {
+    constructor(afs) {
+        this.afs = afs;
+        this.init_slider = [];
+        this.allSlider = [];
+        this.depto = null;
+        this.save_depto = [];
+        this.ckeckDist = false;
+        this.slider = new rxjs__WEBPACK_IMPORTED_MODULE_0__.BehaviorSubject(this.init_slider);
+    }
+    getSliders() {
+        this.depto = localStorage.getItem("deptoActivo");
+        this.allSlider = [];
+        if (this.save_depto.length > 0) {
+            var isDepto = false;
+            this.save_depto.forEach(dep => {
+                if (dep == this.depto)
+                    isDepto = true;
+            });
+        }
+        if (!isDepto && this.depto != null && !this.ckeckDist) {
+            this.afs
+                .collection("sliders")
+                .ref.where("publicado", "==", true)
+                .where("departamento", "==", this.depto)
+                .get()
+                .then((querySnapshot) => {
+                const arrSlider = [];
+                querySnapshot.forEach((item) => {
+                    const data = item.data();
+                    arrSlider.push(Object.assign({ id: item.id }, data));
+                    this.init_slider.push(Object.assign({ id: item.id }, data));
+                });
+                this.save_depto.push(this.depto);
+                this.allSlider = JSON.parse(JSON.stringify(arrSlider));
+                this.slider.next(this.allSlider);
+            })
+                .catch((err) => {
+                console.log(err);
+            })
+                .finally(() => "Fin");
+        }
+        else if (isDepto && this.depto != null) {
+            this.init_slider.forEach(dep => {
+                if (dep.departamento == this.depto)
+                    this.allSlider.push(dep);
+            });
+            this.slider.next(this.allSlider);
+        }
+        else if (!this.ckeckDist) {
+            this.init_slider = [];
+            this.ckeckDist = true;
+            this.afs
+                .collection("sliders")
+                .ref.where("publicado", "==", true)
+                .get()
+                .then((querySnapshot) => {
+                const arrSlider = [];
+                querySnapshot.forEach((item) => {
+                    const data = item.data();
+                    arrSlider.push(Object.assign({ id: item.id }, data));
+                    this.init_slider.push(Object.assign({ id: item.id }, data));
+                });
+                this.allSlider = JSON.parse(JSON.stringify(arrSlider));
+                this.allSlider.forEach(saveDepto => {
+                    let deptoExist = false;
+                    this.save_depto.forEach(search => {
+                        if (saveDepto.departamento == search)
+                            deptoExist = true;
+                    });
+                    if (!deptoExist)
+                        this.save_depto.push(saveDepto.departamento);
+                });
+                this.slider.next(this.allSlider);
+            })
+                .catch((err) => {
+                console.log(err);
+            })
+                .finally(() => "Fin");
+        }
+        else
+            this.slider.next(this.init_slider);
+    }
+};
+SlidesService.ctorParameters = () => [
+    { type: _angular_fire_compat_firestore__WEBPACK_IMPORTED_MODULE_1__.AngularFirestore }
+];
+SlidesService = (0,tslib__WEBPACK_IMPORTED_MODULE_2__.__decorate)([
+    (0,_angular_core__WEBPACK_IMPORTED_MODULE_3__.Injectable)({
+        providedIn: "root",
+    })
+], SlidesService);
+
+
+
+/***/ }),
+
 /***/ 96435:
 /*!**************************************************************************************************************!*\
   !*** ./node_modules/@ngtools/webpack/src/loaders/direct-resource.js!./src/app/pages/artist/artist.page.html ***!
@@ -512,7 +673,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-header class=\"ion-no-border\">\n  <ion-toolbar>\n    <div class=\"slider\">\n      <ion-slides\n        class=\"sliderPrimero setHeight\"\n        scrollbar=\"false\"\n        pager=\"false\"\n        [options]=\"slideOpts\"\n      >\n        <ion-slide *ngFor=\"let item of sliderArtist\" class=\"sliderHijo\">\n          <a\n            *ngIf=\"item.link !== null && item.link !== '' && item.link !== ' ' && item.link !== undefined\"\n            href=\"{{ item.link }}\"\n            class=\"link\"\n          >\n            <ion-fab vertical=\"top\" horizontal=\"start\" slot=\"fixed\">\n              <ion-fab-button color=\"dark\">\n                <ion-icon\n                  *ngIf=\"item.linkTipo !== 'web'\"\n                  name=\"logo-{{ item.linkTipo }}\"\n                  class=\"icon-link\"\n                ></ion-icon>\n                <ion-icon\n                  *ngIf=\"item.linkTipo === 'web'\"\n                  name=\"globe-outline\"\n                  class=\"icon-link\"\n                ></ion-icon>\n              </ion-fab-button>\n            </ion-fab>\n          </a>\n          <app-preload\n            [url]=\"item.imagen.url\"\n            [alt]=\"item.imagen.name\"\n            [urlPreload]=\"preloadImage\"\n          ></app-preload>\n        </ion-slide>\n      </ion-slides>\n      <!-- </div> -->\n\n      <!-- =========>=>=>=> Filtro =========>=>=>=> -->\n      <div class=\"filter_place\">\n        <ion-label\n          *ngIf=\"!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')\"\n          (click)=\"changeFilterLocation()\"\n          >localidad</ion-label\n        >\n        <ion-label\n          *ngIf=\" !selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')\"\n          class=\"open_filter\"\n          (click)=\"changeFilterLocation()\"\n          >{{ optionLocation }}</ion-label\n        >\n        <img *ngIf=\"!selectdistancia\" src=\"/assets/icon/exchange.png\" alt=\"\" />\n        <ion-label\n          *ngIf=\"optionType === null || optionType === 'tipo' || optionType === ''\"\n          (click)=\"changeFilterType()\"\n          >tipo</ion-label\n        >\n        <ion-label\n          *ngIf=\"optionType !== null && optionType !== 'tipo' && optionType !== ''\"\n          class=\"open_filter\"\n          (click)=\"changeFilterType()\"\n          >{{ optionType }}</ion-label\n        >\n      </div>\n\n      <div>\n        <form [formGroup]=\"filterForm\" class=\"form_filter\">\n          <!-- Filtro por Localidad  -->\n          <div *ngIf=\"isFilterLocation\">\n            <div class=\"filter_name\">\n              <span>Localidad</span>\n            </div>\n            <div>\n              <ion-list class=\"list_type\" inset=\"true\">\n                <ion-radio-group\n                  (ionChange)=\"filterArtist()\"\n                  formControlName=\"localidad\"\n                  class=\"type_border\"\n                >\n                  <ion-item class=\"filter_list\" lines=\"none\">\n                    <ion-text>Todo</ion-text>\n                    <ion-radio slot=\"end\" value=\"\"></ion-radio>\n                  </ion-item>\n                  <ion-item\n                    class=\"filter_list\"\n                    lines=\"none\"\n                    *ngFor=\"let loc of lista_localidad_artis\"\n                  >\n                    <ion-text>{{ loc }}</ion-text>\n                    <ion-radio slot=\"end\" value=\"{{ loc }}\"></ion-radio>\n                  </ion-item>\n                </ion-radio-group>\n              </ion-list>\n            </div>\n          </div>\n          <!-- filtro por Localidad -->\n\n          <!-- filtro por Tipo -->\n          <div *ngIf=\"isFilterType\">\n            <div class=\"filter_name\">\n              <span>Tipo</span>\n            </div>\n            <div>\n              <ion-list class=\"list_type\" inset=\"true\">\n                <ion-radio-group\n                  (ionChange)=\"filterArtist()\"\n                  formControlName=\"categoria\"\n                  class=\"type_border\"\n                >\n                  <ion-item class=\"filter_list\" lines=\"none\">\n                    <ion-text>Todo</ion-text>\n                    <ion-radio slot=\"end\" value=\"\"></ion-radio>\n                  </ion-item>\n                  <ion-item\n                    class=\"filter_list last\"\n                    lines=\"none\"\n                    *ngFor=\"let tipo of lista_tipo_artis\"\n                  >\n                    <ion-text>{{ tipo }}</ion-text>\n                    <ion-radio slot=\"end\" value=\"{{ tipo }}\"></ion-radio>\n                  </ion-item>\n                </ion-radio-group>\n              </ion-list>\n            </div>\n          </div>\n          <!-- Filtro por Tipo -->\n        </form>\n      </div>\n    </div>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n  <ion-list>\n    <div class=\"artist\" *ngFor=\"let art of artists | filterArtist:dataForm\">\n      <ng-container *ngIf=\"art.vacio !== 1\">\n        <div class=\"imgArtist\">\n          <app-preload-list\n            [url]=\"art.imagen.url\"\n            [alt]=\"art.nombre\"\n            [clase]=\"preloadClase\"\n            [urlPreload]=\"preloadImage_list\"\n          ></app-preload-list>\n        </div>\n        <div class=\"infoArtist\">\n          <div id=\"info-art\" class=\"type\">{{ art.categoria }}</div>\n          <div id=\"info-art\" class=\"name\">{{ art.nombre }}</div>\n          <div class=\"netArtist\">\n            <img\n              *ngIf=\"art.instagram !== null && art.instagram !== undefined && art.instagram !== '' && art.instagram !== ' ' \"\n              (click)=\"openInstagram(art.instagram)\"\n              src=\"/assets/icon/instagram.png\"\n              alt=\"instagram\"\n            />\n            <img\n              *ngIf=\"art.spotify !== null && art.spotify !== undefined && art.spotify !== '' && art.spotify !== ' ' \"\n              (click)=\"openSpotify(art.spotify)\"\n              src=\"/assets/icon/spotify.png\"\n              alt=\"spotify\"\n            />\n            <img\n              *ngIf=\"art.youtube !== null && art.youtube !== undefined && art.youtube !== '' && art.youtube !== ' ' \"\n              (click)=\"verVideo(art.youtube)\"\n              src=\"/assets/icon/youtube.png\"\n              alt=\"youtube\"\n            />\n          </div>\n        </div>\n      </ng-container>\n\n      <ng-container *ngIf=\"art.vacio === 1\">\n        <div class=\"empty\">\n          <i class=\"fi fi-rr-sad icon_empty\"></i>\n          <div class=\"text_empty\">\n            No hay artistas para mostrar con el filtro seleccionado\n          </div>\n        </div>\n      </ng-container>\n    </div>\n  </ion-list>\n\n  <ion-list *ngIf=\"artists.length === 0 && !this.artistSvc.noData\">\n    <ng-container *ngFor=\"let item of [1,2,3,4,5,6]\">\n      <ion-item>\n        <ion-thumbnail slot=\"start\">\n          <ion-skeleton-text></ion-skeleton-text>\n        </ion-thumbnail>\n        <ion-label>\n          <h3>\n            <ion-skeleton-text animated style=\"width: 80%\"></ion-skeleton-text>\n          </h3>\n          <p>\n            <ion-skeleton-text animated style=\"width: 60%\"></ion-skeleton-text>\n          </p>\n          <p>\n            <ion-skeleton-text animated style=\"width: 30%\"></ion-skeleton-text>\n          </p>\n        </ion-label>\n      </ion-item>\n    </ng-container>\n  </ion-list>\n\n  <div *ngIf=\"this.artistSvc.noData\" class=\"empty\">\n    <i class=\"fi fi-rr-sad icon_empty\"></i>\n    <div class=\"text_empty\" *ngIf=\"dep !== null\">\n      No hay artistas en {{ dep }}\n    </div>\n    <div class=\"text_empty\" *ngIf=\"dist !== null\">\n      No hay artistas en {{ depDist }}\n    </div>\n  </div>\n</ion-content>\n");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-header class=\"ion-no-border\">\r\n  <ion-toolbar>\r\n    <div class=\"slider\">\r\n      <ion-slides\r\n        class=\"sliderPrimero setHeight\"\r\n        scrollbar=\"false\"\r\n        pager=\"false\"\r\n        [options]=\"slideOpts\"\r\n      >\r\n        <ion-slide *ngFor=\"let item of sliderArtist\" class=\"sliderHijo\">\r\n          <a\r\n            *ngIf=\"item.link !== null && item.link !== '' && item.link !== ' ' && item.link !== undefined\"\r\n            href=\"{{ item.link }}\"\r\n            class=\"link\"\r\n          >\r\n            <ion-fab vertical=\"top\" horizontal=\"start\" slot=\"fixed\">\r\n              <ion-fab-button color=\"dark\">\r\n                <ion-icon\r\n                  *ngIf=\"item.linkTipo !== 'web'\"\r\n                  name=\"logo-{{ item.linkTipo }}\"\r\n                  class=\"icon-link\"\r\n                ></ion-icon>\r\n                <ion-icon\r\n                  *ngIf=\"item.linkTipo === 'web'\"\r\n                  name=\"globe-outline\"\r\n                  class=\"icon-link\"\r\n                ></ion-icon>\r\n              </ion-fab-button>\r\n            </ion-fab>\r\n          </a>\r\n          <app-preload\r\n            [url]=\"item.imagen.url\"\r\n            [alt]=\"item.imagen.name\"\r\n            [urlPreload]=\"preloadImage\"\r\n          ></app-preload>\r\n        </ion-slide>\r\n      </ion-slides>\r\n      <!-- </div> -->\r\n\r\n      <!-- =========>=>=>=> Filtro =========>=>=>=> -->\r\n      <div class=\"filter_place\">\r\n        <ion-label\r\n          *ngIf=\"!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')\"\r\n          (click)=\"changeFilterLocation()\"\r\n          >localidad</ion-label\r\n        >\r\n        <ion-label\r\n          *ngIf=\" !selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')\"\r\n          class=\"open_filter\"\r\n          (click)=\"changeFilterLocation()\"\r\n          >{{ optionLocation }}</ion-label\r\n        >\r\n        <img *ngIf=\"!selectdistancia\" src=\"/assets/icon/exchange.png\" alt=\"\" />\r\n        <ion-label\r\n          *ngIf=\"optionType === null || optionType === 'tipo' || optionType === ''\"\r\n          (click)=\"changeFilterType()\"\r\n          >tipo</ion-label\r\n        >\r\n        <ion-label\r\n          *ngIf=\"optionType !== null && optionType !== 'tipo' && optionType !== ''\"\r\n          class=\"open_filter\"\r\n          (click)=\"changeFilterType()\"\r\n          >{{ optionType }}</ion-label\r\n        >\r\n      </div>\r\n\r\n      <div>\r\n        <form [formGroup]=\"filterForm\" class=\"form_filter\">\r\n          <!-- Filtro por Localidad  -->\r\n          <div *ngIf=\"isFilterLocation\">\r\n            <div class=\"filter_name\">\r\n              <span>Localidad</span>\r\n            </div>\r\n            <div>\r\n              <ion-list class=\"list_type\">\r\n                <ion-radio-group\r\n                  (ionChange)=\"filterArtist()\"\r\n                  formControlName=\"localidad\"\r\n                  class=\"type_border\"\r\n                >\r\n                  <ion-item class=\"filter_list\" lines=\"none\">\r\n                    <ion-text>Todo</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"\"></ion-radio>\r\n                  </ion-item>\r\n                  <ion-item\r\n                    class=\"filter_list\"\r\n                    lines=\"none\"\r\n                    *ngFor=\"let loc of lista_localidad_artis\"\r\n                  >\r\n                    <ion-text>{{ loc }}</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"{{ loc }}\"></ion-radio>\r\n                  </ion-item>\r\n                </ion-radio-group>\r\n              </ion-list>\r\n            </div>\r\n          </div>\r\n          <!-- filtro por Localidad -->\r\n\r\n          <!-- filtro por Tipo -->\r\n          <div *ngIf=\"isFilterType\">\r\n            <div class=\"filter_name\">\r\n              <span>Tipo</span>\r\n            </div>\r\n            <div>\r\n              <ion-list class=\"list_type\">\r\n                <ion-radio-group\r\n                  (ionChange)=\"filterArtist()\"\r\n                  formControlName=\"categoria\"\r\n                  class=\"type_border\"\r\n                >\r\n                  <ion-item class=\"filter_list\" lines=\"none\">\r\n                    <ion-text>Todo</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"\"></ion-radio>\r\n                  </ion-item>\r\n                  <ion-item\r\n                    class=\"filter_list last\"\r\n                    lines=\"none\"\r\n                    *ngFor=\"let tipo of lista_tipo_artis\"\r\n                  >\r\n                    <ion-text>{{ tipo }}</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"{{ tipo }}\"></ion-radio>\r\n                  </ion-item>\r\n                </ion-radio-group>\r\n              </ion-list>\r\n            </div>\r\n          </div>\r\n          <!-- Filtro por Tipo -->\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </ion-toolbar>\r\n</ion-header>\r\n\r\n<ion-content>\r\n  <ion-list>\r\n    <div class=\"artist\" *ngFor=\"let art of artists | filterArtist:dataForm\">\r\n      <ng-container *ngIf=\"art.vacio !== 1\">\r\n        <div class=\"imgArtist\">\r\n          <app-preload-list\r\n            [url]=\"art.imagen.url\"\r\n            [alt]=\"art.nombre\"\r\n            [clase]=\"preloadClase\"\r\n            [urlPreload]=\"preloadImage_list\"\r\n          ></app-preload-list>\r\n        </div>\r\n        <div class=\"infoArtist\">\r\n          <div id=\"info-art\" class=\"type\">{{ art.categoria }}</div>\r\n          <div id=\"info-art\" class=\"name\">{{ art.nombre }}</div>\r\n          <div class=\"netArtist\">\r\n            <img\r\n              *ngIf=\"art.instagram !== null && art.instagram !== undefined && art.instagram !== '' && art.instagram !== ' ' \"\r\n              (click)=\"openInstagram(art.instagram)\"\r\n              src=\"/assets/icon/instagram.png\"\r\n              alt=\"instagram\"\r\n            />\r\n            <img\r\n              *ngIf=\"art.spotify !== null && art.spotify !== undefined && art.spotify !== '' && art.spotify !== ' ' \"\r\n              (click)=\"openSpotify(art.spotify)\"\r\n              src=\"/assets/icon/spotify.png\"\r\n              alt=\"spotify\"\r\n            />\r\n            <img\r\n              *ngIf=\"art.youtube !== null && art.youtube !== undefined && art.youtube !== '' && art.youtube !== ' ' \"\r\n              (click)=\"verVideo(art.youtube)\"\r\n              src=\"/assets/icon/youtube.png\"\r\n              alt=\"youtube\"\r\n            />\r\n            <img\r\n              (click)=\"artistShare()\"\r\n              src=\"/assets/icon/share.png\"\r\n              alt=\"compartir\"\r\n            />\r\n          </div>\r\n        </div>\r\n      </ng-container>\r\n\r\n      <ng-container *ngIf=\"art.vacio === 1\">\r\n        <div class=\"empty\">\r\n          <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n          <div class=\"text_empty\">\r\n            No hay artistas para mostrar con el filtro seleccionado\r\n          </div>\r\n        </div>\r\n      </ng-container>\r\n    </div>\r\n  </ion-list>\r\n\r\n  <ion-list *ngIf=\"artists.length === 0 && !this.artistSvc.noData\">\r\n    <ng-container *ngFor=\"let item of [1,2,3,4,5,6]\">\r\n      <ion-item>\r\n        <ion-thumbnail slot=\"start\">\r\n          <ion-skeleton-text></ion-skeleton-text>\r\n        </ion-thumbnail>\r\n        <ion-label>\r\n          <h3>\r\n            <ion-skeleton-text animated style=\"width: 80%\"></ion-skeleton-text>\r\n          </h3>\r\n          <p>\r\n            <ion-skeleton-text animated style=\"width: 60%\"></ion-skeleton-text>\r\n          </p>\r\n          <p>\r\n            <ion-skeleton-text animated style=\"width: 30%\"></ion-skeleton-text>\r\n          </p>\r\n        </ion-label>\r\n      </ion-item>\r\n    </ng-container>\r\n  </ion-list>\r\n\r\n  <div *ngIf=\"this.artistSvc.noData\" class=\"empty\">\r\n    <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n    <div class=\"text_empty\" *ngIf=\"dep !== null\">\r\n      No hay artistas en {{ dep }}\r\n    </div>\r\n    <div class=\"text_empty\" *ngIf=\"dist !== null\">\r\n      No hay artistas en {{ depDist }}\r\n    </div>\r\n  </div>\r\n</ion-content>\r\n");
 
 /***/ }),
 
@@ -522,7 +683,7 @@ __webpack_require__.r(__webpack_exports__);
   \***********************************************/
 /***/ ((module) => {
 
-module.exports = "@import url(\"https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap\");\n.list-md {\n  padding-top: 0 !important;\n  padding-bottom: 0 !important;\n}\n.empty {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  margin: 20px 50px;\n  width: auto;\n}\n.text_empty {\n  color: #d6d2d1;\n  text-align: center;\n  padding-bottom: 15px;\n  font-size: 1.2em;\n  font-family: \"Gill Sans\", \"Gill Sans MT\", Calibri, \"Trebuchet MS\", sans-serif;\n}\n.icon_empty {\n  font-size: 5em;\n  color: #d6d2d1;\n}\n.slider {\n  width: 100%;\n}\n.sliderPrimero,\n.sliderHijo,\n.banner,\n.imgSlider {\n  width: 100%;\n}\n.sliderPrimero {\n  background-color: #eeeeee;\n}\n.link {\n  z-index: 1500;\n}\n.icon-link {\n  margin: 0 !important;\n}\n.artist {\n  display: flex;\n  flex-direction: row;\n  margin: 10px 4%;\n  border-radius: 5px;\n  background-color: var(--ion-color-light);\n}\n.imgArtist {\n  width: 40%;\n  /*height: auto; */\n  min-height: 36.8vw;\n}\n.infoArtist {\n  width: 60%;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  padding-left: 25px;\n}\n#info-art:nth-child(1) {\n  font-weight: bold;\n}\n#info-art:nth-child(2) {\n  color: #1d1d1d;\n}\n.netArtist > img {\n  padding: 6px 1em 3px 0;\n}\n.type {\n  font-family: \"Poppins\", sans-serif;\n  color: #01dfb8;\n  font-size: 13px;\n}\n.name {\n  font-family: \"Poppins\", sans-serif;\n  color: var(--ion-color-dark) !important;\n  padding-right: 3px;\n}\n@media (max-width: 341px) {\n  .name {\n    font-size: 14px;\n  }\n}\n.filter_place {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-around;\n  align-items: center;\n  margin: -30px auto 10px auto;\n  position: relative;\n  z-index: 50;\n  width: 90%;\n  background-color: var(--ion-color-light);\n  padding: 16px;\n  border-radius: 60px;\n}\nion-label {\n  font-weight: bold;\n  font-family: \"Poppins\";\n  color: #a1a1a1;\n  font-size: 0.8em;\n}\n.form_filter {\n  display: flex;\n  flex-direction: column;\n  margin: 0 5% 5px 5%;\n  z-index: 100;\n  background-color: var(--ion-color-back);\n  border-radius: 16px;\n  box-shadow: 0px 0px 9px -1px rgba(161, 141, 141, 0.75);\n}\n.filter_name {\n  padding: 15px 0 15px 15px;\n  font-size: 0.95em;\n  font-family: \"Poppins\", sans-serif;\n  font-weight: 700;\n}\n.filter_name > span {\n  font-weight: 700;\n}\n.filter_list {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  border-top: 2px solid #ddd;\n  width: 100%;\n  height: 35px;\n  font-size: 0.9em;\n  font-family: \"Poppins\", sans-serif;\n  color: var(--ion-color-dark);\n}\n.filter_type {\n  border-top: 2px solid #ddd;\n  width: 100%;\n}\n.type_border > .last:last-child {\n  border-bottom-left-radius: 16px !important;\n  border-bottom-right-radius: 16px !important;\n}\n.list_type {\n  border-bottom-left-radius: 16px !important;\n  border-bottom-right-radius: 16px !important;\n  min-height: 30px;\n  max-height: 200px;\n  overflow-y: scroll;\n}\n.open_filter {\n  color: #fc67ff;\n}\nion-radio {\n  --color-checked: #fc67ff;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFydGlzdC5wYWdlLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQVEscUZBQUE7QUFFUjtFQUNFLHlCQUFBO0VBQ0EsNEJBQUE7QUFBRjtBQUdBO0VBQ0UsYUFBQTtFQUNBLHNCQUFBO0VBQ0EsdUJBQUE7RUFDQSxtQkFBQTtFQUNBLGlCQUFBO0VBQ0EsV0FBQTtBQUFGO0FBR0E7RUFDRSxjQUFBO0VBQ0Esa0JBQUE7RUFDQSxvQkFBQTtFQUNBLGdCQUFBO0VBQ0EsNkVBQUE7QUFBRjtBQUdBO0VBQ0UsY0FBQTtFQUNBLGNBQUE7QUFBRjtBQUdBO0VBQ0UsV0FBQTtBQUFGO0FBR0E7Ozs7RUFJRSxXQUFBO0FBQUY7QUFHQTtFQUNFLHlCQUFBO0FBQUY7QUFHQTtFQUNFLGFBQUE7QUFBRjtBQUdBO0VBQ0Usb0JBQUE7QUFBRjtBQUdBO0VBQ0UsYUFBQTtFQUNBLG1CQUFBO0VBQ0EsZUFBQTtFQUNBLGtCQUFBO0VBQ0Esd0NBQUE7QUFBRjtBQUdBO0VBQ0UsVUFBQTtFQUNBLGlCQUFBO0VBQ0Esa0JBQUE7QUFBRjtBQUdBO0VBQ0UsVUFBQTtFQUNBLGFBQUE7RUFDQSxzQkFBQTtFQUNBLHVCQUFBO0VBRUEsa0JBQUE7QUFERjtBQUlBO0VBQ0UsaUJBQUE7QUFERjtBQUlBO0VBQ0UsY0FBQTtBQURGO0FBS0E7RUFDRSxzQkFBQTtBQUZGO0FBS0E7RUFDRSxrQ0FBQTtFQUNBLGNBQUE7RUFDQSxlQUFBO0FBRkY7QUFLQTtFQUNFLGtDQUFBO0VBQ0EsdUNBQUE7RUFDQSxrQkFBQTtBQUZGO0FBS0E7RUFDRTtJQUNFLGVBQUE7RUFGRjtBQUNGO0FBTUE7RUFDRSxhQUFBO0VBQ0EsbUJBQUE7RUFDQSw2QkFBQTtFQUNBLG1CQUFBO0VBQ0EsNEJBQUE7RUFDQSxrQkFBQTtFQUNBLFdBQUE7RUFDQSxVQUFBO0VBQ0Esd0NBQUE7RUFDQSxhQUFBO0VBQ0EsbUJBQUE7QUFKRjtBQU9BO0VBQ0UsaUJBQUE7RUFDQSxzQkFBQTtFQUNBLGNBQUE7RUFDQSxnQkFBQTtBQUpGO0FBT0E7RUFDRSxhQUFBO0VBQ0Esc0JBQUE7RUFDQSxtQkFBQTtFQUNBLFlBQUE7RUFDQSx1Q0FBQTtFQUNBLG1CQUFBO0VBR0Esc0RBQUE7QUFKRjtBQU9BO0VBQ0UseUJBQUE7RUFDQSxpQkFBQTtFQUNBLGtDQUFBO0VBQ0EsZ0JBQUE7QUFKRjtBQU9BO0VBQ0UsZ0JBQUE7QUFKRjtBQU9BO0VBQ0UsYUFBQTtFQUNBLHNCQUFBO0VBQ0EsdUJBQUE7RUFDQSwwQkFBQTtFQUNBLFdBQUE7RUFDQSxZQUFBO0VBQ0EsZ0JBQUE7RUFDQSxrQ0FBQTtFQUNBLDRCQUFBO0FBSkY7QUFPQTtFQUNFLDBCQUFBO0VBQ0EsV0FBQTtBQUpGO0FBT0E7RUFDRSwwQ0FBQTtFQUNBLDJDQUFBO0FBSkY7QUFPQTtFQUNFLDBDQUFBO0VBQ0EsMkNBQUE7RUFDQSxnQkFBQTtFQUNBLGlCQUFBO0VBQ0Esa0JBQUE7QUFKRjtBQU9BO0VBQ0UsY0FBQTtBQUpGO0FBT0E7RUFDRSx3QkFBQTtBQUpGIiwiZmlsZSI6ImFydGlzdC5wYWdlLnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyJAaW1wb3J0IHVybChcImh0dHBzOi8vZm9udHMuZ29vZ2xlYXBpcy5jb20vY3NzMj9mYW1pbHk9UG9wcGluczp3Z2h0QDcwMCZkaXNwbGF5PXN3YXBcIik7XG5cbi5saXN0LW1kIHtcbiAgcGFkZGluZy10b3A6IDAgIWltcG9ydGFudDtcbiAgcGFkZGluZy1ib3R0b206IDAgIWltcG9ydGFudDtcbn1cblxuLmVtcHR5IHtcbiAgZGlzcGxheTogZmxleDtcbiAgZmxleC1kaXJlY3Rpb246IGNvbHVtbjtcbiAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7XG4gIGFsaWduLWl0ZW1zOiBjZW50ZXI7XG4gIG1hcmdpbjogMjBweCA1MHB4O1xuICB3aWR0aDogYXV0bztcbn1cblxuLnRleHRfZW1wdHkge1xuICBjb2xvcjogI2Q2ZDJkMTtcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xuICBwYWRkaW5nLWJvdHRvbTogMTVweDtcbiAgZm9udC1zaXplOiAxLjJlbTtcbiAgZm9udC1mYW1pbHk6IFwiR2lsbCBTYW5zXCIsIFwiR2lsbCBTYW5zIE1UXCIsIENhbGlicmksIFwiVHJlYnVjaGV0IE1TXCIsIHNhbnMtc2VyaWY7XG59XG5cbi5pY29uX2VtcHR5IHtcbiAgZm9udC1zaXplOiA1ZW07XG4gIGNvbG9yOiAjZDZkMmQxO1xufVxuXG4uc2xpZGVyIHtcbiAgd2lkdGg6IDEwMCU7XG59XG5cbi5zbGlkZXJQcmltZXJvLFxuLnNsaWRlckhpam8sXG4uYmFubmVyLFxuLmltZ1NsaWRlciB7XG4gIHdpZHRoOiAxMDAlO1xufVxuXG4uc2xpZGVyUHJpbWVybyB7XG4gIGJhY2tncm91bmQtY29sb3I6ICNlZWVlZWU7XG59XG5cbi5saW5rIHtcbiAgei1pbmRleDogMTUwMDtcbn1cblxuLmljb24tbGluayB7XG4gIG1hcmdpbjogMCAhaW1wb3J0YW50O1xufVxuXG4uYXJ0aXN0IHtcbiAgZGlzcGxheTogZmxleDtcbiAgZmxleC1kaXJlY3Rpb246IHJvdztcbiAgbWFyZ2luOiAxMHB4IDQlO1xuICBib3JkZXItcmFkaXVzOiA1cHg7XG4gIGJhY2tncm91bmQtY29sb3I6IHZhcigtLWlvbi1jb2xvci1saWdodCk7XG59XG5cbi5pbWdBcnRpc3Qge1xuICB3aWR0aDogNDAlO1xuICAvKmhlaWdodDogYXV0bzsgKi9cbiAgbWluLWhlaWdodDogY2FsYygoMTAwdncgLSAoMTAwdncgKiAwLjA4KSkgKiAwLjQpO1xufVxuXG4uaW5mb0FydGlzdCB7XG4gIHdpZHRoOiA2MCU7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGZsZXgtZGlyZWN0aW9uOiBjb2x1bW47XG4gIGp1c3RpZnktY29udGVudDogY2VudGVyO1xuICAvL2FsaWduLWl0ZW1zOiBzdGFydDtcbiAgcGFkZGluZy1sZWZ0OiAyNXB4O1xufVxuXG4jaW5mby1hcnQ6bnRoLWNoaWxkKDEpIHtcbiAgZm9udC13ZWlnaHQ6IGJvbGQ7XG59XG5cbiNpbmZvLWFydDpudGgtY2hpbGQoMikge1xuICBjb2xvcjogcmdiKDI5LCAyOSwgMjkpO1xufVxuXG5cbi5uZXRBcnRpc3QgPiBpbWcge1xuICBwYWRkaW5nOiA2cHggMWVtIDNweCAwO1xufVxuXG4udHlwZSB7XG4gIGZvbnQtZmFtaWx5OiBcIlBvcHBpbnNcIiwgc2Fucy1zZXJpZjtcbiAgY29sb3I6ICMwMWRmYjg7XG4gIGZvbnQtc2l6ZTogMTNweDtcbn1cblxuLm5hbWUge1xuICBmb250LWZhbWlseTogXCJQb3BwaW5zXCIsIHNhbnMtc2VyaWY7XG4gIGNvbG9yOiB2YXIoLS1pb24tY29sb3ItZGFyaykgIWltcG9ydGFudDtcbiAgcGFkZGluZy1yaWdodDogM3B4O1xufVxuXG5AbWVkaWEgKG1heC13aWR0aDogMzQxcHgpIHtcbiAgLm5hbWUge1xuICAgIGZvbnQtc2l6ZTogMTRweDtcbiAgfVxufVxuXG4vLyBmaWx0cm9cbi5maWx0ZXJfcGxhY2Uge1xuICBkaXNwbGF5OiBmbGV4O1xuICBmbGV4LWRpcmVjdGlvbjogcm93O1xuICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWFyb3VuZDtcbiAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAgbWFyZ2luOiAtMzBweCBhdXRvIDEwcHggYXV0bztcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xuICB6LWluZGV4OiA1MDtcbiAgd2lkdGg6IDkwJTtcbiAgYmFja2dyb3VuZC1jb2xvcjogdmFyKC0taW9uLWNvbG9yLWxpZ2h0KTtcbiAgcGFkZGluZzogMTZweDtcbiAgYm9yZGVyLXJhZGl1czogNjBweDtcbn1cblxuaW9uLWxhYmVsIHtcbiAgZm9udC13ZWlnaHQ6IGJvbGQ7XG4gIGZvbnQtZmFtaWx5OiBcIlBvcHBpbnNcIjtcbiAgY29sb3I6IHJnYigxNjEsIDE2MSwgMTYxKTtcbiAgZm9udC1zaXplOiAwLjhlbTtcbn1cblxuLmZvcm1fZmlsdGVyIHtcbiAgZGlzcGxheTogZmxleDtcbiAgZmxleC1kaXJlY3Rpb246IGNvbHVtbjtcbiAgbWFyZ2luOiAwIDUlIDVweCA1JTtcbiAgei1pbmRleDogMTAwO1xuICBiYWNrZ3JvdW5kLWNvbG9yOiB2YXIoLS1pb24tY29sb3ItYmFjayk7XG4gIGJvcmRlci1yYWRpdXM6IDE2cHg7XG4gIC13ZWJraXQtYm94LXNoYWRvdzogMHB4IDBweCA5cHggLTFweCByZ2JhKDAsIDAsIDAsIDAuNzUpO1xuICAtbW96LWJveC1zaGFkb3c6IDBweCAwcHggOXB4IC0xcHggcmdiYSgwLCAwLCAwLCAwLjc1KTtcbiAgYm94LXNoYWRvdzogMHB4IDBweCA5cHggLTFweCByZ2JhKDE2MSwgMTQxLCAxNDEsIDAuNzUpO1xufVxuXG4uZmlsdGVyX25hbWUge1xuICBwYWRkaW5nOiAxNXB4IDAgMTVweCAxNXB4O1xuICBmb250LXNpemU6IDAuOTVlbTtcbiAgZm9udC1mYW1pbHk6IFwiUG9wcGluc1wiLCBzYW5zLXNlcmlmO1xuICBmb250LXdlaWdodDogNzAwO1xufVxuXG4uZmlsdGVyX25hbWUgPiBzcGFuIHtcbiAgZm9udC13ZWlnaHQ6IDcwMDtcbn1cblxuLmZpbHRlcl9saXN0IHtcbiAgZGlzcGxheTogZmxleDtcbiAgZmxleC1kaXJlY3Rpb246IGNvbHVtbjtcbiAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7XG4gIGJvcmRlci10b3A6IDJweCBzb2xpZCAjZGRkO1xuICB3aWR0aDogMTAwJTtcbiAgaGVpZ2h0OiAzNXB4O1xuICBmb250LXNpemU6IDAuOWVtO1xuICBmb250LWZhbWlseTogXCJQb3BwaW5zXCIsIHNhbnMtc2VyaWY7XG4gIGNvbG9yOiB2YXIoLS1pb24tY29sb3ItZGFyayk7XG59XG5cbi5maWx0ZXJfdHlwZSB7XG4gIGJvcmRlci10b3A6IDJweCBzb2xpZCAjZGRkO1xuICB3aWR0aDogMTAwJTtcbn1cblxuLnR5cGVfYm9yZGVyID4gLmxhc3Q6bGFzdC1jaGlsZCB7XG4gIGJvcmRlci1ib3R0b20tbGVmdC1yYWRpdXM6IDE2cHggIWltcG9ydGFudDtcbiAgYm9yZGVyLWJvdHRvbS1yaWdodC1yYWRpdXM6IDE2cHggIWltcG9ydGFudDtcbn1cblxuLmxpc3RfdHlwZSB7XG4gIGJvcmRlci1ib3R0b20tbGVmdC1yYWRpdXM6IDE2cHggIWltcG9ydGFudDtcbiAgYm9yZGVyLWJvdHRvbS1yaWdodC1yYWRpdXM6IDE2cHggIWltcG9ydGFudDtcbiAgbWluLWhlaWdodDogMzBweDtcbiAgbWF4LWhlaWdodDogMjAwcHg7XG4gIG92ZXJmbG93LXk6IHNjcm9sbDtcbn1cblxuLm9wZW5fZmlsdGVyIHtcbiAgY29sb3I6ICNmYzY3ZmY7XG59XG5cbmlvbi1yYWRpbyB7XG4gIC0tY29sb3ItY2hlY2tlZDogI2ZjNjdmZjtcbn1cbiJdfQ== */";
+module.exports = "@import url(\"https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap\");\n.list-md {\n  padding-top: 0 !important;\n  padding-bottom: 0 !important;\n}\n.empty {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  margin: 20px 50px;\n  width: auto;\n}\n.text_empty {\n  color: #d6d2d1;\n  text-align: center;\n  padding-bottom: 15px;\n  font-size: 1.2em;\n  font-family: \"Gill Sans\", \"Gill Sans MT\", Calibri, \"Trebuchet MS\", sans-serif;\n}\n.icon_empty {\n  font-size: 5em;\n  color: #d6d2d1;\n}\n.slider {\n  width: 100%;\n}\n.sliderPrimero,\n.sliderHijo,\n.banner,\n.imgSlider {\n  width: 100%;\n}\n.sliderPrimero {\n  background-color: #eeeeee;\n}\n.link {\n  z-index: 1500;\n}\n.icon-link {\n  margin: 0 !important;\n}\n.artist {\n  display: flex;\n  flex-direction: row;\n  margin: 10px 4%;\n  border-radius: 5px;\n  background-color: var(--ion-color-light);\n}\n.imgArtist {\n  width: 40%;\n  /*height: auto; */\n  min-height: 36.8vw;\n}\n.infoArtist {\n  width: 60%;\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  padding-left: 25px;\n}\n#info-art:nth-child(1) {\n  font-weight: bold;\n}\n#info-art:nth-child(2) {\n  color: #1d1d1d;\n}\n.netArtist > img {\n  padding: 6px 1em 3px 0;\n}\n.type {\n  font-family: \"Poppins\", sans-serif;\n  color: #01dfb8;\n  font-size: 13px;\n}\n.name {\n  font-family: \"Poppins\", sans-serif;\n  color: var(--ion-color-dark) !important;\n  padding-right: 3px;\n}\n@media (max-width: 341px) {\n  .name {\n    font-size: 14px;\n  }\n}\n.filter_place {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-around;\n  align-items: center;\n  margin: -30px auto 10px auto;\n  position: relative;\n  z-index: 50;\n  width: 90%;\n  background-color: var(--ion-color-light);\n  padding: 16px;\n  border-radius: 60px;\n}\nion-label {\n  font-weight: bold;\n  font-family: \"Poppins\";\n  color: #a1a1a1;\n  font-size: 0.8em;\n}\n.form_filter {\n  display: flex;\n  flex-direction: column;\n  margin: 0 5% 5px 5%;\n  z-index: 100;\n  background-color: var(--ion-color-back);\n  border-radius: 16px;\n  box-shadow: 0px 0px 9px -1px rgba(161, 141, 141, 0.75);\n}\n.filter_name {\n  padding: 15px 0 15px 15px;\n  font-size: 0.95em;\n  font-family: \"Poppins\", sans-serif;\n  font-weight: 700;\n}\n.filter_name > span {\n  font-weight: 700;\n}\n.filter_list {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  border-top: 2px solid #ddd;\n  width: 100%;\n  height: 35px;\n  font-size: 0.9em;\n  font-family: \"Poppins\", sans-serif;\n  color: var(--ion-color-dark);\n}\n.filter_type {\n  border-top: 2px solid #ddd;\n  width: 100%;\n}\n.type_border > .last:last-child {\n  border-bottom-left-radius: 16px !important;\n  border-bottom-right-radius: 16px !important;\n}\n.list_type {\n  border-bottom-left-radius: 16px !important;\n  border-bottom-right-radius: 16px !important;\n  min-height: 30px;\n  max-height: 200px;\n  overflow-y: scroll;\n}\n.open_filter {\n  color: #fc67ff;\n}\nion-radio {\n  --color-checked: #fc67ff;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFydGlzdC5wYWdlLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQVEscUZBQUE7QUFFUjtFQUNFLHlCQUFBO0VBQ0EsNEJBQUE7QUFBRjtBQUdBO0VBQ0UsYUFBQTtFQUNBLHNCQUFBO0VBQ0EsdUJBQUE7RUFDQSxtQkFBQTtFQUNBLGlCQUFBO0VBQ0EsV0FBQTtBQUFGO0FBR0E7RUFDRSxjQUFBO0VBQ0Esa0JBQUE7RUFDQSxvQkFBQTtFQUNBLGdCQUFBO0VBQ0EsNkVBQUE7QUFBRjtBQUdBO0VBQ0UsY0FBQTtFQUNBLGNBQUE7QUFBRjtBQUdBO0VBQ0UsV0FBQTtBQUFGO0FBR0E7Ozs7RUFJRSxXQUFBO0FBQUY7QUFHQTtFQUNFLHlCQUFBO0FBQUY7QUFHQTtFQUNFLGFBQUE7QUFBRjtBQUdBO0VBQ0Usb0JBQUE7QUFBRjtBQUdBO0VBQ0UsYUFBQTtFQUNBLG1CQUFBO0VBQ0EsZUFBQTtFQUNBLGtCQUFBO0VBQ0Esd0NBQUE7QUFBRjtBQUdBO0VBQ0UsVUFBQTtFQUNBLGlCQUFBO0VBQ0Esa0JBQUE7QUFBRjtBQUdBO0VBQ0UsVUFBQTtFQUNBLGFBQUE7RUFDQSxzQkFBQTtFQUNBLHVCQUFBO0VBRUEsa0JBQUE7QUFERjtBQUlBO0VBQ0UsaUJBQUE7QUFERjtBQUlBO0VBQ0UsY0FBQTtBQURGO0FBS0E7RUFDRSxzQkFBQTtBQUZGO0FBS0E7RUFDRSxrQ0FBQTtFQUNBLGNBQUE7RUFDQSxlQUFBO0FBRkY7QUFLQTtFQUNFLGtDQUFBO0VBQ0EsdUNBQUE7RUFDQSxrQkFBQTtBQUZGO0FBS0E7RUFDRTtJQUNFLGVBQUE7RUFGRjtBQUNGO0FBTUE7RUFDRSxhQUFBO0VBQ0EsbUJBQUE7RUFDQSw2QkFBQTtFQUNBLG1CQUFBO0VBQ0EsNEJBQUE7RUFDQSxrQkFBQTtFQUNBLFdBQUE7RUFDQSxVQUFBO0VBQ0Esd0NBQUE7RUFDQSxhQUFBO0VBQ0EsbUJBQUE7QUFKRjtBQU9BO0VBQ0UsaUJBQUE7RUFDQSxzQkFBQTtFQUNBLGNBQUE7RUFDQSxnQkFBQTtBQUpGO0FBT0E7RUFDRSxhQUFBO0VBQ0Esc0JBQUE7RUFDQSxtQkFBQTtFQUNBLFlBQUE7RUFDQSx1Q0FBQTtFQUNBLG1CQUFBO0VBR0Esc0RBQUE7QUFKRjtBQU9BO0VBQ0UseUJBQUE7RUFDQSxpQkFBQTtFQUNBLGtDQUFBO0VBQ0EsZ0JBQUE7QUFKRjtBQU9BO0VBQ0UsZ0JBQUE7QUFKRjtBQU9BO0VBQ0UsYUFBQTtFQUNBLHNCQUFBO0VBQ0EsdUJBQUE7RUFDQSwwQkFBQTtFQUNBLFdBQUE7RUFDQSxZQUFBO0VBQ0EsZ0JBQUE7RUFDQSxrQ0FBQTtFQUNBLDRCQUFBO0FBSkY7QUFPQTtFQUNFLDBCQUFBO0VBQ0EsV0FBQTtBQUpGO0FBT0E7RUFDRSwwQ0FBQTtFQUNBLDJDQUFBO0FBSkY7QUFPQTtFQUNFLDBDQUFBO0VBQ0EsMkNBQUE7RUFDQSxnQkFBQTtFQUNBLGlCQUFBO0VBQ0Esa0JBQUE7QUFKRjtBQU9BO0VBQ0UsY0FBQTtBQUpGO0FBT0E7RUFDRSx3QkFBQTtBQUpGIiwiZmlsZSI6ImFydGlzdC5wYWdlLnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyJAaW1wb3J0IHVybChcImh0dHBzOi8vZm9udHMuZ29vZ2xlYXBpcy5jb20vY3NzMj9mYW1pbHk9UG9wcGluczp3Z2h0QDcwMCZkaXNwbGF5PXN3YXBcIik7XHJcblxyXG4ubGlzdC1tZCB7XHJcbiAgcGFkZGluZy10b3A6IDAgIWltcG9ydGFudDtcclxuICBwYWRkaW5nLWJvdHRvbTogMCAhaW1wb3J0YW50O1xyXG59XHJcblxyXG4uZW1wdHkge1xyXG4gIGRpc3BsYXk6IGZsZXg7XHJcbiAgZmxleC1kaXJlY3Rpb246IGNvbHVtbjtcclxuICBqdXN0aWZ5LWNvbnRlbnQ6IGNlbnRlcjtcclxuICBhbGlnbi1pdGVtczogY2VudGVyO1xyXG4gIG1hcmdpbjogMjBweCA1MHB4O1xyXG4gIHdpZHRoOiBhdXRvO1xyXG59XHJcblxyXG4udGV4dF9lbXB0eSB7XHJcbiAgY29sb3I6ICNkNmQyZDE7XHJcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gIHBhZGRpbmctYm90dG9tOiAxNXB4O1xyXG4gIGZvbnQtc2l6ZTogMS4yZW07XHJcbiAgZm9udC1mYW1pbHk6IFwiR2lsbCBTYW5zXCIsIFwiR2lsbCBTYW5zIE1UXCIsIENhbGlicmksIFwiVHJlYnVjaGV0IE1TXCIsIHNhbnMtc2VyaWY7XHJcbn1cclxuXHJcbi5pY29uX2VtcHR5IHtcclxuICBmb250LXNpemU6IDVlbTtcclxuICBjb2xvcjogI2Q2ZDJkMTtcclxufVxyXG5cclxuLnNsaWRlciB7XHJcbiAgd2lkdGg6IDEwMCU7XHJcbn1cclxuXHJcbi5zbGlkZXJQcmltZXJvLFxyXG4uc2xpZGVySGlqbyxcclxuLmJhbm5lcixcclxuLmltZ1NsaWRlciB7XHJcbiAgd2lkdGg6IDEwMCU7XHJcbn1cclxuXHJcbi5zbGlkZXJQcmltZXJvIHtcclxuICBiYWNrZ3JvdW5kLWNvbG9yOiAjZWVlZWVlO1xyXG59XHJcblxyXG4ubGluayB7XHJcbiAgei1pbmRleDogMTUwMDtcclxufVxyXG5cclxuLmljb24tbGluayB7XHJcbiAgbWFyZ2luOiAwICFpbXBvcnRhbnQ7XHJcbn1cclxuXHJcbi5hcnRpc3Qge1xyXG4gIGRpc3BsYXk6IGZsZXg7XHJcbiAgZmxleC1kaXJlY3Rpb246IHJvdztcclxuICBtYXJnaW46IDEwcHggNCU7XHJcbiAgYm9yZGVyLXJhZGl1czogNXB4O1xyXG4gIGJhY2tncm91bmQtY29sb3I6IHZhcigtLWlvbi1jb2xvci1saWdodCk7XHJcbn1cclxuXHJcbi5pbWdBcnRpc3Qge1xyXG4gIHdpZHRoOiA0MCU7XHJcbiAgLypoZWlnaHQ6IGF1dG87ICovXHJcbiAgbWluLWhlaWdodDogY2FsYygoMTAwdncgLSAoMTAwdncgKiAwLjA4KSkgKiAwLjQpO1xyXG59XHJcblxyXG4uaW5mb0FydGlzdCB7XHJcbiAgd2lkdGg6IDYwJTtcclxuICBkaXNwbGF5OiBmbGV4O1xyXG4gIGZsZXgtZGlyZWN0aW9uOiBjb2x1bW47XHJcbiAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7XHJcbiAgLy9hbGlnbi1pdGVtczogc3RhcnQ7XHJcbiAgcGFkZGluZy1sZWZ0OiAyNXB4O1xyXG59XHJcblxyXG4jaW5mby1hcnQ6bnRoLWNoaWxkKDEpIHtcclxuICBmb250LXdlaWdodDogYm9sZDtcclxufVxyXG5cclxuI2luZm8tYXJ0Om50aC1jaGlsZCgyKSB7XHJcbiAgY29sb3I6IHJnYigyOSwgMjksIDI5KTtcclxufVxyXG5cclxuXHJcbi5uZXRBcnRpc3QgPiBpbWcge1xyXG4gIHBhZGRpbmc6IDZweCAxZW0gM3B4IDA7XHJcbn1cclxuXHJcbi50eXBlIHtcclxuICBmb250LWZhbWlseTogXCJQb3BwaW5zXCIsIHNhbnMtc2VyaWY7XHJcbiAgY29sb3I6ICMwMWRmYjg7XHJcbiAgZm9udC1zaXplOiAxM3B4O1xyXG59XHJcblxyXG4ubmFtZSB7XHJcbiAgZm9udC1mYW1pbHk6IFwiUG9wcGluc1wiLCBzYW5zLXNlcmlmO1xyXG4gIGNvbG9yOiB2YXIoLS1pb24tY29sb3ItZGFyaykgIWltcG9ydGFudDtcclxuICBwYWRkaW5nLXJpZ2h0OiAzcHg7XHJcbn1cclxuXHJcbkBtZWRpYSAobWF4LXdpZHRoOiAzNDFweCkge1xyXG4gIC5uYW1lIHtcclxuICAgIGZvbnQtc2l6ZTogMTRweDtcclxuICB9XHJcbn1cclxuXHJcbi8vIGZpbHRyb1xyXG4uZmlsdGVyX3BsYWNlIHtcclxuICBkaXNwbGF5OiBmbGV4O1xyXG4gIGZsZXgtZGlyZWN0aW9uOiByb3c7XHJcbiAganVzdGlmeS1jb250ZW50OiBzcGFjZS1hcm91bmQ7XHJcbiAgYWxpZ24taXRlbXM6IGNlbnRlcjtcclxuICBtYXJnaW46IC0zMHB4IGF1dG8gMTBweCBhdXRvO1xyXG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcclxuICB6LWluZGV4OiA1MDtcclxuICB3aWR0aDogOTAlO1xyXG4gIGJhY2tncm91bmQtY29sb3I6IHZhcigtLWlvbi1jb2xvci1saWdodCk7XHJcbiAgcGFkZGluZzogMTZweDtcclxuICBib3JkZXItcmFkaXVzOiA2MHB4O1xyXG59XHJcblxyXG5pb24tbGFiZWwge1xyXG4gIGZvbnQtd2VpZ2h0OiBib2xkO1xyXG4gIGZvbnQtZmFtaWx5OiBcIlBvcHBpbnNcIjtcclxuICBjb2xvcjogcmdiKDE2MSwgMTYxLCAxNjEpO1xyXG4gIGZvbnQtc2l6ZTogMC44ZW07XHJcbn1cclxuXHJcbi5mb3JtX2ZpbHRlciB7XHJcbiAgZGlzcGxheTogZmxleDtcclxuICBmbGV4LWRpcmVjdGlvbjogY29sdW1uO1xyXG4gIG1hcmdpbjogMCA1JSA1cHggNSU7XHJcbiAgei1pbmRleDogMTAwO1xyXG4gIGJhY2tncm91bmQtY29sb3I6IHZhcigtLWlvbi1jb2xvci1iYWNrKTtcclxuICBib3JkZXItcmFkaXVzOiAxNnB4O1xyXG4gIC13ZWJraXQtYm94LXNoYWRvdzogMHB4IDBweCA5cHggLTFweCByZ2JhKDAsIDAsIDAsIDAuNzUpO1xyXG4gIC1tb3otYm94LXNoYWRvdzogMHB4IDBweCA5cHggLTFweCByZ2JhKDAsIDAsIDAsIDAuNzUpO1xyXG4gIGJveC1zaGFkb3c6IDBweCAwcHggOXB4IC0xcHggcmdiYSgxNjEsIDE0MSwgMTQxLCAwLjc1KTtcclxufVxyXG5cclxuLmZpbHRlcl9uYW1lIHtcclxuICBwYWRkaW5nOiAxNXB4IDAgMTVweCAxNXB4O1xyXG4gIGZvbnQtc2l6ZTogMC45NWVtO1xyXG4gIGZvbnQtZmFtaWx5OiBcIlBvcHBpbnNcIiwgc2Fucy1zZXJpZjtcclxuICBmb250LXdlaWdodDogNzAwO1xyXG59XHJcblxyXG4uZmlsdGVyX25hbWUgPiBzcGFuIHtcclxuICBmb250LXdlaWdodDogNzAwO1xyXG59XHJcblxyXG4uZmlsdGVyX2xpc3Qge1xyXG4gIGRpc3BsYXk6IGZsZXg7XHJcbiAgZmxleC1kaXJlY3Rpb246IGNvbHVtbjtcclxuICBqdXN0aWZ5LWNvbnRlbnQ6IGNlbnRlcjtcclxuICBib3JkZXItdG9wOiAycHggc29saWQgI2RkZDtcclxuICB3aWR0aDogMTAwJTtcclxuICBoZWlnaHQ6IDM1cHg7XHJcbiAgZm9udC1zaXplOiAwLjllbTtcclxuICBmb250LWZhbWlseTogXCJQb3BwaW5zXCIsIHNhbnMtc2VyaWY7XHJcbiAgY29sb3I6IHZhcigtLWlvbi1jb2xvci1kYXJrKTtcclxufVxyXG5cclxuLmZpbHRlcl90eXBlIHtcclxuICBib3JkZXItdG9wOiAycHggc29saWQgI2RkZDtcclxuICB3aWR0aDogMTAwJTtcclxufVxyXG5cclxuLnR5cGVfYm9yZGVyID4gLmxhc3Q6bGFzdC1jaGlsZCB7XHJcbiAgYm9yZGVyLWJvdHRvbS1sZWZ0LXJhZGl1czogMTZweCAhaW1wb3J0YW50O1xyXG4gIGJvcmRlci1ib3R0b20tcmlnaHQtcmFkaXVzOiAxNnB4ICFpbXBvcnRhbnQ7XHJcbn1cclxuXHJcbi5saXN0X3R5cGUge1xyXG4gIGJvcmRlci1ib3R0b20tbGVmdC1yYWRpdXM6IDE2cHggIWltcG9ydGFudDtcclxuICBib3JkZXItYm90dG9tLXJpZ2h0LXJhZGl1czogMTZweCAhaW1wb3J0YW50O1xyXG4gIG1pbi1oZWlnaHQ6IDMwcHg7XHJcbiAgbWF4LWhlaWdodDogMjAwcHg7XHJcbiAgb3ZlcmZsb3cteTogc2Nyb2xsO1xyXG59XHJcblxyXG4ub3Blbl9maWx0ZXIge1xyXG4gIGNvbG9yOiAjZmM2N2ZmO1xyXG59XHJcblxyXG5pb24tcmFkaW8ge1xyXG4gIC0tY29sb3ItY2hlY2tlZDogI2ZjNjdmZjtcclxufVxyXG4iXX0= */";
 
 /***/ })
 

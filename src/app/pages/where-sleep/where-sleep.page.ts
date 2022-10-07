@@ -14,6 +14,7 @@ import { Point } from "src/app/shared/point";
 import { environment } from "src/environments/environment";
 import { Browser } from '@capacitor/browser';
 import { IonSlides } from "@ionic/angular";
+import { AngularFireAnalytics } from "@angular/fire/compat/analytics";
 
 @Component({
   selector: "app-where-sleep",
@@ -80,6 +81,7 @@ export class WhereSleepPage {
     private geolocationSvc: GeolocationService,
     private http: HttpClient,
     private databaseSvc: DatabaseService,
+    private ga: AngularFireAnalytics
   ) {}
 
   resetSlide() {
@@ -88,6 +90,10 @@ export class WhereSleepPage {
 
   endSlide() {
     this.slide.stopAutoplay();
+  }
+
+  googleAnalytics() {
+    this.ga.logEvent('donde_dormir');
   }
 
   async show(message: string) {
@@ -177,6 +183,8 @@ export class WhereSleepPage {
   }
 
   ionViewWillEnter() {
+    document.title = "Donde Dormir";
+    this.googleAnalytics();
     if (
       localStorage.getItem("deptoActivo") != undefined &&
       localStorage.getItem("deptoActivo") != null

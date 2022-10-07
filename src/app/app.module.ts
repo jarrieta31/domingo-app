@@ -16,8 +16,8 @@ import { environment } from '../environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { AngularFireAnalyticsModule } from '@angular/fire/compat/analytics';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -43,8 +43,8 @@ export function gpsProviderFactory(provider: GpsProvider) {
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireStorageModule,
     AngularFirestoreModule.enablePersistence(),
-    AngularFireAuthModule,
     AngularFireDatabaseModule,
+    AngularFireAnalyticsModule,
     AppRoutingModule,
     BrowserModule,
     ComponentsModule,
@@ -63,7 +63,7 @@ export function gpsProviderFactory(provider: GpsProvider) {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     CallNumber,
     ScreenOrientation,
-    SocialSharing,
+    SocialSharing
   ],
   bootstrap: [AppComponent],
 })

@@ -15,6 +15,8 @@ import { environment } from 'src/environments/environment';
 import { Browser } from '@capacitor/browser';
 import { IonSlides } from '@ionic/angular';
 import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
+import { AngularFireAnalytics } from '@angular/fire/compat/analytics';
+
 
 @Component({
   selector: 'app-where-eat',
@@ -85,7 +87,8 @@ export class WhereEatPage {
     private http: HttpClient,
     private geolocationSvc: GeolocationService,
     private databaseSvc: DatabaseService,
-    private socialSharing: SocialSharing
+    private socialSharing: SocialSharing,
+    private ga: AngularFireAnalytics,
   ) {}
 
   resetSlide() {
@@ -101,8 +104,16 @@ export class WhereEatPage {
       nombre,
       null,
       null,
-      "https://developer-dominga.web.app/lugares/"+id
+      'https://developer-dominga.web.app/lugares/' + id
     );
+  }
+
+  googleAnalytics() {
+    this.ga.logEvent('donde_comer');
+  }
+
+  googleAnalyticsInstagram(nombre: string) {
+    this.ga.logEvent('instagram_donde_comer', { nombre });
   }
 
   async show(message: string) {
@@ -197,6 +208,9 @@ export class WhereEatPage {
   }
 
   ionViewWillEnter() {
+    document.title = "Donde Comer";
+    this.googleAnalytics();
+
     if (
       localStorage.getItem('deptoActivo') != undefined &&
       localStorage.getItem('deptoActivo') != null

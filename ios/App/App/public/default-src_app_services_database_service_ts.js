@@ -417,6 +417,18 @@ let DatabaseService = class DatabaseService {
             });
             this.eventos.next(this.distanceEvents);
         }
+        // this.eventos.forEach(res => res.forEach( ev => {
+        //   if(ev.tipo){
+        //   var d = new Date();
+        //   var Nday = d.getDay()     
+        //   var SumDay = 7 - Nday;
+        //   d.setDate(d.getDate() + SumDay);
+        //   ev.fechaInicio = d
+        //   console.log(d, Nday, SumDay, d.getDay());
+        // }
+        // }
+        //   ))
+        // console.log(this.eventos)
         return this.eventos;
     }
     /**

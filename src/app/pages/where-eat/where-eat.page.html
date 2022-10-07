@@ -1,5 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
+    <ion-title>Donde Comer</ion-title>
     <div class="slider">
       <ion-slides
         class="sliderPrimero setHeight"
@@ -125,7 +126,7 @@
                   class="contact"
                   *ngIf="item.instagram !== null"
                   name="logo-instagram"
-                  (click)="openInstagram(item.instagram)"
+                  (click)="openInstagram(item.instagram); googleAnalyticsInstagram(item.nombre)"
                 ></ion-icon>
                 <ion-icon
                   color="dark"

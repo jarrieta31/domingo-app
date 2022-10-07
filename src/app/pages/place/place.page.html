@@ -1,5 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
+    <ion-title>Lugares</ion-title>
     <div class="slider">
       <ion-slides
         class="sliderPrimero setHeight"
@@ -136,7 +137,7 @@
         <ng-container *ngIf="item.vacio !== 1">
           <ion-card
             *ngIf="(item.distanciaNumber <= dist || (dep != null && !this.placeSvc.noData && item.departamento === dep))"
-            id="{{ item.id }}"
+            id="{{ item.id }}" (click)="googleAnalyticsLugarVisitado(item.nombre, item.id)"
           >
             <ion-card-header
               color="information"

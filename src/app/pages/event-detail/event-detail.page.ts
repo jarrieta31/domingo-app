@@ -64,6 +64,8 @@ export class EventDetailPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    document.title = "Detalle de Evento";
+    
     this.clock = this.source
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((t) => {

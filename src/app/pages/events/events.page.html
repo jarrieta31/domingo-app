@@ -1,5 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
+    <ion-title>Eventos</ion-title>
     <div class="slider">
       <ion-slides
         class="sliderPrimero setHeight"
@@ -263,7 +264,7 @@
           item.precioUnico,
           item.direccion,
           item.localidad,
-          item.departamento)"
+          item.departamento); googleAnalyticsVisitarEvento(item.nombre, item.id)"
           >
             <ion-avatar item-start class="image-event">
               <app-preload-list

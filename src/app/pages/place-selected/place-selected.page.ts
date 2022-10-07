@@ -56,6 +56,7 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    document.title = "Detalle de Lugar";
     this.place_suscription = this.placeSvc.place_selected.subscribe((res) => {
       this.place = res;
 
