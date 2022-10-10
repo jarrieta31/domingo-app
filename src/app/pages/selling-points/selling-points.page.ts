@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Browser } from '@capacitor/browser';
+import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
 
 @Component({
   selector: 'app-selling-points',
@@ -16,10 +17,12 @@ export class SellingPointsPage implements OnInit {
   
   constructor(
     private modalCtrl: ModalController,
+    private gaService: GoogleAnalyticsService,
   ) { }
 
   ngOnInit() {
-    console.log(this.instagram, this.tickAntel, this.facebook, this.whatsapp)
+    document.title = 'Puntos de Venta Eventos';
+    this.gaService.googleAnalyticsPantallas('puntos_de_venta_eventos');
   }
 
   cancelar() {
@@ -27,18 +30,22 @@ export class SellingPointsPage implements OnInit {
   }
 
   openTickAntel() {
+    this.gaService.googleAnalyticsRedesSociales('eventos', 'tickantel');
     Browser.open({ url: this.tickAntel});
   }
 
   openInstagram() {
+    this.gaService.googleAnalyticsRedesSociales('eventos', 'instagram');
     Browser.open({ url: this.instagram});
   }
 
   openFacebook() {
+    this.gaService.googleAnalyticsRedesSociales('eventos', 'facebook');
     Browser.open({ url: this.facebook});
   }
 
   openWhatsapp() {
+    this.gaService.googleAnalyticsRedesSociales('eventos', 'whatsapp');
     Browser.open({ url: this.whatsapp});
   }
 

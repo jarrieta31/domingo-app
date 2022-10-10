@@ -1,10 +1,10 @@
     <ion-fab vertical="bottom" color="red" horizontal="end" edge slot="fixed" [style.display]="viewImage == false ? 'flex': 'none'">
         <ion-fab-button color="circuits">
-            <ion-icon  color="light" name="stop" (click)="stopTextToSpeech()"></ion-icon>
+            <ion-icon  color="light" name="stop" (click)="stopTextToSpeech(); googleAnalyticsAudioStop()"></ion-icon>
         </ion-fab-button>
     </ion-fab>
     <ion-fab vertical="bottom" horizontal="end" edge slot="fixed" [style.display]="viewImage == true ? 'flex': 'none'">
         <ion-fab-button color="circuits">
-            <ion-icon color="light" class="hecho" name="play" (click)="playTextToSpeech()" ></ion-icon>
+            <ion-icon color="light" class="hecho" name="play" (click)="playTextToSpeech(); googleAnalyticsAudioStart()" ></ion-icon>
         </ion-fab-button>
     </ion-fab>

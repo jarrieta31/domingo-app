@@ -9,6 +9,7 @@ import { Observable, Subject, Subscription } from "rxjs";
 import * as Mapboxgl from "mapbox-gl";
 import { takeUntil, tap } from "rxjs/operators";
 import { ActionSheetController, LoadingController } from "@ionic/angular";
+import { GoogleAnalyticsService } from "src/app/services/google-analytics.service";
 
 @Component({
   selector: "app-map",
@@ -40,7 +41,8 @@ export class MapPage implements OnInit, OnDestroy {
     private geolocationService: GeolocationService,
     private router: Router,
     private loadingController: LoadingController,
-    public actionSheetController: ActionSheetController
+    public actionSheetController: ActionSheetController,
+    public gaService: GoogleAnalyticsService
   ) {
     if (this.geolocationService.posicion$.getValue() != null) {
       this.posicion = this.geolocationService.posicion$.getValue();
@@ -58,11 +60,17 @@ export class MapPage implements OnInit, OnDestroy {
     const { role, data } = await loading.onDidDismiss();
   }
 
+  // googleAnalyticsMapa(nombre: string, id: string) {
+  //   this.ga.logEvent('mapa', { nombre, id })
+  // }
+
   regresar() {
     this.router.navigate(["/place-selected", this.id]);
   }
 
   ngOnInit() {
+    document.title = 'Mapa';
+    this.gaService.googleAnalyticsPantallas('mapa');
     //Obtiene el observable con la posicion del usuario
     this.posicion$ = this.geolocationService.getObsPosicion$();
     Mapboxgl.accessToken = environment.mapBoxToken;

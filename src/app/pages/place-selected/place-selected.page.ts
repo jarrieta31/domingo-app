@@ -8,6 +8,7 @@ import * as Mapboxgl from "mapbox-gl";
 import { Router } from "@angular/router";
 import { PreloadDetailsComponent } from "../../components/preload-details/preload-details.component";
 import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
+import { GoogleAnalyticsService } from "src/app/services/google-analytics.service";
 
 @Component({
   selector: "app-place-selected",
@@ -52,14 +53,15 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
     private modalCtrl: ModalController,
     private router: Router,
     private actionSheetController: ActionSheetController,
-    private socialSharing: SocialSharing
+    private socialSharing: SocialSharing,
+    private gaService: GoogleAnalyticsService
   ) {}
 
   ngOnInit() {
     document.title = "Detalle de Lugar";
     this.place_suscription = this.placeSvc.place_selected.subscribe((res) => {
       this.place = res;
-
+      this.gaService.googleAnalyticsPantallas('detalle_de_lugar', res.nombre);
       if (this.place.videos.length > 0) {
         this.videos = this.place.videos.filter(
           (item: any) =>
@@ -90,6 +92,7 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   }
 
   socialSharingShare(nombre: string, id: string) {
+    this.gaService.googleAnalyticsCompartir('lugar', 'lugar_'+nombre, id);
     this.socialSharing.share(
       nombre,
       null,
@@ -114,6 +117,7 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
    * @param url - URL del video que se va a ejecutar
    */
   async verVideo(url: string) {
+    this.gaService.googleAnalyticsReproducirVideo('lugares');
     const video = await this.modalCtrl.create({
       component: VideoPage,
       cssClass: "modal-video",

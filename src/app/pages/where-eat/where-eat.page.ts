@@ -15,7 +15,7 @@ import { environment } from 'src/environments/environment';
 import { Browser } from '@capacitor/browser';
 import { IonSlides } from '@ionic/angular';
 import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
-import { AngularFireAnalytics } from '@angular/fire/compat/analytics';
+import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
 
 
 @Component({
@@ -76,6 +76,8 @@ export class WhereEatPage {
   preloadImage_list: string = '/assets/load_cuadrada.gif';
   /** clase de preload list */
   preloadClase: string = 'img-comer';
+    /**url para compartir */
+    shareURL: string = "https://developer-dominga.web.app/share-where-eat/";
 
   @ViewChild(IonSlides) slide: IonSlides;
 
@@ -88,7 +90,7 @@ export class WhereEatPage {
     private geolocationSvc: GeolocationService,
     private databaseSvc: DatabaseService,
     private socialSharing: SocialSharing,
-    private ga: AngularFireAnalytics,
+    private gaService: GoogleAnalyticsService
   ) {}
 
   resetSlide() {
@@ -100,21 +102,18 @@ export class WhereEatPage {
   }
 
   socialSharingShare(nombre: string, id: string) {
+    this.gaService.googleAnalyticsCompartir('donde_comer', 'donde_comer_'+nombre, id);
     this.socialSharing.share(
       nombre,
       null,
       null,
-      'https://developer-dominga.web.app/lugares/' + id
+      this.shareURL+id
     );
   }
 
-  googleAnalytics() {
-    this.ga.logEvent('donde_comer');
-  }
-
-  googleAnalyticsInstagram(nombre: string) {
-    this.ga.logEvent('instagram_donde_comer', { nombre });
-  }
+  // googleAnalyticsInstagram(nombre: string) {
+  //   this.ga.logEvent('instagram_donde_comer', { nombre });
+  // }
 
   async show(message: string) {
     this.loading = await this.loadingCtrl.create({
@@ -200,16 +199,18 @@ export class WhereEatPage {
   }
 
   openInstagram(url: string) {
+    this.gaService.googleAnalyticsRedesSociales('donde_comer', 'instagram');
     Browser.open({ url: url });
   }
 
   openWhatsapp(url: string) {
+    this.gaService.googleAnalyticsRedesSociales('donde_comer', 'whatsapp');
     Browser.open({ url: url });
   }
 
   ionViewWillEnter() {
     document.title = "Donde Comer";
-    this.googleAnalytics();
+    this.gaService.googleAnalyticsPantallas('donde_comer');
 
     if (
       localStorage.getItem('deptoActivo') != undefined &&

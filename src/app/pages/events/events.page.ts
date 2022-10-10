@@ -18,8 +18,7 @@ import { GeolocationService } from 'src/app/services/geolocation.service';
 import { HttpClient } from '@angular/common/http';
 import { Point } from 'src/app/shared/point';
 import { environment } from 'src/environments/environment';
-import {formatDate} from '@angular/common';
-import { AngularFireAnalytics } from '@angular/fire/compat/analytics';
+import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
 
 @Component({
   selector: 'app-events',
@@ -97,7 +96,7 @@ export class EventsPage {
     private geolocationSvc: GeolocationService,
     private http: HttpClient,
     private alertCtrl: AlertController,
-    private ga: AngularFireAnalytics
+    private gaService: GoogleAnalyticsService
   ) {
     this.nextDay = this.sumarDias(this.now, 1);
   }
@@ -132,14 +131,6 @@ export class EventsPage {
 
   endSlide() {
     this.slide.stopAutoplay();
-  }
-
-  googleAnalytics() {
-    this.ga.logEvent('eventos');
-  }
-
-  googleAnalyticsVisitarEvento(nombre: string, id: string) {
-    this.ga.logEvent('eventos_visitados', { nombre, id })
   }
 
   close() {
@@ -406,7 +397,7 @@ export class EventsPage {
 
   ionViewWillEnter() {
     document.title = "Eventos";
-    this.googleAnalytics();
+    this.gaService.googleAnalyticsPantallas('eventos');
     
     this.sliderSvc.getSliders();
     this.anioActual = new Date().getFullYear();

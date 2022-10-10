@@ -5,6 +5,8 @@ import { SellingPointsPage } from '../selling-points/selling-points.page';
 import { Browser } from '@capacitor/browser';
 import { takeUntil } from 'rxjs/operators';
 import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
+import { AngularFireAnalytics } from '@angular/fire/compat/analytics';
+import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
 
 @Component({
   selector: 'app-event-detail',
@@ -12,7 +14,7 @@ import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
   styleUrls: ['./event-detail.page.scss'],
 })
 export class EventDetailPage implements OnInit, OnDestroy {
-  @Input('id') id: number;
+  @Input('id') id: string;
   @Input('fecha') fecha: string;
   @Input('titulo') titulo: string;
   @Input('descripcion') descripcion: string;
@@ -60,11 +62,13 @@ export class EventDetailPage implements OnInit, OnDestroy {
 
   constructor(
     private modalCtrl: ModalController,
-    private socialSharing: SocialSharing
+    private socialSharing: SocialSharing,
+    private gaService: GoogleAnalyticsService
   ) {}
 
   ngOnInit() {
     document.title = "Detalle de Evento";
+    this.gaService.googleAnalyticsPantallas('detalle_de_evento', this.titulo);
     
     this.clock = this.source
       .pipe(takeUntil(this.unsubscribe$))
@@ -90,7 +94,8 @@ export class EventDetailPage implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  socialSharingEvent(nombre: string, imagen: string) {
+  socialSharingEvent(tipo: string, nombre: string, imagen: string, id: string) {
+    this.gaService.googleAnalyticsCompartir(tipo, tipo+'_'+nombre, id);
     this.socialSharing.share(nombre, null, null, imagen);
   }
 
@@ -116,7 +121,16 @@ export class EventDetailPage implements OnInit, OnDestroy {
     }
   }
 
+  // googleAnalyticsMapa(titulo: string, id: string) {
+  //   this.ga.logEvent('ubicacion_evento', { titulo, id })
+  // }
+
+  // googleAnalyticsPuntosDeVenta(titulo: string, id: string) {
+  //   this.ga.logEvent('puntos_de_venta', { titulo, id })
+  // }
+
   openMap() {
+    this.gaService.googleAnalyticsMapa(this.titulo);
     Browser.open({
       url:
         'https://www.google.com/maps/search/?api=1&query=' +

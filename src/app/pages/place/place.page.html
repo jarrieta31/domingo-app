@@ -136,7 +136,7 @@
         <ng-container *ngIf="item.vacio !== 1">
           <ion-card
             *ngIf="(item.distanciaNumber <= dist || (dep != null && !this.placeSvc.noData && item.departamento === dep))"
-            id="{{ item.id }}" (click)="googleAnalyticsLugarVisitado(item.nombre, item.id)"
+            id="{{ item.id }}"
           >
             <ion-card-header
               color="information"
@@ -173,6 +173,7 @@
                 edge
                 slot="fixed"
                 *ngIf="item.accesibilidad.rampa || item.accesibilidad.banio"
+                (click)="this.gaService.googleAnalyticsAccesibilidad()"
               >
                 <ion-fab-button color="information">
                   <ion-img

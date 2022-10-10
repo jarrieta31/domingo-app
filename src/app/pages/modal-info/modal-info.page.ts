@@ -4,20 +4,19 @@ import {
   OnDestroy,
   ViewChild,
   ElementRef,
-  AfterViewInit,
-} from "@angular/core";
-import { Router } from "@angular/router";
+} from '@angular/core';
 import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
-import { Subject } from "rxjs";
-import { PlaceService } from "src/app/services/database/place.service";
-import { takeUntil } from "rxjs/operators";
-import { Place } from "src/app/shared/place";
+import { Subject } from 'rxjs';
+import { PlaceService } from 'src/app/services/database/place.service';
+import { takeUntil } from 'rxjs/operators';
+import { Place } from 'src/app/shared/place';
 import { Browser } from '@capacitor/browser';
+import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
 
 @Component({
-  selector: "app-modal-info",
-  templateUrl: "./modal-info.page.html",
-  styleUrls: ["./modal-info.page.scss"],
+  selector: 'app-modal-info',
+  templateUrl: './modal-info.page.html',
+  styleUrls: ['./modal-info.page.scss'],
 })
 export class ModalInfoPage implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
@@ -25,26 +24,29 @@ export class ModalInfoPage implements OnInit, OnDestroy {
   descripcionText: string;
   place: Place = null;
   telefonos: string[] = [];
-  @ViewChild("descripcion", { static: true }) descripcionHtml: ElementRef;
+  @ViewChild('descripcion', { static: true }) descripcionHtml: ElementRef;
 
   constructor(
     private callNumber: CallNumber,
-    private placeSvc: PlaceService
+    private placeSvc: PlaceService,
+    private gaService: GoogleAnalyticsService
   ) {}
 
   ngOnInit() {
+    document.title = 'Descripción Lugar';
     this.placeSvc.place_selected
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {
+        this.gaService.googleAnalyticsPantallas('descripcion_lugar', res.nombre);
         this.place = res;
         this.place.telefonos.forEach((tel: string) => {
           if (
-            tel["numero"] !== null &&
-            tel["numero"] !== undefined &&
-            tel["numero"] !== "" &&
-            tel["numero"] !== " "
+            tel['numero'] !== null &&
+            tel['numero'] !== undefined &&
+            tel['numero'] !== '' &&
+            tel['numero'] !== ' '
           ) {
-            this.telefonos.push(tel["numero"]);
+            this.telefonos.push(tel['numero']);
           }
         });
       });
@@ -52,46 +54,46 @@ export class ModalInfoPage implements OnInit, OnDestroy {
     if (
       this.place.web === null ||
       this.place.web === undefined ||
-      this.place.web === "" ||
-      this.place.web === " "
+      this.place.web === '' ||
+      this.place.web === ' '
     ) {
-      let elem: HTMLElement = document.getElementById("web");
-      elem.setAttribute("style", "display:none");
+      let elem: HTMLElement = document.getElementById('web');
+      elem.setAttribute('style', 'display:none');
     }
 
     if (
       this.place.facebook == null ||
       this.place.facebook === undefined ||
-      this.place.facebook === "" ||
-      this.place.facebook === " "
+      this.place.facebook === '' ||
+      this.place.facebook === ' '
     ) {
-      let elem: HTMLElement = document.getElementById("facebook");
-      elem.setAttribute("style", "display:none");
+      let elem: HTMLElement = document.getElementById('facebook');
+      elem.setAttribute('style', 'display:none');
     }
 
     if (
       this.place.instagram == null ||
       this.place.instagram === undefined ||
-      this.place.instagram === "" ||
-      this.place.instagram === " "
+      this.place.instagram === '' ||
+      this.place.instagram === ' '
     ) {
-      let elem: HTMLElement = document.getElementById("instagram");
-      elem.setAttribute("style", "display:none");
+      let elem: HTMLElement = document.getElementById('instagram');
+      elem.setAttribute('style', 'display:none');
     }
 
     if (
       this.place.whatsapp === null ||
       this.place.whatsapp === undefined ||
-      this.place.whatsapp === "" ||
-      this.place.whatsapp === " "
+      this.place.whatsapp === '' ||
+      this.place.whatsapp === ' '
     ) {
-      let elem: HTMLElement = document.getElementById("whatsapp");
-      elem.setAttribute("style", "display:none");
+      let elem: HTMLElement = document.getElementById('whatsapp');
+      elem.setAttribute('style', 'display:none');
     }
 
     if (this.telefonos.length === 0) {
-      let elem: HTMLElement = document.getElementById("phone");
-      elem.setAttribute("style", "display:none");
+      let elem: HTMLElement = document.getElementById('phone');
+      elem.setAttribute('style', 'display:none');
     }
   }
 
@@ -105,17 +107,20 @@ export class ModalInfoPage implements OnInit, OnDestroy {
   }
 
   callPhone() {
+    this.gaService.googleAnalyticsRedesSociales('lugares', 'telefono');
     this.callNumber
       .callNumber(this.telefonos[0], true)
-      .then((res) => console.log("Llamando!", res))
-      .catch((err) => console.log("Error en llamada", err));
+      .then((res) => console.log('Llamando!', res))
+      .catch((err) => console.log('Error en llamada', err));
   }
 
   openWeb() {
-    Browser.open({url: this.place.web});
+    this.gaService.googleAnalyticsRedesSociales('lugares', 'web');
+    Browser.open({ url: this.place.web });
   }
 
   openFacebook() {
-    Browser.open({url: this.place.facebook});
+    this.gaService.googleAnalyticsRedesSociales('lugares', 'facebook');
+    Browser.open({ url: this.place.facebook });
   }
 }

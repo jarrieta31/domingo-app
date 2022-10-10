@@ -6,6 +6,7 @@ import { Departament } from 'src/app/shared/departament';
 import { AlertController } from '@ionic/angular';
 import { takeUntil } from 'rxjs/operators';
 import { GpsProvider } from 'src/app/providers/gps-provider.service';
+import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
 
 @Component({
   selector: 'app-home-menu',
@@ -34,7 +35,8 @@ export class HomeMenuPage {
     private dbService: DatabaseService,
     private geolocationSvc: GeolocationService,
     public alertController: AlertController,
-    private gpsProv: GpsProvider
+    private gpsProv: GpsProvider,
+    private gaService: GoogleAnalyticsService
   ) {}
 
   country: string = null;
@@ -121,6 +123,7 @@ export class HomeMenuPage {
     this.dbService.getSelectMenu(depto, distance);
 
     if (depto != null && depto != undefined) {
+      this.gaService.googleAnalyticsFiltroHome('departamento', depto);
       this.deptoSelected = depto;
       localStorage.setItem('deptoActivo', depto);
       localStorage.removeItem('distanceActivo');
@@ -130,6 +133,7 @@ export class HomeMenuPage {
       this.depto = false;
       this.distanceSelected = null;
     } else if (distance != null && distance != undefined) {
+      this.gaService.googleAnalyticsFiltroHome('distancia', distance+' km');
       this.distanceSelected = distance;
       this.deptoSave = null;
       localStorage.setItem('distanceActivo', distance.toString());

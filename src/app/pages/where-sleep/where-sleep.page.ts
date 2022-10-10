@@ -14,7 +14,8 @@ import { Point } from "src/app/shared/point";
 import { environment } from "src/environments/environment";
 import { Browser } from '@capacitor/browser';
 import { IonSlides } from "@ionic/angular";
-import { AngularFireAnalytics } from "@angular/fire/compat/analytics";
+import { GoogleAnalyticsService } from "src/app/services/google-analytics.service";
+import { SocialSharing } from "@awesome-cordova-plugins/social-sharing/ngx";
 
 @Component({
   selector: "app-where-sleep",
@@ -44,6 +45,8 @@ export class WhereSleepPage {
   sleep: DondeDormir[] = [];
   loading: any;
   textoBuscar = "";
+    /**url para compartir */
+    shareURL: string = "https://developer-dominga.web.app/share-where-sleep/";
 
   locationActive: any[] = [];
 
@@ -81,7 +84,8 @@ export class WhereSleepPage {
     private geolocationSvc: GeolocationService,
     private http: HttpClient,
     private databaseSvc: DatabaseService,
-    private ga: AngularFireAnalytics
+    private socialSharing: SocialSharing,
+    private gaService: GoogleAnalyticsService
   ) {}
 
   resetSlide() {
@@ -92,8 +96,14 @@ export class WhereSleepPage {
     this.slide.stopAutoplay();
   }
 
-  googleAnalytics() {
-    this.ga.logEvent('donde_dormir');
+  socialSharingShare(nombre: string, id: string) {
+    this.gaService.googleAnalyticsCompartir('donde_dormir', 'donde_dormir_'+nombre, id);
+    this.socialSharing.share(
+      nombre,
+      null,
+      null,
+      this.shareURL+id
+    );
   }
 
   async show(message: string) {
@@ -175,16 +185,18 @@ export class WhereSleepPage {
   }
 
   openInstagram(url: string) {
+    this.gaService.googleAnalyticsRedesSociales('donde_dormir', 'instagram');
     Browser.open({ url: url});
   }
 
   openWhatsapp(url: string) {
+    this.gaService.googleAnalyticsRedesSociales('donde_dormir', 'whatsapp');
     Browser.open({ url: url});
   }
 
   ionViewWillEnter() {
     document.title = "Donde Dormir";
-    this.googleAnalytics();
+    this.gaService.googleAnalyticsPantallas('donde_dormir');
     if (
       localStorage.getItem("deptoActivo") != undefined &&
       localStorage.getItem("deptoActivo") != null

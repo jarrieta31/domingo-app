@@ -9,11 +9,14 @@
     <ion-title color="back"> {{ place.nombre }} </ion-title>
   </ion-toolbar>
   <!-- Botones de reproduccion Text To Speech -->
-  <app-text-to-speech [texto]="descripcionText"></app-text-to-speech> 
+  <app-text-to-speech
+    [texto]="descripcionText"
+    [nombre]="place.nombre"
+  ></app-text-to-speech>
 </ion-header>
 <ion-content>
   <ion-text>
-    <br>
+    <br />
     <div #descripcion class="texto" [innerHTML]="place.descripcion"></div>
   </ion-text>
   <ion-grid>
@@ -39,7 +42,8 @@
       <ion-col id="instagram">
         <div class="ion-text-center">
           <div class="circulo_red">
-            <a href="{{ place.instagram }}"
+            <a
+              href="{{ place.instagram }}" (click)="this.gaService.googleAnalyticsRedesSociales('lugares', 'instagram')"
               ><ion-icon name="logo-instagram"></ion-icon
             ></a>
           </div>
@@ -48,7 +52,8 @@
       <ion-col id="whatsapp">
         <div class="ion-text-center">
           <div class="circulo_red_wpp">
-            <a href="{{ place.whatsapp }}"
+            <a
+              href="{{ place.whatsapp }}" (click)="this.gaService.googleAnalyticsRedesSociales('lugares', 'whatsapp')"
               ><ion-icon name="logo-whatsapp"></ion-icon
             ></a>
           </div>
@@ -56,7 +61,10 @@
       </ion-col>
       <ion-col id="phone">
         <div class="ion-text-center">
-          <div class="circulo_red" (click)="callPhone()">
+          <div
+            class="circulo_red"
+            (click)="callPhone()"
+          >
             <ion-icon name="call-outline"></ion-icon>
           </div>
         </div>

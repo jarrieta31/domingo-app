@@ -15,7 +15,7 @@ import { SlidesService } from 'src/app/services/database/slides.service';
 import { environment } from 'src/environments/environment';
 import { Browser } from '@capacitor/browser';
 import { IonSlides } from '@ionic/angular';
-import { AngularFireAnalytics } from '@angular/fire/compat/analytics';
+import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
 
 export interface Papa {
   type: string;
@@ -55,7 +55,7 @@ export class PlacePage {
     private http: HttpClient,
     private fb: FormBuilder,
     private sliderSvc: SlidesService,
-    private ga: AngularFireAnalytics
+    private gaService: GoogleAnalyticsService
   ) {}
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
@@ -121,13 +121,9 @@ export class PlacePage {
     this.slide.stopAutoplay();
   }
 
-  googleAnalytics() {
-    this.ga.logEvent('lugares');
-  }
-
-  googleAnalyticsLugarVisitado(nombre: string, id: string) {
-    this.ga.logEvent('lugares_visitados', { nombre, id });
-  }
+  // googleAnalyticsLugarVisitado(nombre: string, id: string) {
+  //   this.ga.logEvent('lugares_visitados', { nombre, id });
+  // }
 
   filterPlace() {
     this.dataForm = this.filterForm.value;
@@ -223,7 +219,7 @@ export class PlacePage {
   /**se ejecuta cada vez que se ingresa a la tab */
   ionViewWillEnter() {
     document.title = "Lugares";
-    this.googleAnalytics();
+    this.gaService.googleAnalyticsPantallas('lugares');
     if (
       localStorage.getItem('deptoActivo') !== undefined &&
       localStorage.getItem('deptoActivo') !== null

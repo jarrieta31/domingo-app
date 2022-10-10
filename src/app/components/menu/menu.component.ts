@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
 
 @Component({
   selector: 'app-menu',
@@ -18,6 +19,7 @@ export class MenuComponent implements OnInit {
   constructor(
     private menuCtrl: MenuController,
     private router: Router,
+    private gaService: GoogleAnalyticsService
   ) {}
 
   ngOnInit() {}
@@ -30,11 +32,13 @@ export class MenuComponent implements OnInit {
     this.darkMode = localStorage.getItem('modoOscuro');
 
     if (this.darkMode == 'true') {
+      this.gaService.googleAnalyticsModos('modo_oscuro', 'desactivar_oscuro');
       localStorage.removeItem('modoOscuro');
       document.body.classList.toggle('dark');
       this.modoOscuro = localStorage.getItem('modoOscuro');
       this.labelCheck = false;
     } else {
+      this.gaService.googleAnalyticsModos('modo_oscuro', 'activar_oscuro');
       localStorage.setItem('modoOscuro', JSON.stringify(true));
       document.body.classList.toggle('dark');
       this.labelCheck = true;
@@ -45,11 +49,13 @@ export class MenuComponent implements OnInit {
     this.dyslexicMode = localStorage.getItem('dyslexic');
 
     if (this.dyslexicMode == 'true') {
+      this.gaService.googleAnalyticsModos('modo_dislexia', 'desactivar_dislexia');
       localStorage.removeItem('dyslexic');
       document.body.classList.toggle('dyslexic');
       this.dyslexic = localStorage.getItem('dyslexic');
       this.dyslexicCheck = false;
     } else {
+      this.gaService.googleAnalyticsModos('modo_dislexia', 'activar_dislexia');
       localStorage.setItem('dyslexic', JSON.stringify(true));
       document.body.classList.toggle('dyslexic');
       this.dyslexicCheck = true;

@@ -1,22 +1,27 @@
-import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
-import { DatabaseService } from "src/app/services/database.service";
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { DatabaseService } from 'src/app/services/database.service';
+import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
 
 @Component({
-  selector: "app-dominga",
-  templateUrl: "./dominga.page.html",
-  styleUrls: ["./dominga.page.scss"],
+  selector: 'app-dominga',
+  templateUrl: './dominga.page.html',
+  styleUrls: ['./dominga.page.scss'],
 })
 export class DomingaPage implements OnInit {
-  constructor(private router: Router, private databaseSvc: DatabaseService) {}
+  constructor(
+    private router: Router,
+    private databaseSvc: DatabaseService,
+    private gaService: GoogleAnalyticsService
+  ) {}
 
   /**guarda datos de subscription a casa dominga */
   dominga: any[] = [];
 
   /**url load  */
-  preloadImage: string = "/assets/load_1.30.gif";
+  preloadImage: string = '/assets/load_1.30.gif';
   /**clase preload */
-  preloadClass: string = "img_dominga";
+  preloadClass: string = 'img_dominga';
 
   /**Configuración de slider mini galeria */
   slideOpts = {
@@ -72,7 +77,7 @@ export class DomingaPage implements OnInit {
         let $cubeShadowEl;
         if (params.shadow) {
           if (isHorizontal) {
-            $cubeShadowEl = $wrapperEl.find(".swiper-cube-shadow");
+            $cubeShadowEl = $wrapperEl.find('.swiper-cube-shadow');
             if ($cubeShadowEl.length === 0) {
               $cubeShadowEl = swiper.$(
                 '<div class="swiper-cube-shadow"></div>'
@@ -81,7 +86,7 @@ export class DomingaPage implements OnInit {
             }
             $cubeShadowEl.css({ height: `${swiperWidth}px` });
           } else {
-            $cubeShadowEl = $el.find(".swiper-cube-shadow");
+            $cubeShadowEl = $el.find('.swiper-cube-shadow');
             if ($cubeShadowEl.length === 0) {
               $cubeShadowEl = swiper.$(
                 '<div class="swiper-cube-shadow"></div>'
@@ -95,7 +100,7 @@ export class DomingaPage implements OnInit {
           const $slideEl = slides.eq(i);
           let slideIndex = i;
           if (isVirtual) {
-            slideIndex = parseInt($slideEl.attr("data-swiper-slide-index"), 10);
+            slideIndex = parseInt($slideEl.attr('data-swiper-slide-index'), 10);
           }
           let slideAngle = slideIndex * 90;
           let round = Math.floor(slideAngle / 360);
@@ -142,15 +147,15 @@ export class DomingaPage implements OnInit {
           if (params.slideShadows) {
             // Set shadows
             let shadowBefore = isHorizontal
-              ? $slideEl.find(".swiper-slide-shadow-left")
-              : $slideEl.find(".swiper-slide-shadow-top");
+              ? $slideEl.find('.swiper-slide-shadow-left')
+              : $slideEl.find('.swiper-slide-shadow-top');
             let shadowAfter = isHorizontal
-              ? $slideEl.find(".swiper-slide-shadow-right")
-              : $slideEl.find(".swiper-slide-shadow-bottom");
+              ? $slideEl.find('.swiper-slide-shadow-right')
+              : $slideEl.find('.swiper-slide-shadow-bottom');
             if (shadowBefore.length === 0) {
               shadowBefore = swiper.$(
                 `<div class="swiper-slide-shadow-${
-                  isHorizontal ? "left" : "top"
+                  isHorizontal ? 'left' : 'top'
                 }"></div>`
               );
               $slideEl.append(shadowBefore);
@@ -158,7 +163,7 @@ export class DomingaPage implements OnInit {
             if (shadowAfter.length === 0) {
               shadowAfter = swiper.$(
                 `<div class="swiper-slide-shadow-${
-                  isHorizontal ? "right" : "bottom"
+                  isHorizontal ? 'right' : 'bottom'
                 }"></div>`
               );
               $slideEl.append(shadowAfter);
@@ -170,10 +175,10 @@ export class DomingaPage implements OnInit {
           }
         }
         $wrapperEl.css({
-          "-webkit-transform-origin": `50% 50% -${swiperSize / 2}px`,
-          "-moz-transform-origin": `50% 50% -${swiperSize / 2}px`,
-          "-ms-transform-origin": `50% 50% -${swiperSize / 2}px`,
-          "transform-origin": `50% 50% -${swiperSize / 2}px`,
+          '-webkit-transform-origin': `50% 50% -${swiperSize / 2}px`,
+          '-moz-transform-origin': `50% 50% -${swiperSize / 2}px`,
+          '-ms-transform-origin': `50% 50% -${swiperSize / 2}px`,
+          'transform-origin': `50% 50% -${swiperSize / 2}px`,
         });
 
         if (params.shadow) {
@@ -218,21 +223,23 @@ export class DomingaPage implements OnInit {
         slides
           .transition(duration)
           .find(
-            ".swiper-slide-shadow-top, .swiper-slide-shadow-right, .swiper-slide-shadow-bottom, .swiper-slide-shadow-left"
+            '.swiper-slide-shadow-top, .swiper-slide-shadow-right, .swiper-slide-shadow-bottom, .swiper-slide-shadow-left'
           )
           .transition(duration);
         if (swiper.params.cubeEffect.shadow && !swiper.isHorizontal()) {
-          $el.find(".swiper-cube-shadow").transition(duration);
+          $el.find('.swiper-cube-shadow').transition(duration);
         }
       },
     },
   };
 
   irHome() {
-    this.router.navigate(["/tabs/home"]);
+    this.router.navigate(['/tabs/home']);
   }
 
   ngOnInit() {
+    document.title = 'Casa Dominga';
+    this.gaService.googleAnalyticsPantallas('casa_dominga');
     this.databaseSvc.getDominga().subscribe((res) => {
       this.dominga = res;
     });

@@ -92,7 +92,7 @@
     <div class="divf">
       <a
         class="sugerencia"
-        (click)="getPlace(sug.id)"
+        (click)="getPlace(sug.id); this.gaService.googleAnalyticsPuntosDeInteres()"
         *ngFor="let sug of near"
         [routerLink]="['/place-selected',sug.id]"
       >
