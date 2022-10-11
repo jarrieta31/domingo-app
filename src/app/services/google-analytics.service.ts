@@ -24,10 +24,7 @@ export class GoogleAnalyticsService {
     this.ga.logEvent('compartir', { tipo, nombre, id });
   }
 
-  googleAnalyticsRedesSociales(
-    pantalla: string,
-    tipo: string,
-  ) {
+  googleAnalyticsRedesSociales(pantalla: string, tipo: string) {
     this.ga.logEvent('vistas_redes_sociales', { pantalla, tipo });
   }
 

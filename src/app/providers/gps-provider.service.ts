@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { map, takeUntil, tap } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { AngularFireAnalytics } from '@angular/fire/compat/analytics';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,7 @@ export class GpsProvider {
 
   private unsubscribe$: Subject<void> = new Subject<void>();
 
-  constructor(private platform: Platform, private http: HttpClient) {
+  constructor(private platform: Platform, private http: HttpClient, private ga: AngularFireAnalytics) {
     console.log('provider.server');
   }
 
@@ -73,6 +74,9 @@ export class GpsProvider {
 
   getDeviceInfo = async () => {
     this.deviceInfo = await Device.getInfo();
+    let deviceID = (await Device.getId()).uuid;
+    //console.log('ID USER ', deviceID);
+    this.ga.setUserId(deviceID);
   };
 
   getLocation(lng: number, lat: number) {
