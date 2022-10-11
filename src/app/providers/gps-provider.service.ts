@@ -20,7 +20,11 @@ export class GpsProvider {
 
   private unsubscribe$: Subject<void> = new Subject<void>();
 
-  constructor(private platform: Platform, private http: HttpClient, private ga: AngularFireAnalytics) {
+  constructor(
+    private platform: Platform,
+    private http: HttpClient,
+    private ga: AngularFireAnalytics
+  ) {
     console.log('provider.server');
   }
 
@@ -44,8 +48,15 @@ export class GpsProvider {
               this.posicion.longitud,
               this.posicion.latitud
             );
+            let resDepto = this.getLocationDepto(
+              this.posicion.longitud,
+              this.posicion.latitud
+            );
             res.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
               this.pais = res;
+            });
+            resDepto.pipe(takeUntil(this.unsubscribe$)).subscribe((region) => {
+              this.ga.setUserProperties({ ciudad: region });
             });
           } else {
             this.gps = false;
@@ -75,7 +86,6 @@ export class GpsProvider {
   getDeviceInfo = async () => {
     this.deviceInfo = await Device.getInfo();
     let deviceID = (await Device.getId()).uuid;
-    //console.log('ID USER ', deviceID);
     this.ga.setUserId(deviceID);
   };
 
@@ -85,8 +95,20 @@ export class GpsProvider {
         `${environment.urlMopboxDepto}${lng},${lat}.json?access_token=${environment.mapBoxToken}`
       )
       .pipe(
-        tap(a => console.log(a)),
+        tap((a) => console.log(a)),
         map((depto) => depto.features[depto.features.length - 1].text),
+        takeUntil(this.unsubscribe$)
+      );
+  }
+
+  getLocationDepto(lng: number, lat: number) {
+    return this.http
+      .get<any>(
+        `${environment.urlMopboxDepto}${lng},${lat}.json?access_token=${environment.mapBoxToken}`
+      )
+      .pipe(
+        tap((a) => console.log(a)),
+        map((depto) => depto.features[depto.features.length - 2].text),
         takeUntil(this.unsubscribe$)
       );
   }
