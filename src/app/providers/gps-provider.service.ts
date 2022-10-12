@@ -56,7 +56,7 @@ export class GpsProvider {
               this.pais = res;
             });
             resDepto.pipe(takeUntil(this.unsubscribe$)).subscribe((region) => {
-              this.ga.setUserProperties({ ciudad: region });
+              this.ga.setUserProperties({ departamento: region });
             });
           } else {
             this.gps = false;
