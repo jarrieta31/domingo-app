@@ -92,7 +92,7 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   }
 
   socialSharingShare(nombre: string, id: string) {
-    this.gaService.googleAnalyticsCompartir('lugar', 'lugar_'+nombre, id);
+    this.gaService.googleAnalyticsCompartir('lugar', 'lugar_'+nombre);
     this.socialSharing.share(
       nombre,
       null,
@@ -116,8 +116,8 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
    * Abre modal para reproducir video
    * @param url - URL del video que se va a ejecutar
    */
-  async verVideo(url: string) {
-    this.gaService.googleAnalyticsReproducirVideo('lugares');
+  async verVideo(url: string, nombre: string) {
+    this.gaService.googleAnalyticsReproducirVideo('lugares', nombre);
     const video = await this.modalCtrl.create({
       component: VideoPage,
       cssClass: "modal-video",

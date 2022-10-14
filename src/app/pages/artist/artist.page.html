@@ -161,12 +161,12 @@
             />
             <img
               *ngIf="art.youtube !== null && art.youtube !== undefined && art.youtube !== '' && art.youtube !== ' ' "
-              (click)="verVideo(art.youtube)"
+              (click)="verVideo(art.youtube, art.nombre)"
               src="/assets/icon/youtube.png"
               alt="youtube"
             />
             <img
-              (click)="artistShare('artista', art.nombre, art.id)"
+              (click)="artistShare('artista', art.nombre)"
               src="/assets/icon/share.png"
               alt="compartir"
             />

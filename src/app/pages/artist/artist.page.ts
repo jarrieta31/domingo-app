@@ -100,7 +100,7 @@ export class ArtistPage {
   }
 
   artistShare(tipo: string, nombre: string, id: string) {
-    this.gaService.googleAnalyticsCompartir(tipo, tipo+'_'+nombre, id);
+    this.gaService.googleAnalyticsCompartir(tipo, tipo+'_'+nombre);
     this.socialSharing.share(nombre, null, null, this.shareURL + id);
   }
 
@@ -171,8 +171,8 @@ export class ArtistPage {
    * Abre modal para reproducir video
    * @param url - URL del video que se va a ejecutar
    */
-  async verVideo(url: string) {
-    this.gaService.googleAnalyticsReproducirVideo('artistas');
+  async verVideo(url: string, nombre: string) {
+    this.gaService.googleAnalyticsReproducirVideo('artistas', nombre);
     const video = await this.modalCtrl.create({
       component: VideoPage,
       cssClass: 'modal-video',

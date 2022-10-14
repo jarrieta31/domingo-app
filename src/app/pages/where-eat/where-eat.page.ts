@@ -102,7 +102,7 @@ export class WhereEatPage {
   }
 
   socialSharingShare(nombre: string, id: string) {
-    this.gaService.googleAnalyticsCompartir('donde_comer', 'donde_comer_'+nombre, id);
+    this.gaService.googleAnalyticsCompartir('donde_comer', 'donde_comer_'+nombre);
     this.socialSharing.share(
       nombre,
       null,

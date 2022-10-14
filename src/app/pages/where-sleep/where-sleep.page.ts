@@ -97,7 +97,7 @@ export class WhereSleepPage {
   }
 
   socialSharingShare(nombre: string, id: string) {
-    this.gaService.googleAnalyticsCompartir('donde_dormir', 'donde_dormir_'+nombre, id);
+    this.gaService.googleAnalyticsCompartir('donde_dormir', 'donde_dormir_'+nombre);
     this.socialSharing.share(
       nombre,
       null,

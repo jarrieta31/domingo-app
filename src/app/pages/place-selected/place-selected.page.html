@@ -30,7 +30,7 @@
     <ion-fab-list side="bottom" class="lista_videos">
       <ion-fab-button class="btn_video" *ngFor="let video of videos">
         <ion-icon
-          (click)="verVideo(video.url)"
+          (click)="verVideo(video.url, place.nombre)"
           name="videocam-outline"
           style="font-size: 180%"
         ></ion-icon>
