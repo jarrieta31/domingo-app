@@ -26,6 +26,9 @@ export class GoogleAnalyticsService {
       this.ga.logEvent(pantalla_visitada + '_visitas', {
         nombre_descripcion_lugar_visitada,
       });
+    } else if (pantalla_visitada === 'mapa') {
+      let nombre_mapa_visto = nombre;
+      this.ga.logEvent(pantalla_visitada + '_lugar_visto', { nombre_mapa_visto });
     }
   }
 

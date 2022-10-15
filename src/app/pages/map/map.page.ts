@@ -70,13 +70,13 @@ export class MapPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     document.title = 'Mapa';
-    this.gaService.googleAnalyticsPantallas('mapa');
+    this.nombre = this.activatedRoute.snapshot.paramMap.get("nombre");
+    this.gaService.googleAnalyticsPantallas('mapa', this.nombre);
     //Obtiene el observable con la posicion del usuario
     this.posicion$ = this.geolocationService.getObsPosicion$();
     Mapboxgl.accessToken = environment.mapBoxToken;
 
     //Datos recibidos desde places
-    this.nombre = this.activatedRoute.snapshot.paramMap.get("nombre");
     this.longitud = Number(
       this.activatedRoute.snapshot.paramMap.get("longitud")
     );

@@ -33,7 +33,7 @@ export class GpsProvider {
     console.log('ready: ', platformReady);
     //await this.verEstadoGps(platformReady);
     await this.getDeviceInfo();
-    if (!this.deviceInfo.isVirtual) {
+    if (!this.deviceInfo.isVirtual) { 
       return Geolocation.getCurrentPosition()
         .then((pos) => {
           console.log('pos: ', pos);
