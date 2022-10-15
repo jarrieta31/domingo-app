@@ -33,8 +33,14 @@ export class GoogleAnalyticsService {
     this.ga.logEvent('compartir', { tipo_compartir, nombre_compartir });
   }
 
-  googleAnalyticsRedesSociales(pantalla_red_social: string, tipo_red_social: string) {
-    this.ga.logEvent('vistas_redes_sociales', { pantalla_red_social, tipo_red_social });
+  googleAnalyticsRedesSociales(
+    pantalla_red_social: string,
+    tipo_red_social: string
+  ) {
+    this.ga.logEvent('vistas_redes_sociales', {
+      pantalla_red_social,
+      tipo_red_social,
+    });
   }
 
   googleAnalyticsReproducirVideo(tipo_video: string, nombre_video: string) {
@@ -71,5 +77,12 @@ export class GoogleAnalyticsService {
   /**métodos filtros */
   googleAnalyticsFiltroHome(tipo_filtro_home: string, seleccion_home: string) {
     this.ga.logEvent('filtro_home', { tipo_filtro_home, seleccion_home });
+  }
+
+  googleAnalyticsFiltrosPantallas(
+    filtro_pantalla: string,
+    filtro_tipo: string
+  ) {
+    this.ga.logEvent('filtros_pantallas', { filtro_pantalla, filtro_tipo });
   }
 }

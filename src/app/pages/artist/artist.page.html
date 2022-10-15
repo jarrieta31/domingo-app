@@ -74,7 +74,7 @@
             <div>
               <ion-list class="list_type">
                 <ion-radio-group
-                  (ionChange)="filterArtist()"
+                  (ionChange)="filterArtist('artista', 'localidad_artista')"
                   formControlName="localidad"
                   class="type_border"
                 >
@@ -104,7 +104,7 @@
             <div>
               <ion-list class="list_type">
                 <ion-radio-group
-                  (ionChange)="filterArtist()"
+                  (ionChange)="filterArtist('artista', 'tipo_artista')"
                   formControlName="categoria"
                   class="type_border"
                 >

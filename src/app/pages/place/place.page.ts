@@ -125,7 +125,8 @@ export class PlacePage {
   //   this.ga.logEvent('lugares_visitados', { nombre, id });
   // }
 
-  filterPlace() {
+  filterPlace(pantalla: string, tipo: string) {
+    this.gaService.googleAnalyticsFiltrosPantallas(pantalla, tipo);
     this.dataForm = this.filterForm.value;
 
     if (this.isFilterLocation) this.isFilterLocation = false;
@@ -218,7 +219,7 @@ export class PlacePage {
 
   /**se ejecuta cada vez que se ingresa a la tab */
   ionViewWillEnter() {
-    document.title = "Lugares";
+    document.title = 'Lugares';
     this.gaService.googleAnalyticsPantallas('lugares');
     if (
       localStorage.getItem('deptoActivo') !== undefined &&

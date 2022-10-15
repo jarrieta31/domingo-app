@@ -107,7 +107,7 @@
                 <ng-template>
                   <ion-content>
                     <ion-datetime
-                      (ionChange)="filterEvento()"
+                      (ionChange)="filterEvento('eventos', 'fecha_inicio_evento')"
                       mode="ios"
                       min="{{ fullDay }}"
                       displayFormat="DD MMM YYYY"
@@ -147,7 +147,7 @@
                 <ng-template>
                   <ion-content>
                     <ion-datetime
-                      (ionChange)="filterEvento()"
+                      (ionChange)="filterEvento('eventos', 'fecha_fin_evento')"
                       mode="ios"
                       min="{{ fullDayNext }}"
                       displayFormat="DD MMM YYYY"
@@ -179,7 +179,7 @@
             <div>
               <ion-list class="list_type">
                 <ion-radio-group
-                  (ionChange)="filterEvento()"
+                  (ionChange)="filterEvento('eventos', 'localidad_evento')"
                   formControlName="localidad"
                   class="type_border"
                 >
@@ -209,7 +209,7 @@
             <div>
               <ion-list class="list_type">
                 <ion-radio-group
-                  (ionChange)="filterEvento()"
+                  (ionChange)="filterEvento('eventos', 'tipo_evento')"
                   formControlName="tipo"
                   class="type_border"
                 >

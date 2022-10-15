@@ -277,7 +277,8 @@ export class EventsPage {
     await alert.present();
   }
 
-  filterEvento() {
+  filterEvento(pantalla: string, tipo: string) {
+    this.gaService.googleAnalyticsFiltrosPantallas(pantalla, tipo);
     this.dataform = this.filterForm.value;
 
     if (this.isFilterLocation) this.isFilterLocation = false;

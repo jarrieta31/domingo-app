@@ -104,7 +104,8 @@ export class ArtistPage {
     this.socialSharing.share(nombre, null, null, this.shareURL + id);
   }
 
-  filterArtist() {
+  filterArtist(pantalla: string, tipo: string) {
+    this.gaService.googleAnalyticsFiltrosPantallas(pantalla, tipo);
     this.dataForm = this.filterForm.value;
 
     if (this.isFilterLocation) this.isFilterLocation = false;

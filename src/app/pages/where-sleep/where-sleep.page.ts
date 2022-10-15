@@ -1,26 +1,26 @@
-import { Component, ViewChild } from "@angular/core";
-import { DondeDormir } from "../../shared/donde-dormir";
-import { LoadingController } from "@ionic/angular";
-import { WhereSleepService } from "src/app/services/database/where-sleep.service";
-import { forkJoin, of, Subject } from "rxjs";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { SlidesService } from "src/app/services/database/slides.service";
-import { Slider } from "src/app/shared/slider";
-import { map, switchMap, takeUntil } from "rxjs/operators";
-import { HttpClient } from "@angular/common/http";
-import { GeolocationService } from "src/app/services/geolocation.service";
-import { DatabaseService } from "src/app/services/database.service";
-import { Point } from "src/app/shared/point";
-import { environment } from "src/environments/environment";
+import { Component, ViewChild } from '@angular/core';
+import { DondeDormir } from '../../shared/donde-dormir';
+import { LoadingController } from '@ionic/angular';
+import { WhereSleepService } from 'src/app/services/database/where-sleep.service';
+import { forkJoin, of, Subject } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SlidesService } from 'src/app/services/database/slides.service';
+import { Slider } from 'src/app/shared/slider';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { GeolocationService } from 'src/app/services/geolocation.service';
+import { DatabaseService } from 'src/app/services/database.service';
+import { Point } from 'src/app/shared/point';
+import { environment } from 'src/environments/environment';
 import { Browser } from '@capacitor/browser';
-import { IonSlides } from "@ionic/angular";
-import { GoogleAnalyticsService } from "src/app/services/google-analytics.service";
-import { SocialSharing } from "@awesome-cordova-plugins/social-sharing/ngx";
+import { IonSlides } from '@ionic/angular';
+import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
+import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 
 @Component({
-  selector: "app-where-sleep",
-  templateUrl: "./where-sleep.page.html",
-  styleUrls: ["./where-sleep.page.scss"],
+  selector: 'app-where-sleep',
+  templateUrl: './where-sleep.page.html',
+  styleUrls: ['./where-sleep.page.scss'],
 })
 export class WhereSleepPage {
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
@@ -41,26 +41,26 @@ export class WhereSleepPage {
   /**departamente seleccionado actualmente */
   currentDepto: string = this.databaseSvc.selectionDepto;
   /**url load  */
-  preloadImage: string = "/assets/load.gif";
+  preloadImage: string = '/assets/load.gif';
   sleep: DondeDormir[] = [];
   loading: any;
-  textoBuscar = "";
-    /**url para compartir */
-    shareURL: string = "https://developer-dominga.web.app/share-where-sleep/";
+  textoBuscar = '';
+  /**url para compartir */
+  shareURL: string = 'https://developer-dominga.web.app/share-where-sleep/';
 
   locationActive: any[] = [];
 
   /**url load  */
-  preloadImage_list: string = "/assets/load_cuadrada.gif";
+  preloadImage_list: string = '/assets/load_cuadrada.gif';
   /** clase de preload list */
-  preloadClase: string = "img-dormir";
+  preloadClase: string = 'img-dormir';
 
   /**captura los datos del formulario de filtros */
-  dataForm: any = "";
+  dataForm: any = '';
 
   filterForm: FormGroup = this.fb.group({
-    localidad: ["", Validators.required],
-    tipo: ["", Validators.required],
+    localidad: ['', Validators.required],
+    tipo: ['', Validators.required],
   });
 
   slideOpts = {
@@ -97,19 +97,17 @@ export class WhereSleepPage {
   }
 
   socialSharingShare(nombre: string, id: string) {
-    this.gaService.googleAnalyticsCompartir('donde_dormir', 'donde_dormir_'+nombre);
-    this.socialSharing.share(
-      nombre,
-      null,
-      null,
-      this.shareURL+id
+    this.gaService.googleAnalyticsCompartir(
+      'donde_dormir',
+      'donde_dormir_' + nombre
     );
+    this.socialSharing.share(nombre, null, null, this.shareURL + id);
   }
 
   async show(message: string) {
     this.loading = await this.loadingCtrl.create({
       message,
-      spinner: "bubbles",
+      spinner: 'bubbles',
     });
 
     this.loading.present().then(() => {
@@ -121,11 +119,12 @@ export class WhereSleepPage {
     this.textoBuscar = event.detail.value;
   }
 
-  filterSleep() {
+  filterSleep(pantalla: string, tipo: string) {
+    this.gaService.googleAnalyticsFiltrosPantallas(pantalla, tipo);
     this.dataForm = this.filterForm.value;
     if (this.isFilterLocation) this.isFilterLocation = false;
     this.optionLocation = this.dataForm.localidad;
-    if (this.dataForm.localidad === "") this.optionLocation = "localidad";
+    if (this.dataForm.localidad === '') this.optionLocation = 'localidad';
   }
 
   changeFilterSleep() {
@@ -133,7 +132,7 @@ export class WhereSleepPage {
   }
 
   get selectdistancia() {
-    return localStorage.getItem("distanceActivo") ? true : false;
+    return localStorage.getItem('distanceActivo') ? true : false;
   }
 
   getLocation(lng: number, lat: number) {
@@ -155,15 +154,15 @@ export class WhereSleepPage {
     latPlace: number
   ) {
     return this.http.get(
-      "https://api.mapbox.com/directions/v5/mapbox/driving/" +
+      'https://api.mapbox.com/directions/v5/mapbox/driving/' +
         lngUser +
-        "," +
+        ',' +
         latUser +
-        ";" +
+        ';' +
         lngPlace +
-        "," +
+        ',' +
         latPlace +
-        "?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA"
+        '?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA'
     );
   }
 
@@ -186,36 +185,36 @@ export class WhereSleepPage {
 
   openInstagram(url: string) {
     this.gaService.googleAnalyticsRedesSociales('donde_dormir', 'instagram');
-    Browser.open({ url: url});
+    Browser.open({ url: url });
   }
 
   openWhatsapp(url: string) {
     this.gaService.googleAnalyticsRedesSociales('donde_dormir', 'whatsapp');
-    Browser.open({ url: url});
+    Browser.open({ url: url });
   }
 
   ionViewWillEnter() {
-    document.title = "Donde Dormir";
+    document.title = 'Donde Dormir';
     this.gaService.googleAnalyticsPantallas('donde_dormir');
     if (
-      localStorage.getItem("deptoActivo") != undefined &&
-      localStorage.getItem("deptoActivo") != null
+      localStorage.getItem('deptoActivo') != undefined &&
+      localStorage.getItem('deptoActivo') != null
     ) {
       this.dist = null;
-      this.dep = localStorage.getItem("deptoActivo");
+      this.dep = localStorage.getItem('deptoActivo');
     } else if (
-      localStorage.getItem("distanceActivo") != undefined &&
-      localStorage.getItem("distanceActivo") != null
+      localStorage.getItem('distanceActivo') != undefined &&
+      localStorage.getItem('distanceActivo') != null
     ) {
       this.dep = null;
-      this.dist = parseInt(localStorage.getItem("distanceActivo"));
+      this.dist = parseInt(localStorage.getItem('distanceActivo'));
     }
 
-    if (localStorage.getItem("deptoActivo") != this.currentDepto) {
-      this.currentDepto = localStorage.getItem("deptoActivo");
+    if (localStorage.getItem('deptoActivo') != this.currentDepto) {
+      this.currentDepto = localStorage.getItem('deptoActivo');
       this.filterForm.reset();
-      this.dataForm = "";
-      this.optionLocation = "localidad";
+      this.dataForm = '';
+      this.optionLocation = 'localidad';
     }
 
     this.unsubscribe$ = new Subject<void>();
@@ -224,14 +223,14 @@ export class WhereSleepPage {
 
     this.sliderSvc.slider
       .pipe(
-        map((slider) => slider.filter((s) => s.pantalla === "donde_dormir")),
+        map((slider) => slider.filter((s) => s.pantalla === 'donde_dormir')),
         takeUntil(this.unsubscribe$)
       )
       .subscribe((res) => {
         this.sliderSleep = res;
       });
 
-      this.resetSlide();
+    this.resetSlide();
 
     /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
     let posDep = this.geolocationSvc.posicion$.pipe(
@@ -247,19 +246,18 @@ export class WhereSleepPage {
     );
 
     if (this.geolocationSvc.posicion$.value !== null) {
-      dto
-        .pipe(
-          takeUntil(this.unsubscribe$)
-        )
+      dto.pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
+        this.sleep = [];
+        this.sleep = res;
+      });
+    } else {
+      this.sleepSvc
+        .getDondeDormir(this.dep)
+        .pipe(takeUntil(this.unsubscribe$))
         .subscribe((res) => {
           this.sleep = [];
           this.sleep = res;
         });
-    } else {
-      this.sleepSvc.getDondeDormir(this.dep).pipe(takeUntil(this.unsubscribe$)).subscribe((res) => {
-        this.sleep = [];
-        this.sleep = res;
-      });
     }
     /************************************************************************************ */
   }
