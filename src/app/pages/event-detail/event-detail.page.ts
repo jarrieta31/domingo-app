@@ -56,6 +56,8 @@ export class EventDetailPage implements OnInit, OnDestroy {
   dateControl: boolean = false;
   /**controla si fecha inicio es identica a fecha fin  */
   controlHour: boolean = false;
+  /**url para compartir */
+  shareURL: string = 'https://developer-dominga.web.app/share-event/';
 
   /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
   private unsubscribe$: Subject<void> = new Subject<void>();
@@ -67,9 +69,9 @@ export class EventDetailPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    document.title = "Detalle de Evento";
+    document.title = 'Detalle de Evento';
     this.gaService.googleAnalyticsPantallas('detalle_de_evento', this.titulo);
-    
+
     this.clock = this.source
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((t) => {
@@ -94,9 +96,9 @@ export class EventDetailPage implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  socialSharingEvent(tipo: string, nombre: string, imagen: string, id: string) {
-    this.gaService.googleAnalyticsCompartir(tipo, tipo+'_'+nombre);
-    this.socialSharing.share(nombre, null, null, imagen);
+  socialSharingEvent(tipo: string, nombre: string, id: string) {
+    this.gaService.googleAnalyticsCompartir(tipo, tipo + '_' + nombre);
+    this.socialSharing.share(nombre, null, null, this.shareURL + id);
   }
 
   /**
