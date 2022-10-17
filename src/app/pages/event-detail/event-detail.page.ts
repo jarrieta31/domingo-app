@@ -5,7 +5,6 @@ import { SellingPointsPage } from '../selling-points/selling-points.page';
 import { Browser } from '@capacitor/browser';
 import { takeUntil } from 'rxjs/operators';
 import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
-import { AngularFireAnalytics } from '@angular/fire/compat/analytics';
 import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
 
 @Component({
@@ -96,6 +95,11 @@ export class EventDetailPage implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
+  /**comparte evento y envía evento compartir a google analytics
+   * @param tipo nombre de pantalla compartida
+   * @param nombre nombre de evento compartido
+   * @param id id de evento compartido
+   */
   socialSharingEvent(tipo: string, nombre: string, id: string) {
     this.gaService.googleAnalyticsCompartir(tipo, tipo + '_' + nombre);
     this.socialSharing.share(nombre, null, null, this.shareURL + id);
@@ -122,14 +126,6 @@ export class EventDetailPage implements OnInit, OnDestroy {
       this.seconds = 0;
     }
   }
-
-  // googleAnalyticsMapa(titulo: string, id: string) {
-  //   this.ga.logEvent('ubicacion_evento', { titulo, id })
-  // }
-
-  // googleAnalyticsPuntosDeVenta(titulo: string, id: string) {
-  //   this.ga.logEvent('puntos_de_venta', { titulo, id })
-  // }
 
   openMap() {
     this.gaService.googleAnalyticsMapa(this.titulo);
