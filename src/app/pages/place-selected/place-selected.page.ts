@@ -47,6 +47,8 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   preloadClassInteres: string = 'img-interes';
   /**url para compartir */
   shareURL: string = 'https://developer-dominga.web.app/share-place/';
+  /**imagen para compartir */
+  shareImage: string = '/assets/img/logo.jpg';
 
   constructor(
     private placeSvc: PlaceService,
@@ -91,12 +93,12 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
     this.placeSvc.getPlaceId(id);
   }
 
-  socialSharingShare(nombre: string, id: string, imagen: string) {
+  socialSharingShare(nombre: string, id: string) {
     this.gaService.googleAnalyticsCompartir('lugar', 'lugar_' + nombre);
     this.socialSharing.shareWithOptions({
-      message: 'Compartiendo lugar',
-      subject: nombre,
-      files: [imagen],
+      message: nombre,
+      subject: null,
+      files: [this.shareImage],
       url: this.shareURL + id,
       chooserTitle: 'Compartiendo ' + nombre,
     });
