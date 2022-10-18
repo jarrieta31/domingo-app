@@ -60,10 +60,6 @@ export class MapPage implements OnInit, OnDestroy {
     const { role, data } = await loading.onDidDismiss();
   }
 
-  // googleAnalyticsMapa(nombre: string, id: string) {
-  //   this.ga.logEvent('mapa', { nombre, id })
-  // }
-
   regresar() {
     this.router.navigate(["/place-selected", this.id]);
   }

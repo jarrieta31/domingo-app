@@ -1,19 +1,19 @@
-import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
-import { ActionSheetController, ModalController } from "@ionic/angular";
-import { Subscription } from "rxjs";
-import { PlaceService } from "src/app/services/database/place.service";
-import { Place } from "src/app/shared/place";
-import { VideoPage } from "../video/video.page";
-import * as Mapboxgl from "mapbox-gl";
-import { Router } from "@angular/router";
-import { PreloadDetailsComponent } from "../../components/preload-details/preload-details.component";
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { ActionSheetController, ModalController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
+import { PlaceService } from 'src/app/services/database/place.service';
+import { Place } from 'src/app/shared/place';
+import { VideoPage } from '../video/video.page';
+import * as Mapboxgl from 'mapbox-gl';
+import { Router } from '@angular/router';
+import { PreloadDetailsComponent } from '../../components/preload-details/preload-details.component';
 import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
-import { GoogleAnalyticsService } from "src/app/services/google-analytics.service";
+import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
 
 @Component({
-  selector: "app-place-selected",
-  templateUrl: "./place-selected.page.html",
-  styleUrls: ["./place-selected.page.scss"],
+  selector: 'app-place-selected',
+  templateUrl: './place-selected.page.html',
+  styleUrls: ['./place-selected.page.scss'],
 })
 export class PlaceSelectedPage implements OnInit, OnDestroy {
   @ViewChild(PreloadDetailsComponent, { static: true })
@@ -25,7 +25,7 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   near: any[] = [];
   near_places: Subscription;
 
-  param: string = "";
+  param: string = '';
 
   slideOpts = {
     initialSlide: 0,
@@ -38,15 +38,15 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   videos: any[] = [];
 
   /**url load  */
-  preloadImage: string = "/assets/load_1.30.gif";
+  preloadImage: string = '/assets/load_1.30.gif';
   /**clase preload */
-  preloadClass: string = "img-principal";
+  preloadClass: string = 'img-principal';
   /**clase preload galeria*/
-  preloadClassGaleria: string = "img-galeria";
+  preloadClassGaleria: string = 'img-galeria';
   /**clase preload interes*/
-  preloadClassInteres: string = "img-interes";
+  preloadClassInteres: string = 'img-interes';
   /**url para compartir */
-  shareURL: string = "https://developer-dominga.web.app/share-place/";
+  shareURL: string = 'https://developer-dominga.web.app/share-place/';
 
   constructor(
     private placeSvc: PlaceService,
@@ -58,7 +58,7 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    document.title = "Detalle de Lugar";
+    document.title = 'Detalle de Lugar';
     this.place_suscription = this.placeSvc.place_selected.subscribe((res) => {
       this.place = res;
       this.gaService.googleAnalyticsPantallas('detalle_de_lugar', res.nombre);
@@ -67,8 +67,8 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
           (item: any) =>
             item.url !== null &&
             item.url !== undefined &&
-            item.url !== "" &&
-            item.url !== " "
+            item.url !== '' &&
+            item.url !== ' '
         );
       }
 
@@ -92,13 +92,14 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   }
 
   socialSharingShare(nombre: string, id: string) {
-    this.gaService.googleAnalyticsCompartir('lugar', 'lugar_'+nombre);
-    this.socialSharing.share(
-      nombre,
-      null,
-      null,
-      this.shareURL+id
-    );
+    this.gaService.googleAnalyticsCompartir('lugar', 'lugar_' + nombre);
+    this.socialSharing.shareWithOptions({
+      message: nombre,
+      subject: null,
+      files: null,
+      url: this.shareURL + id,
+      chooserTitle: 'Compartiendo' + nombre,
+    });
   }
 
   /**
@@ -109,7 +110,7 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   }
 
   irHome() {
-    this.router.navigate(["/tabs/place"]);
+    this.router.navigate(['/tabs/place']);
   }
 
   /**
@@ -120,7 +121,7 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
     this.gaService.googleAnalyticsReproducirVideo('lugares', nombre);
     const video = await this.modalCtrl.create({
       component: VideoPage,
-      cssClass: "modal-video",
+      cssClass: 'modal-video',
       backdropDismiss: false,
       showBackdrop: true,
       componentProps: {
@@ -138,69 +139,69 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
    */
   async abrirMapaActionSheet() {
     const actionSheet = await this.actionSheetController.create({
-      header: "Abrir Mapa",
-      cssClass: "my-custom-class",
+      header: 'Abrir Mapa',
+      cssClass: 'my-custom-class',
       buttons: [
         {
-          text: "Ir en auto",
-          icon: "car-sport",
+          text: 'Ir en auto',
+          icon: 'car-sport',
           handler: () => {
             //Abre el mapa en modo auto
             this.router.navigate([
-              "/map",
+              '/map',
               this.place.nombre,
               {
                 longitud: this.place.ubicacion.lng,
                 latitud: this.place.ubicacion.lat,
                 tipo: this.place.tipo,
                 id: this.place.id,
-                profile: "mapbox/driving-traffic",
+                profile: 'mapbox/driving-traffic',
               },
             ]);
           },
         },
         {
-          text: "Ir caminando",
-          icon: "walk",
+          text: 'Ir caminando',
+          icon: 'walk',
           handler: () => {
             this.router.navigate([
-              "/map",
+              '/map',
               this.place.nombre,
               {
                 longitud: this.place.ubicacion.lng,
                 latitud: this.place.ubicacion.lat,
                 tipo: this.place.tipo,
                 id: this.place.id,
-                profile: "mapbox/walking",
+                profile: 'mapbox/walking',
               },
             ]);
-            console.log("Ir caminando");
+            console.log('Ir caminando');
           },
         },
         {
-          text: "Ir en bicicleta",
-          icon: "bicycle-outline",
+          text: 'Ir en bicicleta',
+          icon: 'bicycle-outline',
           handler: () => {
             this.router.navigate([
-              "/map",
+              '/map',
               this.place.nombre,
               {
                 longitud: this.place.ubicacion.lng,
                 latitud: this.place.ubicacion.lat,
                 tipo: this.place.tipo,
                 id: this.place.id,
-                profile: "mapbox/driving",
+                profile: 'mapbox/driving',
               },
             ]);
-            console.log("Ir en Bicicleta");
+            console.log('Ir en Bicicleta');
           },
         },
         {
-          text: "Cancelar",
-          icon: "close",
-          role: "cancel",
+          text: 'Cancelar',
+          icon: 'close',
+          role: 'cancel',
           handler: () => {
-            console.log("Cancel clicked");
+            console.log('Cancel clicked');
           },
         },
       ],
