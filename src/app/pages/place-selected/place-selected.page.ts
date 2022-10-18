@@ -91,14 +91,14 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
     this.placeSvc.getPlaceId(id);
   }
 
-  socialSharingShare(nombre: string, id: string) {
+  socialSharingShare(nombre: string, id: string, imagen: string) {
     this.gaService.googleAnalyticsCompartir('lugar', 'lugar_' + nombre);
     this.socialSharing.shareWithOptions({
-      message: nombre,
-      subject: null,
-      files: null,
+      message: 'Compartiendo lugar',
+      subject: nombre,
+      files: [imagen],
       url: this.shareURL + id,
-      chooserTitle: 'Compartiendo' + nombre,
+      chooserTitle: 'Compartiendo ' + nombre,
     });
   }
 
