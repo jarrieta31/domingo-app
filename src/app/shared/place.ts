@@ -4,6 +4,7 @@
     distanciaNumber: number | string,
     //hora: string | number,
     //minuto: string | number,
+    base64?: string,
     nombre: string,
     prioridad: number,
     publicado: boolean,

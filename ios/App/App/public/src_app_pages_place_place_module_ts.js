@@ -97,26 +97,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "PlacePage": () => (/* binding */ PlacePage)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! tslib */ 98806);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! tslib */ 98806);
 /* harmony import */ var _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_place_page_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !./node_modules/@ngtools/webpack/src/loaders/direct-resource.js!./place.page.html */ 91431);
 /* harmony import */ var _place_page_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./place.page.scss */ 81908);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @angular/core */ 14001);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! rxjs */ 64008);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! rxjs */ 99457);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! rxjs */ 18252);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! rxjs/operators */ 88377);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! rxjs/operators */ 94058);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! rxjs/operators */ 29026);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @angular/core */ 14001);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! rxjs */ 64008);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! rxjs */ 99457);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! rxjs */ 18252);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! rxjs/operators */ 88377);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! rxjs/operators */ 94058);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! rxjs/operators */ 29026);
 /* harmony import */ var src_app_services_database_place_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/services/database/place.service */ 22087);
 /* harmony import */ var src_app_services_geolocation_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/services/geolocation.service */ 4276);
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/forms */ 18346);
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @angular/common/http */ 83981);
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/forms */ 18346);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @angular/common/http */ 83981);
 /* harmony import */ var src_app_services_database_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/services/database.service */ 60568);
 /* harmony import */ var src_app_services_database_visit_place_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/app/services/database/visit-place.service */ 3429);
 /* harmony import */ var src_app_services_database_slides_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! src/app/services/database/slides.service */ 60696);
 /* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! src/environments/environment */ 18260);
 /* harmony import */ var _capacitor_browser__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @capacitor/browser */ 39337);
-/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @ionic/angular */ 78099);
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @ionic/angular */ 78099);
+/* harmony import */ var src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! src/app/services/google-analytics.service */ 81679);
+
 
 
 
@@ -134,7 +136,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let PlacePage = class PlacePage {
-    constructor(geolocationSvc, visitPlaceSvc, databaseSvc, placeSvc, http, fb, sliderSvc) {
+    constructor(geolocationSvc, visitPlaceSvc, databaseSvc, placeSvc, http, fb, sliderSvc, gaService) {
         this.geolocationSvc = geolocationSvc;
         this.visitPlaceSvc = visitPlaceSvc;
         this.databaseSvc = databaseSvc;
@@ -142,6 +144,7 @@ let PlacePage = class PlacePage {
         this.http = http;
         this.fb = fb;
         this.sliderSvc = sliderSvc;
+        this.gaService = gaService;
         /**Configuración de slider mini galeria */
         this.slideOpts = {
             initialSlide: 0,
@@ -159,7 +162,7 @@ let PlacePage = class PlacePage {
         /**departamente seleccionado actualmente */
         this.currentDepto = this.databaseSvc.selectionDepto;
         /**captura los datos del formulario de filtros */
-        this.dataForm = "";
+        this.dataForm = '';
         /**se guardan los sliders de la pantalla lugares */
         this.sliderPlace = [];
         /**filtro seleccionado, distancia o departamento */
@@ -167,8 +170,8 @@ let PlacePage = class PlacePage {
         this.dep = null;
         /**formulario que obtiene datos para filtrar */
         this.filterForm = this.fb.group({
-            localidad: ["", _angular_forms__WEBPACK_IMPORTED_MODULE_9__.Validators.required],
-            tipo: ["", _angular_forms__WEBPACK_IMPORTED_MODULE_9__.Validators.required],
+            localidad: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_10__.Validators.required],
+            tipo: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_10__.Validators.required],
         });
         /**control la apertura de filtros */
         this.isFilterLocation = false;
@@ -177,9 +180,9 @@ let PlacePage = class PlacePage {
         this.optionLocation = null;
         this.optionType = null;
         /**url load  */
-        this.preloadImage = "/assets/load.gif";
+        this.preloadImage = '/assets/load.gif';
         /** clase para lista de preload */
-        this.preload_card = "img_card_place";
+        this.preload_card = 'img_card_place';
     }
     resetSlide() {
         this.slide.startAutoplay();
@@ -187,7 +190,11 @@ let PlacePage = class PlacePage {
     endSlide() {
         this.slide.stopAutoplay();
     }
-    filterPlace() {
+    // googleAnalyticsLugarVisitado(nombre: string, id: string) {
+    //   this.ga.logEvent('lugares_visitados', { nombre, id });
+    // }
+    filterPlace(pantalla, tipo) {
+        this.gaService.googleAnalyticsFiltrosPantallas(pantalla, tipo);
         this.dataForm = this.filterForm.value;
         if (this.isFilterLocation)
             this.isFilterLocation = false;
@@ -195,13 +202,13 @@ let PlacePage = class PlacePage {
             this.isFilterType = false;
         this.optionLocation = this.dataForm.localidad;
         this.optionType = this.dataForm.tipo;
-        if (this.dataForm.localidad === "")
-            this.optionLocation = "localidad";
-        if (this.dataForm.tipo === "")
-            this.optionType = "tipo";
+        if (this.dataForm.localidad === '')
+            this.optionLocation = 'localidad';
+        if (this.dataForm.tipo === '')
+            this.optionType = 'tipo';
     }
     pageDominga() {
-        _capacitor_browser__WEBPACK_IMPORTED_MODULE_8__.Browser.open({ url: "https://casadominga.com.uy" });
+        _capacitor_browser__WEBPACK_IMPORTED_MODULE_8__.Browser.open({ url: 'https://casadominga.com.uy' });
     }
     getPlace(id) {
         this.placeSvc.getPlaceId(id);
@@ -219,7 +226,7 @@ let PlacePage = class PlacePage {
     getLocation(lng, lat) {
         return this.http
             .get(`${src_environments_environment__WEBPACK_IMPORTED_MODULE_7__.environment.urlMopboxDepto}${lng},${lat}.json?access_token=${src_environments_environment__WEBPACK_IMPORTED_MODULE_7__.environment.mapBoxToken}`)
-            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_10__.map)((depto) => depto.features[depto.features.length - 2].text), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.takeUntil)(this.unsubscribe$));
+            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.map)((depto) => depto.features[depto.features.length - 2].text), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.takeUntil)(this.unsubscribe$));
     }
     /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
     getDistance(lngUser, latUser, lngPlace, latPlace) {
@@ -255,48 +262,53 @@ let PlacePage = class PlacePage {
     }
     /**retorna true si se selecciono Distancia como filtro principal */
     get selectdistancia() {
-        return localStorage.getItem("distanceActivo") ? true : false;
+        return localStorage.getItem('distanceActivo') ? true : false;
     }
     /**se ejecuta cada vez que se ingresa a la tab */
     ionViewWillEnter() {
-        if (localStorage.getItem("deptoActivo") !== undefined &&
-            localStorage.getItem("deptoActivo") !== null) {
+        document.title = 'Lugares';
+        this.gaService.googleAnalyticsPantallas('lugares');
+        if (localStorage.getItem('deptoActivo') !== undefined &&
+            localStorage.getItem('deptoActivo') !== null) {
             this.dist = null;
-            this.dep = localStorage.getItem("deptoActivo");
+            this.dep = localStorage.getItem('deptoActivo');
         }
-        else if (localStorage.getItem("distanceActivo") !== undefined &&
-            localStorage.getItem("distanceActivo") !== null) {
+        else if (localStorage.getItem('distanceActivo') !== undefined &&
+            localStorage.getItem('distanceActivo') !== null) {
             this.dep = null;
-            this.dist = parseInt(localStorage.getItem("distanceActivo"));
+            this.dist = parseInt(localStorage.getItem('distanceActivo'));
         }
-        if (localStorage.getItem("deptoActivo") !== this.currentDepto) {
-            this.currentDepto = localStorage.getItem("deptoActivo");
+        if (localStorage.getItem('deptoActivo') !== this.currentDepto) {
+            this.currentDepto = localStorage.getItem('deptoActivo');
             this.filterForm.reset();
-            this.dataForm = "";
-            this.optionLocation = "localidad";
-            this.optionType = "tipo";
+            this.dataForm = '';
+            this.optionLocation = 'localidad';
+            this.optionType = 'tipo';
         }
-        this.unsubscribe$ = new rxjs__WEBPACK_IMPORTED_MODULE_12__.Subject();
+        this.unsubscribe$ = new rxjs__WEBPACK_IMPORTED_MODULE_13__.Subject();
         this.sliderSvc.getSliders();
         this.sliderSvc.slider
-            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_10__.map)((slider) => slider.filter((s) => s.pantalla === "lugares")), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.takeUntil)(this.unsubscribe$))
+            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.map)((slider) => slider.filter((s) => s.pantalla === 'lugares')), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.takeUntil)(this.unsubscribe$))
             .subscribe((res) => {
             this.sliderPlace = res;
         });
         this.resetSlide();
         /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
-        let posDep = this.geolocationSvc.posicion$.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_13__.switchMap)((pos) => {
-            return (0,rxjs__WEBPACK_IMPORTED_MODULE_14__.forkJoin)((0,rxjs__WEBPACK_IMPORTED_MODULE_15__.of)(pos), this.getLocation(pos.longitud, pos.latitud));
-        }), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.takeUntil)(this.unsubscribe$));
-        let dto = posDep.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_13__.switchMap)((res) => this.placeSvc.getPlaces(res[1])), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.takeUntil)(this.unsubscribe$));
+        let posDep = this.geolocationSvc.posicion$.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_14__.switchMap)((pos) => {
+            return (0,rxjs__WEBPACK_IMPORTED_MODULE_15__.forkJoin)((0,rxjs__WEBPACK_IMPORTED_MODULE_16__.of)(pos), this.getLocation(pos.longitud, pos.latitud));
+        }), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.takeUntil)(this.unsubscribe$));
+        let dto = posDep.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_14__.switchMap)((res) => this.placeSvc.getPlaces(res[1])), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.takeUntil)(this.unsubscribe$));
         if (this.geolocationSvc.posicion$.value !== null) {
-            dto.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.takeUntil)(this.unsubscribe$)).subscribe((res) => {
+            dto.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.takeUntil)(this.unsubscribe$)).subscribe((res) => {
                 this.places = [];
                 this.places = res;
             });
         }
         else {
-            this.placeSvc.getPlaces(this.dep).pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.takeUntil)(this.unsubscribe$)).subscribe((res) => {
+            this.placeSvc
+                .getPlaces(this.dep)
+                .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.takeUntil)(this.unsubscribe$))
+                .subscribe((res) => {
                 this.places = [];
                 this.places = res;
             });
@@ -321,16 +333,17 @@ PlacePage.ctorParameters = () => [
     { type: src_app_services_database_visit_place_service__WEBPACK_IMPORTED_MODULE_5__.VisitPlaceService },
     { type: src_app_services_database_service__WEBPACK_IMPORTED_MODULE_4__.DatabaseService },
     { type: src_app_services_database_place_service__WEBPACK_IMPORTED_MODULE_2__.PlaceService },
-    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_16__.HttpClient },
-    { type: _angular_forms__WEBPACK_IMPORTED_MODULE_9__.FormBuilder },
-    { type: src_app_services_database_slides_service__WEBPACK_IMPORTED_MODULE_6__.SlidesService }
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_17__.HttpClient },
+    { type: _angular_forms__WEBPACK_IMPORTED_MODULE_10__.FormBuilder },
+    { type: src_app_services_database_slides_service__WEBPACK_IMPORTED_MODULE_6__.SlidesService },
+    { type: src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_9__.GoogleAnalyticsService }
 ];
 PlacePage.propDecorators = {
-    slide: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_17__.ViewChild, args: [_ionic_angular__WEBPACK_IMPORTED_MODULE_18__.IonSlides,] }]
+    slide: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_18__.ViewChild, args: [_ionic_angular__WEBPACK_IMPORTED_MODULE_19__.IonSlides,] }]
 };
-PlacePage = (0,tslib__WEBPACK_IMPORTED_MODULE_19__.__decorate)([
-    (0,_angular_core__WEBPACK_IMPORTED_MODULE_17__.Component)({
-        selector: "app-place",
+PlacePage = (0,tslib__WEBPACK_IMPORTED_MODULE_20__.__decorate)([
+    (0,_angular_core__WEBPACK_IMPORTED_MODULE_18__.Component)({
+        selector: 'app-place',
         template: _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_place_page_html__WEBPACK_IMPORTED_MODULE_0__["default"],
         styles: [_place_page_scss__WEBPACK_IMPORTED_MODULE_1__]
     })
@@ -580,7 +593,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-header class=\"ion-no-border\">\r\n  <ion-toolbar>\r\n    <div class=\"slider\">\r\n      <ion-slides\r\n        class=\"sliderPrimero setHeight\"\r\n        scrollbar=\"false\"\r\n        pager=\"false\"\r\n        [options]=\"slideOpts\"\r\n      >\r\n        <ion-slide *ngFor=\"let item of sliderPlace\" class=\"sliderHijo\">\r\n          <a\r\n            *ngIf=\"item.link !== null && item.link !== '' && item.link !== ' ' && item.link !== undefined\"\r\n            href=\"{{ item.link }}\"\r\n            class=\"link\"\r\n          >\r\n            <ion-fab vertical=\"top\" horizontal=\"start\" slot=\"fixed\">\r\n              <ion-fab-button color=\"dark\">\r\n                <ion-icon\r\n                  *ngIf=\"item.linkTipo !== 'web'\"\r\n                  name=\"logo-{{ item.linkTipo }}\"\r\n                  class=\"icon-link\"\r\n                ></ion-icon>\r\n                <ion-icon\r\n                  *ngIf=\"item.linkTipo === 'web'\"\r\n                  name=\"globe-outline\"\r\n                  class=\"icon-link\"\r\n                ></ion-icon>\r\n              </ion-fab-button>\r\n            </ion-fab>\r\n          </a>\r\n          <app-preload\r\n            [url]=\"item.imagen.url\"\r\n            [alt]=\"item.imagen.name\"\r\n            [urlPreload]=\"preloadImage\"\r\n          ></app-preload>\r\n        </ion-slide>\r\n      </ion-slides>\r\n      <!-- =========>=>=>=> Filtro =========>=>=>=> -->\r\n      <div class=\"filter_place\">\r\n        <ion-label\r\n          *ngIf=\"!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')\"\r\n          (click)=\"changeFilterLocation()\"\r\n          >localidad</ion-label\r\n        >\r\n        <ion-label\r\n          *ngIf=\" !selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')\"\r\n          class=\"open_filter\"\r\n          (click)=\"changeFilterLocation()\"\r\n          >{{ optionLocation }}</ion-label\r\n        >\r\n        <img *ngIf=\"!selectdistancia\" src=\"/assets/icon/exchange.png\" alt=\"\" />\r\n        <ion-label\r\n          *ngIf=\"optionType === null || optionType === 'tipo' || optionType === ''\"\r\n          (click)=\"changeFilterType()\"\r\n          >tipo</ion-label\r\n        >\r\n        <ion-label\r\n          *ngIf=\"optionType !== null && optionType !== 'tipo' && optionType !== ''\"\r\n          class=\"open_filter\"\r\n          (click)=\"changeFilterType()\"\r\n          >{{ optionType }}</ion-label\r\n        >\r\n      </div>\r\n\r\n      <div>\r\n        <form [formGroup]=\"filterForm\" class=\"form_filter\">\r\n          <!-- Filtro por Localidad  -->\r\n          <div *ngIf=\"isFilterLocation\">\r\n            <div class=\"filter_name\">\r\n              <span>Localidad</span>\r\n            </div>\r\n            <div>\r\n              <ion-list class=\"list_type\">\r\n                <ion-radio-group\r\n                  (ionChange)=\"filterPlace()\"\r\n                  formControlName=\"localidad\"\r\n                  class=\"type_border\"\r\n                >\r\n                  <ion-item class=\"filter_list\" lines=\"none\">\r\n                    <ion-text>Todo</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"\"></ion-radio>\r\n                  </ion-item>\r\n                  <ion-item\r\n                    class=\"filter_list\"\r\n                    lines=\"none\"\r\n                    *ngFor=\"let loc of localidades\"\r\n                  >\r\n                    <ion-text>{{ loc }}</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"{{ loc }}\"></ion-radio>\r\n                  </ion-item>\r\n                </ion-radio-group>\r\n              </ion-list>\r\n            </div>\r\n          </div>\r\n          <!-- filtro por Localidad -->\r\n\r\n          <!-- filtro por Tipo -->\r\n          <div *ngIf=\"isFilterType\">\r\n            <div class=\"filter_name\">\r\n              <span>Tipo</span>\r\n            </div>\r\n            <div>\r\n              <ion-list class=\"list_type\">\r\n                <ion-radio-group\r\n                  (ionChange)=\"filterPlace()\"\r\n                  formControlName=\"tipo\"\r\n                  class=\"type_border\"\r\n                >\r\n                  <ion-item class=\"filter_list\" lines=\"none\">\r\n                    <ion-text>Todo</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"\"></ion-radio>\r\n                  </ion-item>\r\n                  <ion-item\r\n                    class=\"filter_list last\"\r\n                    lines=\"none\"\r\n                    *ngFor=\"let tipo of tipos\"\r\n                  >\r\n                    <ion-text>{{ tipo }}</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"{{ tipo }}\"></ion-radio>\r\n                  </ion-item>\r\n                </ion-radio-group>\r\n              </ion-list>\r\n            </div>\r\n          </div>\r\n          <!-- Filtro por Tipo -->\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </ion-toolbar>\r\n</ion-header>\r\n\r\n<ion-content>\r\n  <div class=\"cards\">\r\n    <ion-list>\r\n      <ng-container *ngFor=\"let item of places | filterPlaces:dataForm\">\r\n        <ng-container *ngIf=\"item.vacio !== 1\">\r\n          <ion-card\r\n            *ngIf=\"(item.distanciaNumber <= dist || (dep != null && !this.placeSvc.noData && item.departamento === dep))\"\r\n            id=\"{{ item.id }}\"\r\n          >\r\n            <ion-card-header\r\n              color=\"information\"\r\n              id=\"place-title\"\r\n              [routerLink]=\"['/place-selected', item.id]\"\r\n              (click)=\"getPlace(item.id); sumaVisitaLugar(item.id)\"\r\n            >\r\n              <span class=\"title_place\">{{ item.nombre }}</span><span class=\"categoria\"\r\n                >&nbsp;&nbsp;({{item.tipo}})</span\r\n              >\r\n            </ion-card-header>\r\n            <ion-card-content>\r\n              <span\r\n                [routerLink]=\"['/place-selected', item.id]\"\r\n                (click)=\"getPlace(item.id); sumaVisitaLugar(item.id)\"\r\n              >\r\n                <div class=\"img_min\">\r\n                  <app-preload\r\n                    [url]=\"item.imagenHome['url']\"\r\n                    [alt]=\"item.nombre\"\r\n                    [urlPreload]=\"preloadImage\"\r\n                    [clase]=\"preload_card\"\r\n                  ></app-preload>\r\n                </div>\r\n                <div class=\"duracion\">\r\n                  <b class=\"distancia\"\r\n                    >{{item.distancia | formatDistancia }}\r\n                  </b>\r\n                </div>\r\n              </span>\r\n              <ion-fab\r\n                horizontal=\"end\"\r\n                vertical=\"bottom\"\r\n                edge\r\n                slot=\"fixed\"\r\n                *ngIf=\"item.accesibilidad.rampa || item.accesibilidad.banio\"\r\n              >\r\n                <ion-fab-button color=\"information\">\r\n                  <ion-img\r\n                    class=\"accessibility\"\r\n                    src=\"/assets/icon/accessibility.svg\"\r\n                  ></ion-img>\r\n                </ion-fab-button>\r\n                <ion-fab-list side=\"start\" class=\"list_access\">\r\n                  <ion-fab-button\r\n                    class=\"fab-button-access\"\r\n                    color=\"accessibility\"\r\n                    *ngIf=\"item.accesibilidad.rampa\"\r\n                  >\r\n                    <ion-img\r\n                      class=\"accessibility-option\"\r\n                      src=\"/assets/icon/accessible-icon-brands.svg\"\r\n                    ></ion-img>\r\n                  </ion-fab-button>\r\n                  <ion-fab-button\r\n                    class=\"fab-button-access\"\r\n                    color=\"accessibility\"\r\n                    *ngIf=\"item.accesibilidad.banio\"\r\n                  >\r\n                    <ion-img\r\n                      class=\"accessibility-option\"\r\n                      src=\"/assets/icon/toilet-solid.svg\"\r\n                    ></ion-img>\r\n                  </ion-fab-button>\r\n                </ion-fab-list>\r\n              </ion-fab>\r\n            </ion-card-content>\r\n          </ion-card>\r\n        </ng-container>\r\n\r\n        <ng-container *ngIf=\"item.vacio === 1\">\r\n          <div class=\"empty\">\r\n            <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n            <div class=\"text_empty\">\r\n              No hay lugares para mostrar con el filtro seleccionado\r\n            </div>\r\n          </div>\r\n        </ng-container>\r\n      </ng-container>\r\n    </ion-list>\r\n\r\n    <ion-list *ngIf=\"places.length === 0 && !this.placeSvc.noData\">\r\n      <ng-container *ngFor=\"let item of [1,2,3]\">\r\n        <ion-card>\r\n          <ion-card-header>\r\n            <ion-skeleton-text animated style=\"width: 80%\"></ion-skeleton-text>\r\n          </ion-card-header>\r\n          <ion-card-content>\r\n            <div class=\"img_skeleton\">\r\n              <ion-img src=\"/assets/img/img-skeleton.svg\"></ion-img>\r\n            </div>\r\n            <ion-skeleton-text\r\n              animated\r\n              style=\"width: 30%; margin: 5px 0 5px 10px\"\r\n            ></ion-skeleton-text>\r\n          </ion-card-content>\r\n        </ion-card>\r\n      </ng-container>\r\n    </ion-list>\r\n\r\n    <div *ngIf=\"this.placeSvc.noData && dist === null\" class=\"empty\">\r\n      <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n      <div class=\"text_empty\">No existen lugares en {{ dep }}</div>\r\n    </div>\r\n\r\n    <div *ngIf=\"!this.placeSvc.controlDistance && dist !== null\" class=\"empty\">\r\n      <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n      <div class=\"text_empty\">\r\n        No existen lugares en el rango de {{ dist }} km\r\n      </div>\r\n    </div>\r\n  </div>\r\n</ion-content>\r\n");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-header class=\"ion-no-border\">\r\n  <ion-toolbar>\r\n    <div class=\"slider\">\r\n      <ion-slides\r\n        class=\"sliderPrimero setHeight\"\r\n        scrollbar=\"false\"\r\n        pager=\"false\"\r\n        [options]=\"slideOpts\"\r\n      >\r\n        <ion-slide *ngFor=\"let item of sliderPlace\" class=\"sliderHijo\">\r\n          <a\r\n            *ngIf=\"item.link !== null && item.link !== '' && item.link !== ' ' && item.link !== undefined\"\r\n            href=\"{{ item.link }}\"\r\n            class=\"link\"\r\n          >\r\n            <ion-fab vertical=\"top\" horizontal=\"start\" slot=\"fixed\">\r\n              <ion-fab-button color=\"dark\">\r\n                <ion-icon\r\n                  *ngIf=\"item.linkTipo !== 'web'\"\r\n                  name=\"logo-{{ item.linkTipo }}\"\r\n                  class=\"icon-link\"\r\n                ></ion-icon>\r\n                <ion-icon\r\n                  *ngIf=\"item.linkTipo === 'web'\"\r\n                  name=\"globe-outline\"\r\n                  class=\"icon-link\"\r\n                ></ion-icon>\r\n              </ion-fab-button>\r\n            </ion-fab>\r\n          </a>\r\n          <app-preload\r\n            [url]=\"item.imagen.url\"\r\n            [alt]=\"item.imagen.name\"\r\n            [urlPreload]=\"preloadImage\"\r\n          ></app-preload>\r\n        </ion-slide>\r\n      </ion-slides>\r\n      <!-- =========>=>=>=> Filtro =========>=>=>=> -->\r\n      <div class=\"filter_place\">\r\n        <ion-label\r\n          *ngIf=\"!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')\"\r\n          (click)=\"changeFilterLocation()\"\r\n          >localidad</ion-label\r\n        >\r\n        <ion-label\r\n          *ngIf=\" !selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')\"\r\n          class=\"open_filter\"\r\n          (click)=\"changeFilterLocation()\"\r\n          >{{ optionLocation }}</ion-label\r\n        >\r\n        <img *ngIf=\"!selectdistancia\" src=\"/assets/icon/exchange.png\" alt=\"\" />\r\n        <ion-label\r\n          *ngIf=\"optionType === null || optionType === 'tipo' || optionType === ''\"\r\n          (click)=\"changeFilterType()\"\r\n          >tipo</ion-label\r\n        >\r\n        <ion-label\r\n          *ngIf=\"optionType !== null && optionType !== 'tipo' && optionType !== ''\"\r\n          class=\"open_filter\"\r\n          (click)=\"changeFilterType()\"\r\n          >{{ optionType }}</ion-label\r\n        >\r\n      </div>\r\n\r\n      <div>\r\n        <form [formGroup]=\"filterForm\" class=\"form_filter\">\r\n          <!-- Filtro por Localidad  -->\r\n          <div *ngIf=\"isFilterLocation\">\r\n            <div class=\"filter_name\">\r\n              <span>Localidad</span>\r\n            </div>\r\n            <div>\r\n              <ion-list class=\"list_type\">\r\n                <ion-radio-group\r\n                  (ionChange)=\"filterPlace('lugares', 'localidad_lugar')\"\r\n                  formControlName=\"localidad\"\r\n                  class=\"type_border\"\r\n                >\r\n                  <ion-item class=\"filter_list\" lines=\"none\">\r\n                    <ion-text>Todo</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"\"></ion-radio>\r\n                  </ion-item>\r\n                  <ion-item\r\n                    class=\"filter_list\"\r\n                    lines=\"none\"\r\n                    *ngFor=\"let loc of localidades\"\r\n                  >\r\n                    <ion-text>{{ loc }}</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"{{ loc }}\"></ion-radio>\r\n                  </ion-item>\r\n                </ion-radio-group>\r\n              </ion-list>\r\n            </div>\r\n          </div>\r\n          <!-- filtro por Localidad -->\r\n\r\n          <!-- filtro por Tipo -->\r\n          <div *ngIf=\"isFilterType\">\r\n            <div class=\"filter_name\">\r\n              <span>Tipo</span>\r\n            </div>\r\n            <div>\r\n              <ion-list class=\"list_type\">\r\n                <ion-radio-group\r\n                  (ionChange)=\"filterPlace('lugares', 'tipo_lugar')\"\r\n                  formControlName=\"tipo\"\r\n                  class=\"type_border\"\r\n                >\r\n                  <ion-item class=\"filter_list\" lines=\"none\">\r\n                    <ion-text>Todo</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"\"></ion-radio>\r\n                  </ion-item>\r\n                  <ion-item\r\n                    class=\"filter_list last\"\r\n                    lines=\"none\"\r\n                    *ngFor=\"let tipo of tipos\"\r\n                  >\r\n                    <ion-text>{{ tipo }}</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"{{ tipo }}\"></ion-radio>\r\n                  </ion-item>\r\n                </ion-radio-group>\r\n              </ion-list>\r\n            </div>\r\n          </div>\r\n          <!-- Filtro por Tipo -->\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </ion-toolbar>\r\n</ion-header>\r\n\r\n<ion-content>\r\n  <div class=\"cards\">\r\n    <ion-list>\r\n      <ng-container *ngFor=\"let item of places | filterPlaces:dataForm\">\r\n        <ng-container *ngIf=\"item.vacio !== 1\">\r\n          <ion-card\r\n            *ngIf=\"(item.distanciaNumber <= dist || (dep != null && !this.placeSvc.noData && item.departamento === dep))\"\r\n            id=\"{{ item.id }}\"\r\n          >\r\n            <ion-card-header\r\n              color=\"information\"\r\n              id=\"place-title\"\r\n              [routerLink]=\"['/place-selected', item.id]\"\r\n              (click)=\"getPlace(item.id); sumaVisitaLugar(item.id)\"\r\n            >\r\n              <span class=\"title_place\">{{ item.nombre }}</span><span class=\"categoria\"\r\n                >&nbsp;&nbsp;({{item.tipo}})</span\r\n              >\r\n            </ion-card-header>\r\n            <ion-card-content>\r\n              <span\r\n                [routerLink]=\"['/place-selected', item.id]\"\r\n                (click)=\"getPlace(item.id); sumaVisitaLugar(item.id)\"\r\n              >\r\n                <div class=\"img_min\">\r\n                  <app-preload\r\n                    [url]=\"item.imagenHome['url']\"\r\n                    [alt]=\"item.nombre\"\r\n                    [urlPreload]=\"preloadImage\"\r\n                    [clase]=\"preload_card\"\r\n                  ></app-preload>\r\n                </div>\r\n                <div class=\"duracion\">\r\n                  <b class=\"distancia\"\r\n                    >{{item.distancia | formatDistancia }}\r\n                  </b>\r\n                </div>\r\n              </span>\r\n              <ion-fab\r\n                horizontal=\"end\"\r\n                vertical=\"bottom\"\r\n                edge\r\n                slot=\"fixed\"\r\n                *ngIf=\"item.accesibilidad.rampa || item.accesibilidad.banio\"\r\n                (click)=\"this.gaService.googleAnalyticsAccesibilidad()\"\r\n              >\r\n                <ion-fab-button color=\"information\">\r\n                  <ion-img\r\n                    class=\"accessibility\"\r\n                    src=\"/assets/icon/accessibility.svg\"\r\n                  ></ion-img>\r\n                </ion-fab-button>\r\n                <ion-fab-list side=\"start\" class=\"list_access\">\r\n                  <ion-fab-button\r\n                    class=\"fab-button-access\"\r\n                    color=\"accessibility\"\r\n                    *ngIf=\"item.accesibilidad.rampa\"\r\n                  >\r\n                    <ion-img\r\n                      class=\"accessibility-option\"\r\n                      src=\"/assets/icon/accessible-icon-brands.svg\"\r\n                    ></ion-img>\r\n                  </ion-fab-button>\r\n                  <ion-fab-button\r\n                    class=\"fab-button-access\"\r\n                    color=\"accessibility\"\r\n                    *ngIf=\"item.accesibilidad.banio\"\r\n                  >\r\n                    <ion-img\r\n                      class=\"accessibility-option\"\r\n                      src=\"/assets/icon/toilet-solid.svg\"\r\n                    ></ion-img>\r\n                  </ion-fab-button>\r\n                </ion-fab-list>\r\n              </ion-fab>\r\n            </ion-card-content>\r\n          </ion-card>\r\n        </ng-container>\r\n\r\n        <ng-container *ngIf=\"item.vacio === 1\">\r\n          <div class=\"empty\">\r\n            <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n            <div class=\"text_empty\">\r\n              No hay lugares para mostrar con el filtro seleccionado\r\n            </div>\r\n          </div>\r\n        </ng-container>\r\n      </ng-container>\r\n    </ion-list>\r\n\r\n    <ion-list *ngIf=\"places.length === 0 && !this.placeSvc.noData\">\r\n      <ng-container *ngFor=\"let item of [1,2,3]\">\r\n        <ion-card>\r\n          <ion-card-header>\r\n            <ion-skeleton-text animated style=\"width: 80%\"></ion-skeleton-text>\r\n          </ion-card-header>\r\n          <ion-card-content>\r\n            <div class=\"img_skeleton\">\r\n              <ion-img src=\"/assets/img/img-skeleton.svg\"></ion-img>\r\n            </div>\r\n            <ion-skeleton-text\r\n              animated\r\n              style=\"width: 30%; margin: 5px 0 5px 10px\"\r\n            ></ion-skeleton-text>\r\n          </ion-card-content>\r\n        </ion-card>\r\n      </ng-container>\r\n    </ion-list>\r\n\r\n    <div *ngIf=\"this.placeSvc.noData && dist === null\" class=\"empty\">\r\n      <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n      <div class=\"text_empty\">No existen lugares en {{ dep }}</div>\r\n    </div>\r\n\r\n    <div *ngIf=\"!this.placeSvc.controlDistance && dist !== null\" class=\"empty\">\r\n      <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n      <div class=\"text_empty\">\r\n        No existen lugares en el rango de {{ dist }} km\r\n      </div>\r\n    </div>\r\n  </div>\r\n</ion-content>\r\n");
 
 /***/ }),
 

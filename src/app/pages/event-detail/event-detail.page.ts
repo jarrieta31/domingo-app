@@ -100,9 +100,9 @@ export class EventDetailPage implements OnInit, OnDestroy {
    * @param nombre nombre de evento compartido
    * @param id id de evento compartido
    */
-  socialSharingEvent(tipo: string, nombre: string, id: string) {
+  socialSharingEvent(tipo: string, nombre: string, id: string, imagen: string) {
     this.gaService.googleAnalyticsCompartir(tipo, tipo + '_' + nombre);
-    this.socialSharing.share(nombre, null, null, this.shareURL + id);
+    this.socialSharing.share(nombre, null, imagen, this.shareURL + id);
   }
 
   /**

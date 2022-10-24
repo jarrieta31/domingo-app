@@ -93,12 +93,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "DomingaPage": () => (/* binding */ DomingaPage)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! tslib */ 98806);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! tslib */ 98806);
 /* harmony import */ var _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_dominga_page_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !./node_modules/@ngtools/webpack/src/loaders/direct-resource.js!./dominga.page.html */ 31899);
 /* harmony import */ var _dominga_page_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./dominga.page.scss */ 40303);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/core */ 14001);
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ 13252);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/core */ 14001);
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ 13252);
 /* harmony import */ var src_app_services_database_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/services/database.service */ 60568);
+/* harmony import */ var src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/services/google-analytics.service */ 81679);
+
 
 
 
@@ -106,15 +108,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let DomingaPage = class DomingaPage {
-    constructor(router, databaseSvc) {
+    constructor(router, databaseSvc, gaService) {
         this.router = router;
         this.databaseSvc = databaseSvc;
+        this.gaService = gaService;
         /**guarda datos de subscription a casa dominga */
         this.dominga = [];
         /**url load  */
-        this.preloadImage = "/assets/load_1.30.gif";
+        this.preloadImage = '/assets/load_1.30.gif';
         /**clase preload */
-        this.preloadClass = "img_dominga";
+        this.preloadClass = 'img_dominga';
         /**Configuración de slider mini galeria */
         this.slideOpts = {
             initialSlide: 0,
@@ -156,7 +159,7 @@ let DomingaPage = class DomingaPage {
                     let $cubeShadowEl;
                     if (params.shadow) {
                         if (isHorizontal) {
-                            $cubeShadowEl = $wrapperEl.find(".swiper-cube-shadow");
+                            $cubeShadowEl = $wrapperEl.find('.swiper-cube-shadow');
                             if ($cubeShadowEl.length === 0) {
                                 $cubeShadowEl = swiper.$('<div class="swiper-cube-shadow"></div>');
                                 $wrapperEl.append($cubeShadowEl);
@@ -164,7 +167,7 @@ let DomingaPage = class DomingaPage {
                             $cubeShadowEl.css({ height: `${swiperWidth}px` });
                         }
                         else {
-                            $cubeShadowEl = $el.find(".swiper-cube-shadow");
+                            $cubeShadowEl = $el.find('.swiper-cube-shadow');
                             if ($cubeShadowEl.length === 0) {
                                 $cubeShadowEl = swiper.$('<div class="swiper-cube-shadow"></div>');
                                 $el.append($cubeShadowEl);
@@ -175,7 +178,7 @@ let DomingaPage = class DomingaPage {
                         const $slideEl = slides.eq(i);
                         let slideIndex = i;
                         if (isVirtual) {
-                            slideIndex = parseInt($slideEl.attr("data-swiper-slide-index"), 10);
+                            slideIndex = parseInt($slideEl.attr('data-swiper-slide-index'), 10);
                         }
                         let slideAngle = slideIndex * 90;
                         let round = Math.floor(slideAngle / 360);
@@ -220,17 +223,17 @@ let DomingaPage = class DomingaPage {
                         if (params.slideShadows) {
                             // Set shadows
                             let shadowBefore = isHorizontal
-                                ? $slideEl.find(".swiper-slide-shadow-left")
-                                : $slideEl.find(".swiper-slide-shadow-top");
+                                ? $slideEl.find('.swiper-slide-shadow-left')
+                                : $slideEl.find('.swiper-slide-shadow-top');
                             let shadowAfter = isHorizontal
-                                ? $slideEl.find(".swiper-slide-shadow-right")
-                                : $slideEl.find(".swiper-slide-shadow-bottom");
+                                ? $slideEl.find('.swiper-slide-shadow-right')
+                                : $slideEl.find('.swiper-slide-shadow-bottom');
                             if (shadowBefore.length === 0) {
-                                shadowBefore = swiper.$(`<div class="swiper-slide-shadow-${isHorizontal ? "left" : "top"}"></div>`);
+                                shadowBefore = swiper.$(`<div class="swiper-slide-shadow-${isHorizontal ? 'left' : 'top'}"></div>`);
                                 $slideEl.append(shadowBefore);
                             }
                             if (shadowAfter.length === 0) {
-                                shadowAfter = swiper.$(`<div class="swiper-slide-shadow-${isHorizontal ? "right" : "bottom"}"></div>`);
+                                shadowAfter = swiper.$(`<div class="swiper-slide-shadow-${isHorizontal ? 'right' : 'bottom'}"></div>`);
                                 $slideEl.append(shadowAfter);
                             }
                             if (shadowBefore.length)
@@ -240,10 +243,10 @@ let DomingaPage = class DomingaPage {
                         }
                     }
                     $wrapperEl.css({
-                        "-webkit-transform-origin": `50% 50% -${swiperSize / 2}px`,
-                        "-moz-transform-origin": `50% 50% -${swiperSize / 2}px`,
-                        "-ms-transform-origin": `50% 50% -${swiperSize / 2}px`,
-                        "transform-origin": `50% 50% -${swiperSize / 2}px`,
+                        '-webkit-transform-origin': `50% 50% -${swiperSize / 2}px`,
+                        '-moz-transform-origin': `50% 50% -${swiperSize / 2}px`,
+                        '-ms-transform-origin': `50% 50% -${swiperSize / 2}px`,
+                        'transform-origin': `50% 50% -${swiperSize / 2}px`,
                     });
                     if (params.shadow) {
                         if (isHorizontal) {
@@ -271,31 +274,34 @@ let DomingaPage = class DomingaPage {
                     const { $el, slides } = swiper;
                     slides
                         .transition(duration)
-                        .find(".swiper-slide-shadow-top, .swiper-slide-shadow-right, .swiper-slide-shadow-bottom, .swiper-slide-shadow-left")
+                        .find('.swiper-slide-shadow-top, .swiper-slide-shadow-right, .swiper-slide-shadow-bottom, .swiper-slide-shadow-left')
                         .transition(duration);
                     if (swiper.params.cubeEffect.shadow && !swiper.isHorizontal()) {
-                        $el.find(".swiper-cube-shadow").transition(duration);
+                        $el.find('.swiper-cube-shadow').transition(duration);
                     }
                 },
             },
         };
     }
     irHome() {
-        this.router.navigate(["/tabs/home"]);
+        this.router.navigate(['/tabs/home']);
     }
     ngOnInit() {
+        document.title = 'Casa Dominga';
+        this.gaService.googleAnalyticsPantallas('casa_dominga');
         this.databaseSvc.getDominga().subscribe((res) => {
             this.dominga = res;
         });
     }
 };
 DomingaPage.ctorParameters = () => [
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__.Router },
-    { type: src_app_services_database_service__WEBPACK_IMPORTED_MODULE_2__.DatabaseService }
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__.Router },
+    { type: src_app_services_database_service__WEBPACK_IMPORTED_MODULE_2__.DatabaseService },
+    { type: src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_3__.GoogleAnalyticsService }
 ];
-DomingaPage = (0,tslib__WEBPACK_IMPORTED_MODULE_4__.__decorate)([
-    (0,_angular_core__WEBPACK_IMPORTED_MODULE_5__.Component)({
-        selector: "app-dominga",
+DomingaPage = (0,tslib__WEBPACK_IMPORTED_MODULE_5__.__decorate)([
+    (0,_angular_core__WEBPACK_IMPORTED_MODULE_6__.Component)({
+        selector: 'app-dominga',
         template: _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_dominga_page_html__WEBPACK_IMPORTED_MODULE_0__["default"],
         styles: [_dominga_page_scss__WEBPACK_IMPORTED_MODULE_1__]
     })

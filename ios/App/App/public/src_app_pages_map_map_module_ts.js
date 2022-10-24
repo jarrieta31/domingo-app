@@ -9464,21 +9464,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "MapPage": () => (/* binding */ MapPage)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! tslib */ 98806);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! tslib */ 98806);
 /* harmony import */ var _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_map_page_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !./node_modules/@ngtools/webpack/src/loaders/direct-resource.js!./map.page.html */ 19882);
 /* harmony import */ var _map_page_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./map.page.scss */ 37749);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/core */ 14001);
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/router */ 13252);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/core */ 14001);
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/router */ 13252);
 /* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../environments/environment */ 18260);
 /* harmony import */ var _mapbox_mapbox_gl_directions_dist_mapbox_gl_directions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @mapbox/mapbox-gl-directions/dist/mapbox-gl-directions */ 33974);
 /* harmony import */ var _mapbox_mapbox_gl_directions_dist_mapbox_gl_directions__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_mapbox_mapbox_gl_directions_dist_mapbox_gl_directions__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _services_geolocation_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../services/geolocation.service */ 4276);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs */ 64008);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs */ 64008);
 /* harmony import */ var mapbox_gl__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! mapbox-gl */ 33858);
 /* harmony import */ var mapbox_gl__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(mapbox_gl__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! rxjs/operators */ 85029);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! rxjs/operators */ 94058);
-/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @ionic/angular */ 78099);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! rxjs/operators */ 85029);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! rxjs/operators */ 94058);
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @ionic/angular */ 78099);
+/* harmony import */ var src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! src/app/services/google-analytics.service */ 81679);
+
 
 
 
@@ -9492,12 +9494,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let MapPage = class MapPage {
-    constructor(activatedRoute, geolocationService, router, loadingController, actionSheetController) {
+    constructor(activatedRoute, geolocationService, router, loadingController, actionSheetController, gaService) {
         this.activatedRoute = activatedRoute;
         this.geolocationService = geolocationService;
         this.router = router;
         this.loadingController = loadingController;
         this.actionSheetController = actionSheetController;
+        this.gaService = gaService;
         this.longitud = null;
         this.latitud = null;
         this.nombre = null;
@@ -9506,13 +9509,13 @@ let MapPage = class MapPage {
         this.myPositionMarker = null;
         this.directions = null; //Buscador de direcciones para indicar recorrido
         this.profile = "mapbox/walking";
-        this.uns$ = new rxjs__WEBPACK_IMPORTED_MODULE_6__.Subject();
+        this.uns$ = new rxjs__WEBPACK_IMPORTED_MODULE_7__.Subject();
         if (this.geolocationService.posicion$.getValue() != null) {
             this.posicion = this.geolocationService.posicion$.getValue();
         }
     }
     presentLoading() {
-        return (0,tslib__WEBPACK_IMPORTED_MODULE_7__.__awaiter)(this, void 0, void 0, function* () {
+        return (0,tslib__WEBPACK_IMPORTED_MODULE_8__.__awaiter)(this, void 0, void 0, function* () {
             const loading = yield this.loadingController.create({
                 cssClass: "my-custom-class",
                 message: "Actualizando ...",
@@ -9526,11 +9529,13 @@ let MapPage = class MapPage {
         this.router.navigate(["/place-selected", this.id]);
     }
     ngOnInit() {
+        document.title = 'Mapa';
+        this.nombre = this.activatedRoute.snapshot.paramMap.get("nombre");
+        this.gaService.googleAnalyticsPantallas('mapa', this.nombre);
         //Obtiene el observable con la posicion del usuario
         this.posicion$ = this.geolocationService.getObsPosicion$();
         mapbox_gl__WEBPACK_IMPORTED_MODULE_5__.accessToken = _environments_environment__WEBPACK_IMPORTED_MODULE_2__.environment.mapBoxToken;
         //Datos recibidos desde places
-        this.nombre = this.activatedRoute.snapshot.paramMap.get("nombre");
         this.longitud = Number(this.activatedRoute.snapshot.paramMap.get("longitud"));
         this.latitud = Number(this.activatedRoute.snapshot.paramMap.get("latitud"));
         this.id = this.activatedRoute.snapshot.paramMap.get("id");
@@ -9594,7 +9599,7 @@ let MapPage = class MapPage {
             .setLngLat([this.longitud, this.latitud])
             .addTo(this.mapa);
         this.posicion$
-            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_8__.tap)((posicionUser) => {
+            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_9__.tap)((posicionUser) => {
             if (posicionUser != null) {
                 this.posicion = posicionUser;
             }
@@ -9607,7 +9612,7 @@ let MapPage = class MapPage {
                 this.actualizarRuta(posicionUser.longitud, posicionUser.latitud);
                 this.centrarMapa(posicionUser.longitud, posicionUser.latitud);
             }
-        })).pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_9__.takeUntil)(this.uns$))
+        })).pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_10__.takeUntil)(this.uns$))
             .subscribe();
         //Subscripcion para ver la ruta
         this.directions.on("route", (e) => {
@@ -9657,14 +9662,15 @@ let MapPage = class MapPage {
     }
 };
 MapPage.ctorParameters = () => [
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_10__.ActivatedRoute },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_11__.ActivatedRoute },
     { type: _services_geolocation_service__WEBPACK_IMPORTED_MODULE_4__.GeolocationService },
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_10__.Router },
-    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_11__.LoadingController },
-    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_11__.ActionSheetController }
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_11__.Router },
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_12__.LoadingController },
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_12__.ActionSheetController },
+    { type: src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_6__.GoogleAnalyticsService }
 ];
-MapPage = (0,tslib__WEBPACK_IMPORTED_MODULE_7__.__decorate)([
-    (0,_angular_core__WEBPACK_IMPORTED_MODULE_12__.Component)({
+MapPage = (0,tslib__WEBPACK_IMPORTED_MODULE_8__.__decorate)([
+    (0,_angular_core__WEBPACK_IMPORTED_MODULE_13__.Component)({
         selector: "app-map",
         template: _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_map_page_html__WEBPACK_IMPORTED_MODULE_0__["default"],
         styles: [_map_page_scss__WEBPACK_IMPORTED_MODULE_1__]

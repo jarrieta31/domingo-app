@@ -48,17 +48,20 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   /**url para compartir */
   shareURL: string = 'https://developer-dominga.web.app/share-place/';
 
+  base64: string = "";
+
   constructor(
     private placeSvc: PlaceService,
     private modalCtrl: ModalController,
     private router: Router,
     private actionSheetController: ActionSheetController,
     private socialSharing: SocialSharing,
-    private gaService: GoogleAnalyticsService
+    private gaService: GoogleAnalyticsService,
   ) {}
 
   ngOnInit() {
     document.title = 'Detalle de Lugar';
+
     this.place_suscription = this.placeSvc.place_selected.subscribe((res) => {
       this.place = res;
       this.gaService.googleAnalyticsPantallas('detalle_de_lugar', res.nombre);
@@ -91,19 +94,37 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
     this.placeSvc.getPlaceId(id);
   }
 
+  base64ImageURL(URL_img: string) {
+    let ref = this;
+    let xhr = new XMLHttpRequest();
+
+    xhr.open("GET", URL_img);
+    xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+    xhr.setRequestHeader("Access-Control-Allow-Headers", "access-control-allow-origin, Origin, X-Requested-With, Content-Type, Accept");
+    xhr.setRequestHeader("Access-Control-Allow-Method", "*");
+    xhr.responseType = "blob";
+    xhr.send();
+
+    xhr.onload = function() {
+      let reader = new FileReader();
+      reader.onloadend = function() {
+        ref.base64 = reader.result.toString();
+        console.log(ref.base64);
+      }
+      reader.readAsDataURL(xhr.response);
+    }
+
+  }
+
   socialSharingShare(nombre: string, id: string, imagen: string) {
+    console.log(imagen)
     this.gaService.googleAnalyticsCompartir('lugar', 'lugar_' + nombre);
-    this.socialSharing.shareWithOptions({
-      message: nombre,
-      subject: null,
-      files: [imagen],
-      url: this.shareURL + id,
-      chooserTitle: 'Compartiendo ' + nombre,
-    });
+    this.socialSharing.share(nombre, null, imagen, this.shareURL + id);
   }
 
   /**
    * Al seleccionar una imagen de la mini galería modifica la imagen principal
+   * this.base64ImageURL(imagen)
    */
   cambiarImagen(src: string) {
     this.preloadDetails.url = src;

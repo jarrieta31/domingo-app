@@ -91,16 +91,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "HomeMenuPage": () => (/* binding */ HomeMenuPage)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! tslib */ 98806);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! tslib */ 98806);
 /* harmony import */ var _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_home_menu_page_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !./node_modules/@ngtools/webpack/src/loaders/direct-resource.js!./home-menu.page.html */ 17593);
 /* harmony import */ var _home_menu_page_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./home-menu.page.scss */ 39039);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/core */ 14001);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs */ 64008);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/core */ 14001);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs */ 64008);
 /* harmony import */ var src_app_services_database_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/services/database.service */ 60568);
 /* harmony import */ var src_app_services_geolocation_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/services/geolocation.service */ 4276);
-/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @ionic/angular */ 78099);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs/operators */ 94058);
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @ionic/angular */ 78099);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! rxjs/operators */ 94058);
 /* harmony import */ var src_app_providers_gps_provider_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/providers/gps-provider.service */ 53269);
+/* harmony import */ var src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/app/services/google-analytics.service */ 81679);
+
 
 
 
@@ -112,11 +114,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let HomeMenuPage = class HomeMenuPage {
-    constructor(dbService, geolocationSvc, alertController, gpsProv) {
+    constructor(dbService, geolocationSvc, alertController, gpsProv, gaService) {
         this.dbService = dbService;
         this.geolocationSvc = geolocationSvc;
         this.alertController = alertController;
         this.gpsProv = gpsProv;
+        this.gaService = gaService;
         this.depto = false;
         this.distance = false;
         this.deptosActivos = [];
@@ -129,7 +132,7 @@ let HomeMenuPage = class HomeMenuPage {
         this.country = null;
     }
     presentAlert() {
-        return (0,tslib__WEBPACK_IMPORTED_MODULE_5__.__awaiter)(this, void 0, void 0, function* () {
+        return (0,tslib__WEBPACK_IMPORTED_MODULE_6__.__awaiter)(this, void 0, void 0, function* () {
             const alert = yield this.alertController.create({
                 cssClass: 'my-custom-class',
                 header: 'SELECCIONAR FILTRO',
@@ -163,7 +166,7 @@ let HomeMenuPage = class HomeMenuPage {
         });
     }
     presentAlertDepto() {
-        return (0,tslib__WEBPACK_IMPORTED_MODULE_5__.__awaiter)(this, void 0, void 0, function* () {
+        return (0,tslib__WEBPACK_IMPORTED_MODULE_6__.__awaiter)(this, void 0, void 0, function* () {
             const alert = yield this.alertController.create({
                 cssClass: 'my-custom-class',
                 header: 'SELECCIONAR FILTRO',
@@ -202,6 +205,7 @@ let HomeMenuPage = class HomeMenuPage {
     select(depto, distance) {
         this.dbService.getSelectMenu(depto, distance);
         if (depto != null && depto != undefined) {
+            this.gaService.googleAnalyticsFiltroHome('departamento', depto);
             this.deptoSelected = depto;
             localStorage.setItem('deptoActivo', depto);
             localStorage.removeItem('distanceActivo');
@@ -212,6 +216,7 @@ let HomeMenuPage = class HomeMenuPage {
             this.distanceSelected = null;
         }
         else if (distance != null && distance != undefined) {
+            this.gaService.googleAnalyticsFiltroHome('distancia', distance + ' km');
             this.distanceSelected = distance;
             this.deptoSave = null;
             localStorage.setItem('distanceActivo', distance.toString());
@@ -223,7 +228,7 @@ let HomeMenuPage = class HomeMenuPage {
         }
     }
     ionViewWillEnter() {
-        this.unsubscribe$ = new rxjs__WEBPACK_IMPORTED_MODULE_6__.Subject();
+        this.unsubscribe$ = new rxjs__WEBPACK_IMPORTED_MODULE_7__.Subject();
         if ((this.geolocationSvc.posicion === null ||
             this.geolocationSvc.posicion === undefined) &&
             (localStorage.getItem('distanceActivo') !== null ||
@@ -233,7 +238,7 @@ let HomeMenuPage = class HomeMenuPage {
         this.depto = false;
         this.dbService.getDepartamentosActivos();
         this.dbService.departamentosActivos
-            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_7__.takeUntil)(this.unsubscribe$))
+            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_8__.takeUntil)(this.unsubscribe$))
             .subscribe((res) => (this.deptosActivos = res));
         this.gps = this.geolocationSvc.gps;
         setTimeout(() => {
@@ -266,11 +271,12 @@ let HomeMenuPage = class HomeMenuPage {
 HomeMenuPage.ctorParameters = () => [
     { type: src_app_services_database_service__WEBPACK_IMPORTED_MODULE_2__.DatabaseService },
     { type: src_app_services_geolocation_service__WEBPACK_IMPORTED_MODULE_3__.GeolocationService },
-    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_8__.AlertController },
-    { type: src_app_providers_gps_provider_service__WEBPACK_IMPORTED_MODULE_4__.GpsProvider }
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_9__.AlertController },
+    { type: src_app_providers_gps_provider_service__WEBPACK_IMPORTED_MODULE_4__.GpsProvider },
+    { type: src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_5__.GoogleAnalyticsService }
 ];
-HomeMenuPage = (0,tslib__WEBPACK_IMPORTED_MODULE_5__.__decorate)([
-    (0,_angular_core__WEBPACK_IMPORTED_MODULE_9__.Component)({
+HomeMenuPage = (0,tslib__WEBPACK_IMPORTED_MODULE_6__.__decorate)([
+    (0,_angular_core__WEBPACK_IMPORTED_MODULE_10__.Component)({
         selector: 'app-home-menu',
         template: _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_home_menu_page_html__WEBPACK_IMPORTED_MODULE_0__["default"],
         styles: [_home_menu_page_scss__WEBPACK_IMPORTED_MODULE_1__]

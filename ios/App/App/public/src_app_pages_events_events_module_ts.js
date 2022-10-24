@@ -101,17 +101,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "EventDetailPage": () => (/* binding */ EventDetailPage)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! tslib */ 98806);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! tslib */ 98806);
 /* harmony import */ var _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_event_detail_page_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !./node_modules/@ngtools/webpack/src/loaders/direct-resource.js!./event-detail.page.html */ 89448);
 /* harmony import */ var _event_detail_page_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./event-detail.page.scss */ 74682);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/core */ 14001);
-/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @ionic/angular */ 78099);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs */ 81356);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs */ 64008);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/core */ 14001);
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @ionic/angular */ 78099);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs */ 81356);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs */ 64008);
 /* harmony import */ var _selling_points_selling_points_page__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../selling-points/selling-points.page */ 2399);
 /* harmony import */ var _capacitor_browser__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @capacitor/browser */ 39337);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs/operators */ 94058);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! rxjs/operators */ 94058);
 /* harmony import */ var _awesome_cordova_plugins_social_sharing_ngx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @awesome-cordova-plugins/social-sharing/ngx */ 90900);
+/* harmony import */ var src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/app/services/google-analytics.service */ 81679);
+
 
 
 
@@ -123,14 +125,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let EventDetailPage = class EventDetailPage {
-    constructor(modalCtrl, socialSharing) {
+    constructor(modalCtrl, socialSharing, gaService) {
         this.modalCtrl = modalCtrl;
         this.socialSharing = socialSharing;
+        this.gaService = gaService;
         this._second = 1000;
         this._minute = this._second * 60;
         this._hour = this._minute * 60;
         this._day = this._hour * 24;
-        this.source = (0,rxjs__WEBPACK_IMPORTED_MODULE_5__.timer)(0, 1000);
+        this.source = (0,rxjs__WEBPACK_IMPORTED_MODULE_6__.timer)(0, 1000);
         /**url load  */
         this.preloadImage = '/assets/load_1.30.gif';
         /**clase preload */
@@ -139,12 +142,16 @@ let EventDetailPage = class EventDetailPage {
         this.dateControl = false;
         /**controla si fecha inicio es identica a fecha fin  */
         this.controlHour = false;
+        /**url para compartir */
+        this.shareURL = 'https://developer-dominga.web.app/share-event/';
         /**se utiliza para eliminar todas las subscripciones al salir de la pantalla */
-        this.unsubscribe$ = new rxjs__WEBPACK_IMPORTED_MODULE_6__.Subject();
+        this.unsubscribe$ = new rxjs__WEBPACK_IMPORTED_MODULE_7__.Subject();
     }
     ngOnInit() {
+        document.title = 'Detalle de Evento';
+        this.gaService.googleAnalyticsPantallas('detalle_de_evento', this.titulo);
         this.clock = this.source
-            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_7__.takeUntil)(this.unsubscribe$))
+            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_8__.takeUntil)(this.unsubscribe$))
             .subscribe((t) => {
             this.now = new Date();
             this.end = new Date(this.fecha);
@@ -163,8 +170,14 @@ let EventDetailPage = class EventDetailPage {
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
     }
-    socialSharingEvent(nombre, imagen) {
-        this.socialSharing.share(nombre, null, null, imagen);
+    /**comparte evento y envía evento compartir a google analytics
+     * @param tipo nombre de pantalla compartida
+     * @param nombre nombre de evento compartido
+     * @param id id de evento compartido
+     */
+    socialSharingEvent(tipo, nombre, id) {
+        this.gaService.googleAnalyticsCompartir(tipo, tipo + '_' + nombre);
+        this.socialSharing.share(nombre, null, null, this.shareURL + id);
     }
     /**
      * Cierra el modal del detalle del evento
@@ -188,6 +201,7 @@ let EventDetailPage = class EventDetailPage {
         }
     }
     openMap() {
+        this.gaService.googleAnalyticsMapa(this.titulo);
         _capacitor_browser__WEBPACK_IMPORTED_MODULE_3__.Browser.open({
             url: 'https://www.google.com/maps/search/?api=1&query=' +
                 this.latitud +
@@ -196,7 +210,7 @@ let EventDetailPage = class EventDetailPage {
         });
     }
     openModalSellingPoint() {
-        return (0,tslib__WEBPACK_IMPORTED_MODULE_8__.__awaiter)(this, void 0, void 0, function* () {
+        return (0,tslib__WEBPACK_IMPORTED_MODULE_9__.__awaiter)(this, void 0, void 0, function* () {
             const modalSellingPoint = yield this.modalCtrl.create({
                 component: _selling_points_selling_points_page__WEBPACK_IMPORTED_MODULE_2__.SellingPointsPage,
                 cssClass: 'modal-selling-point',
@@ -215,32 +229,33 @@ let EventDetailPage = class EventDetailPage {
     }
 };
 EventDetailPage.ctorParameters = () => [
-    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_9__.ModalController },
-    { type: _awesome_cordova_plugins_social_sharing_ngx__WEBPACK_IMPORTED_MODULE_4__.SocialSharing }
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_10__.ModalController },
+    { type: _awesome_cordova_plugins_social_sharing_ngx__WEBPACK_IMPORTED_MODULE_4__.SocialSharing },
+    { type: src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_5__.GoogleAnalyticsService }
 ];
 EventDetailPage.propDecorators = {
-    id: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Input, args: ['id',] }],
-    fecha: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Input, args: ['fecha',] }],
-    titulo: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Input, args: ['titulo',] }],
-    descripcion: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Input, args: ['descripcion',] }],
-    imagen: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Input, args: ['imagen',] }],
-    lugar: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Input, args: ['lugar',] }],
-    latitud: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Input, args: ['latitud',] }],
-    longitud: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Input, args: ['longitud',] }],
-    fechaFin: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Input, args: ['fechaFin',] }],
-    instagram: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Input, args: ['instagram',] }],
-    tickAntel: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Input, args: ['tickAntel',] }],
-    facebook: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Input, args: ['facebook',] }],
-    whatsapp: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Input, args: ['whatsapp',] }],
-    moneda: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Input, args: ['moneda',] }],
-    precio: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Input, args: ['precio',] }],
-    precioUnico: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Input, args: ['precioUnico',] }],
-    direccion: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Input, args: ['direccion',] }],
-    localidad: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Input, args: ['localidad',] }],
-    departamento: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_10__.Input, args: ['departamento',] }]
+    id: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Input, args: ['id',] }],
+    fecha: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Input, args: ['fecha',] }],
+    titulo: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Input, args: ['titulo',] }],
+    descripcion: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Input, args: ['descripcion',] }],
+    imagen: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Input, args: ['imagen',] }],
+    lugar: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Input, args: ['lugar',] }],
+    latitud: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Input, args: ['latitud',] }],
+    longitud: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Input, args: ['longitud',] }],
+    fechaFin: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Input, args: ['fechaFin',] }],
+    instagram: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Input, args: ['instagram',] }],
+    tickAntel: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Input, args: ['tickAntel',] }],
+    facebook: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Input, args: ['facebook',] }],
+    whatsapp: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Input, args: ['whatsapp',] }],
+    moneda: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Input, args: ['moneda',] }],
+    precio: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Input, args: ['precio',] }],
+    precioUnico: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Input, args: ['precioUnico',] }],
+    direccion: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Input, args: ['direccion',] }],
+    localidad: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Input, args: ['localidad',] }],
+    departamento: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.Input, args: ['departamento',] }]
 };
-EventDetailPage = (0,tslib__WEBPACK_IMPORTED_MODULE_8__.__decorate)([
-    (0,_angular_core__WEBPACK_IMPORTED_MODULE_10__.Component)({
+EventDetailPage = (0,tslib__WEBPACK_IMPORTED_MODULE_9__.__decorate)([
+    (0,_angular_core__WEBPACK_IMPORTED_MODULE_11__.Component)({
         selector: 'app-event-detail',
         template: _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_event_detail_page_html__WEBPACK_IMPORTED_MODULE_0__["default"],
         styles: [_event_detail_page_scss__WEBPACK_IMPORTED_MODULE_1__]
@@ -355,25 +370,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "EventsPage": () => (/* binding */ EventsPage)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! tslib */ 98806);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! tslib */ 98806);
 /* harmony import */ var _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_events_page_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !./node_modules/@ngtools/webpack/src/loaders/direct-resource.js!./events.page.html */ 81470);
 /* harmony import */ var _events_page_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./events.page.scss */ 99716);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @angular/core */ 14001);
-/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @ionic/angular */ 78099);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @angular/core */ 14001);
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @ionic/angular */ 78099);
 /* harmony import */ var _event_detail_event_detail_page__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../event-detail/event-detail.page */ 3727);
 /* harmony import */ var src_app_services_database_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/services/database.service */ 60568);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! rxjs */ 64008);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! rxjs */ 99457);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! rxjs */ 18252);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! rxjs */ 64008);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! rxjs */ 99457);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! rxjs */ 18252);
 /* harmony import */ var src_app_services_database_visit_event_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/services/database/visit-event.service */ 73070);
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/forms */ 18346);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! rxjs/operators */ 88377);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! rxjs/operators */ 94058);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! rxjs/operators */ 29026);
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/forms */ 18346);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! rxjs/operators */ 88377);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! rxjs/operators */ 94058);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! rxjs/operators */ 29026);
 /* harmony import */ var src_app_services_database_slides_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/app/services/database/slides.service */ 60696);
 /* harmony import */ var src_app_services_geolocation_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! src/app/services/geolocation.service */ 4276);
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @angular/common/http */ 83981);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @angular/common/http */ 83981);
 /* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! src/environments/environment */ 18260);
+/* harmony import */ var src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! src/app/services/google-analytics.service */ 81679);
+
 
 
 
@@ -391,7 +408,7 @@ __webpack_require__.r(__webpack_exports__);
 
 let EventsPage = class EventsPage {
     constructor(veService, //Servicio contador de visitas eventos.
-    modalCtrl, dbService, sliderSvc, fb, geolocationSvc, http, alertCtrl) {
+    modalCtrl, dbService, sliderSvc, fb, geolocationSvc, http, alertCtrl, gaService) {
         this.veService = veService;
         this.modalCtrl = modalCtrl;
         this.dbService = dbService;
@@ -400,6 +417,7 @@ let EventsPage = class EventsPage {
         this.geolocationSvc = geolocationSvc;
         this.http = http;
         this.alertCtrl = alertCtrl;
+        this.gaService = gaService;
         this.textoBuscar = '';
         this.today = new Date();
         this.now = new Date();
@@ -433,10 +451,10 @@ let EventsPage = class EventsPage {
         /**se guardan los sliders de la pantalla eventos */
         this.sliderEvents = [];
         this.filterForm = this.fb.group({
-            tipo: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_8__.Validators.required],
-            localidad: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_8__.Validators.required],
-            fecha_fin: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_8__.Validators.required],
-            fecha_inicio: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_8__.Validators.required],
+            tipo: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_9__.Validators.required],
+            localidad: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_9__.Validators.required],
+            fecha_fin: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_9__.Validators.required],
+            fecha_inicio: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_9__.Validators.required],
         });
         this.isFilter = false;
         this.anioActual = 0;
@@ -483,7 +501,7 @@ let EventsPage = class EventsPage {
      * @param imagen - imagen del evento
      */
     openModalDetailEvent(id, fecha, titulo, descripcion, imagen, lugar, latitud, longitud, fechaFin, instagram, tickAntel, facebook, whatsapp, moneda, precio, precioUnico, direccion, localidad, departamento) {
-        return (0,tslib__WEBPACK_IMPORTED_MODULE_9__.__awaiter)(this, void 0, void 0, function* () {
+        return (0,tslib__WEBPACK_IMPORTED_MODULE_10__.__awaiter)(this, void 0, void 0, function* () {
             this.contadorVisitas(id);
             const modal = yield this.modalCtrl.create({
                 component: _event_detail_event_detail_page__WEBPACK_IMPORTED_MODULE_2__.EventDetailPage,
@@ -521,7 +539,7 @@ let EventsPage = class EventsPage {
     getLocation(lng, lat) {
         return this.http
             .get(`${src_environments_environment__WEBPACK_IMPORTED_MODULE_7__.environment.urlMopboxDepto}${lng},${lat}.json?access_token=${src_environments_environment__WEBPACK_IMPORTED_MODULE_7__.environment.mapBoxToken}`)
-            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_10__.map)((depto) => depto.features[depto.features.length - 2].text), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.takeUntil)(this.unsubscribe$));
+            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.map)((depto) => depto.features[depto.features.length - 2].text), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.takeUntil)(this.unsubscribe$));
     }
     /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
     getDistance(lngUser, latUser, lngPlace, latPlace) {
@@ -558,7 +576,7 @@ let EventsPage = class EventsPage {
             this.isFilterLocation = false;
     }
     presentAlert() {
-        return (0,tslib__WEBPACK_IMPORTED_MODULE_9__.__awaiter)(this, void 0, void 0, function* () {
+        return (0,tslib__WEBPACK_IMPORTED_MODULE_10__.__awaiter)(this, void 0, void 0, function* () {
             const alert = yield this.alertCtrl.create({
                 cssClass: 'my-custom-class',
                 header: 'FECHA INCORRECTA',
@@ -574,7 +592,8 @@ let EventsPage = class EventsPage {
             yield alert.present();
         });
     }
-    filterEvento() {
+    filterEvento(pantalla, tipo) {
+        this.gaService.googleAnalyticsFiltrosPantallas(pantalla, tipo);
         this.dataform = this.filterForm.value;
         if (this.isFilterLocation)
             this.isFilterLocation = false;
@@ -686,6 +705,8 @@ let EventsPage = class EventsPage {
         return fecha;
     }
     ionViewWillEnter() {
+        document.title = "Eventos";
+        this.gaService.googleAnalyticsPantallas('eventos');
         this.sliderSvc.getSliders();
         this.anioActual = new Date().getFullYear();
         this.month = this.today.getMonth() + 1;
@@ -732,7 +753,7 @@ let EventsPage = class EventsPage {
             this.customYearValues.push(this.anioActual);
             this.anioActual = this.anioActual + 1;
         }
-        this.unsubscribe$ = new rxjs__WEBPACK_IMPORTED_MODULE_12__.Subject();
+        this.unsubscribe$ = new rxjs__WEBPACK_IMPORTED_MODULE_13__.Subject();
         if (localStorage.getItem('deptoActivo') != undefined &&
             localStorage.getItem('deptoActivo') != null) {
             this.dist = null;
@@ -753,18 +774,18 @@ let EventsPage = class EventsPage {
             this.optionType = 'tipo';
         }
         this.sliderSvc.slider
-            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_10__.map)((slider) => slider.filter((s) => s.pantalla === 'eventos')), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.takeUntil)(this.unsubscribe$))
+            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.map)((slider) => slider.filter((s) => s.pantalla === 'eventos')), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.takeUntil)(this.unsubscribe$))
             .subscribe((res) => {
             this.sliderEvents = res;
         });
         this.resetSlide();
         /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
-        let posDep = this.geolocationSvc.posicion$.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_13__.switchMap)((pos) => {
-            return (0,rxjs__WEBPACK_IMPORTED_MODULE_14__.forkJoin)((0,rxjs__WEBPACK_IMPORTED_MODULE_15__.of)(pos), this.getLocation(pos.longitud, pos.latitud));
-        }), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.takeUntil)(this.unsubscribe$));
-        let dto = posDep.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_13__.switchMap)((res) => this.dbService.getEventos(res[1])), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.takeUntil)(this.unsubscribe$));
+        let posDep = this.geolocationSvc.posicion$.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_14__.switchMap)((pos) => {
+            return (0,rxjs__WEBPACK_IMPORTED_MODULE_15__.forkJoin)((0,rxjs__WEBPACK_IMPORTED_MODULE_16__.of)(pos), this.getLocation(pos.longitud, pos.latitud));
+        }), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.takeUntil)(this.unsubscribe$));
+        let dto = posDep.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_14__.switchMap)((res) => this.dbService.getEventos(res[1])), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.takeUntil)(this.unsubscribe$));
         if (this.geolocationSvc.posicion$.value !== null) {
-            dto.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.takeUntil)(this.unsubscribe$)).subscribe((res) => {
+            dto.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.takeUntil)(this.unsubscribe$)).subscribe((res) => {
                 this.eventos = [];
                 this.eventos = res;
             });
@@ -772,7 +793,7 @@ let EventsPage = class EventsPage {
         else {
             this.dbService
                 .getEventos(this.dep)
-                .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.takeUntil)(this.unsubscribe$))
+                .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.takeUntil)(this.unsubscribe$))
                 .subscribe((res) => {
                 this.eventos = [];
                 this.eventos = res;
@@ -791,20 +812,21 @@ let EventsPage = class EventsPage {
 };
 EventsPage.ctorParameters = () => [
     { type: src_app_services_database_visit_event_service__WEBPACK_IMPORTED_MODULE_4__.VisitEventService },
-    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_16__.ModalController },
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_17__.ModalController },
     { type: src_app_services_database_service__WEBPACK_IMPORTED_MODULE_3__.DatabaseService },
     { type: src_app_services_database_slides_service__WEBPACK_IMPORTED_MODULE_5__.SlidesService },
-    { type: _angular_forms__WEBPACK_IMPORTED_MODULE_8__.FormBuilder },
+    { type: _angular_forms__WEBPACK_IMPORTED_MODULE_9__.FormBuilder },
     { type: src_app_services_geolocation_service__WEBPACK_IMPORTED_MODULE_6__.GeolocationService },
-    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_17__.HttpClient },
-    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_16__.AlertController }
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_18__.HttpClient },
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_17__.AlertController },
+    { type: src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_8__.GoogleAnalyticsService }
 ];
 EventsPage.propDecorators = {
-    slide: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_18__.ViewChild, args: [_ionic_angular__WEBPACK_IMPORTED_MODULE_16__.IonSlides,] }],
-    datetime: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_18__.ViewChild, args: [_ionic_angular__WEBPACK_IMPORTED_MODULE_16__.IonDatetime,] }]
+    slide: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_19__.ViewChild, args: [_ionic_angular__WEBPACK_IMPORTED_MODULE_17__.IonSlides,] }],
+    datetime: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_19__.ViewChild, args: [_ionic_angular__WEBPACK_IMPORTED_MODULE_17__.IonDatetime,] }]
 };
-EventsPage = (0,tslib__WEBPACK_IMPORTED_MODULE_9__.__decorate)([
-    (0,_angular_core__WEBPACK_IMPORTED_MODULE_18__.Component)({
+EventsPage = (0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([
+    (0,_angular_core__WEBPACK_IMPORTED_MODULE_19__.Component)({
         selector: 'app-events',
         template: _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_events_page_html__WEBPACK_IMPORTED_MODULE_0__["default"],
         styles: [_events_page_scss__WEBPACK_IMPORTED_MODULE_1__]
@@ -905,12 +927,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "SellingPointsPage": () => (/* binding */ SellingPointsPage)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! tslib */ 98806);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! tslib */ 98806);
 /* harmony import */ var _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_selling_points_page_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !./node_modules/@ngtools/webpack/src/loaders/direct-resource.js!./selling-points.page.html */ 54559);
 /* harmony import */ var _selling_points_page_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./selling-points.page.scss */ 42488);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ 14001);
-/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ionic/angular */ 78099);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/core */ 14001);
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ionic/angular */ 78099);
 /* harmony import */ var _capacitor_browser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @capacitor/browser */ 39337);
+/* harmony import */ var src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/services/google-analytics.service */ 81679);
+
 
 
 
@@ -918,39 +942,46 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let SellingPointsPage = class SellingPointsPage {
-    constructor(modalCtrl) {
+    constructor(modalCtrl, gaService) {
         this.modalCtrl = modalCtrl;
+        this.gaService = gaService;
     }
     ngOnInit() {
-        console.log(this.instagram, this.tickAntel, this.facebook, this.whatsapp);
+        document.title = 'Puntos de Venta Eventos';
+        this.gaService.googleAnalyticsPantallas('puntos_de_venta_eventos');
     }
     cancelar() {
         const modal = this.modalCtrl.dismiss();
     }
     openTickAntel() {
+        this.gaService.googleAnalyticsRedesSociales('eventos', 'tickantel');
         _capacitor_browser__WEBPACK_IMPORTED_MODULE_2__.Browser.open({ url: this.tickAntel });
     }
     openInstagram() {
+        this.gaService.googleAnalyticsRedesSociales('eventos', 'instagram');
         _capacitor_browser__WEBPACK_IMPORTED_MODULE_2__.Browser.open({ url: this.instagram });
     }
     openFacebook() {
+        this.gaService.googleAnalyticsRedesSociales('eventos', 'facebook');
         _capacitor_browser__WEBPACK_IMPORTED_MODULE_2__.Browser.open({ url: this.facebook });
     }
     openWhatsapp() {
+        this.gaService.googleAnalyticsRedesSociales('eventos', 'whatsapp');
         _capacitor_browser__WEBPACK_IMPORTED_MODULE_2__.Browser.open({ url: this.whatsapp });
     }
 };
 SellingPointsPage.ctorParameters = () => [
-    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_3__.ModalController }
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_4__.ModalController },
+    { type: src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_3__.GoogleAnalyticsService }
 ];
 SellingPointsPage.propDecorators = {
-    instagram: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_4__.Input }],
-    tickAntel: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_4__.Input }],
-    facebook: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_4__.Input }],
-    whatsapp: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_4__.Input }]
+    instagram: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_5__.Input }],
+    tickAntel: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_5__.Input }],
+    facebook: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_5__.Input }],
+    whatsapp: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_5__.Input }]
 };
-SellingPointsPage = (0,tslib__WEBPACK_IMPORTED_MODULE_5__.__decorate)([
-    (0,_angular_core__WEBPACK_IMPORTED_MODULE_4__.Component)({
+SellingPointsPage = (0,tslib__WEBPACK_IMPORTED_MODULE_6__.__decorate)([
+    (0,_angular_core__WEBPACK_IMPORTED_MODULE_5__.Component)({
         selector: 'app-selling-points',
         template: _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_selling_points_page_html__WEBPACK_IMPORTED_MODULE_0__["default"],
         styles: [_selling_points_page_scss__WEBPACK_IMPORTED_MODULE_1__]
@@ -971,7 +1002,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-header class=\"ion-no-border\">\r\n  <ion-toolbar color=\"information\">\r\n    <ion-buttons slot=\"start\">\r\n      <ion-back-button\r\n        defaultHref=\"tabs/events\"\r\n        (click)=\"salir()\"\r\n        color=\"back\"\r\n        text=\"\"\r\n      ></ion-back-button>\r\n    </ion-buttons>\r\n    <ion-title color=\"back\" id=\"nombre\">{{titulo}}</ion-title>\r\n    <ion-icon\r\n      color=\"back\"\r\n      slot=\"end\"\r\n      class=\"share\"\r\n      name=\"share-social-sharp\"\r\n      (click)=\"socialSharingEvent(titulo, imagen)\"\r\n    ></ion-icon>\r\n  </ion-toolbar>\r\n</ion-header>\r\n<ion-content>\r\n  <div class=\"padre\" id=\"event-detail-container\">\r\n    <div class=\"diva\">\r\n      <app-preload-details\r\n        [url]=\"imagen\"\r\n        [alt]=\"titulo\"\r\n        [urlPreload]=\"preloadImage\"\r\n        [clase]=\"preloadClass\"\r\n      ></app-preload-details>\r\n    </div>\r\n    <section>\r\n      <div\r\n        class=\"cuenta-regresiva\"\r\n        *ngIf=\"day !== 0 || hours !== 0 || minutes !== 0 || seconds !== 0, else start\"\r\n      >\r\n        <div class=\"time\">\r\n          <ul class=\"time-list\">\r\n            <li id=\"event-detail-container\" class=\"count-bg-one radius\">\r\n              <span id=\"days\">{{day}}</span>Dias\r\n            </li>\r\n            <li id=\"event-detail-container\" class=\"count-bg-two radius\">\r\n              <span id=\"hours\">{{hours}}</span>Horas\r\n            </li>\r\n            <li id=\"event-detail-container\" class=\"count-bg-three radius\">\r\n              <span id=\"minutes\">{{minutes}}</span>Minutos\r\n            </li>\r\n            <li id=\"event-detail-container\" class=\"count-bg-four radius\">\r\n              <span id=\"seconds\">{{seconds}}</span>Segundos\r\n            </li>\r\n          </ul>\r\n        </div>\r\n      </div>\r\n      <ng-template #start>\r\n        <div class=\"event_start\">Evento en curso</div>\r\n      </ng-template>\r\n    </section>\r\n    <div class=\"ubicacion\">\r\n      <div id=\"event-detail-container\" class=\"dir\">\r\n        <div\r\n          id=\"event-detail-container\"\r\n          class=\"div-ubicacion\"\r\n          (click)=\"openMap()\"\r\n        >\r\n          {{ lugar }}\r\n        </div>\r\n        <div class=\"lugar\">\r\n          <div><i class=\"fi fi-rr-map-marker mark-info\"></i><br /></div>\r\n          <div>\r\n            <div>{{ direccion }}</div>\r\n            <div>{{ localidad }} - {{ departamento }}</div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"fecha-hora\">\r\n      <div class=\"fecha\">\r\n        <div id=\"event-detail-container\" class=\"div-fecha\">Fecha</div>\r\n        <div class=\"fecha-hora_div\">\r\n          <ion-icon name=\"calendar-outline\" class=\"mark-info\"></ion-icon>{{fecha\r\n          | date: 'dd.MM.yyyy'}}\r\n        </div>\r\n        <div class=\"fecha-hora_div\" *ngIf=\"!dateControl\">\r\n          <ion-icon name=\"calendar-outline\" class=\"mark-info\"></ion-icon\r\n          >{{fechaFin | date: 'dd.MM.yyyy'}}\r\n        </div>\r\n      </div>\r\n      <div class=\"hora\">\r\n        <div id=\"event-detail-container\" class=\"div-hora\">Hora</div>\r\n        <div class=\"fecha-hora_div\" *ngIf=\"fecha !== fechaFin\">\r\n          <ion-icon name=\"time-outline\" class=\"mark-info\"></ion-icon>{{fecha |\r\n          date:'HH:mm'}}\r\n          <span *ngIf=\"!controlHour\">a {{fechaFin | date:'HH:mm'}}</span>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div\r\n      class=\"descripcion\"\r\n      id=\"description-event\"\r\n      [innerHTML]=\"descripcion\"\r\n    ></div>\r\n  </div>\r\n</ion-content>\r\n<ion-footer class=\"ion-no-border\">\r\n  <div class=\"ticket\">\r\n    <div *ngIf=\"precioUnico && precio > 0\" class=\"entradas\">\r\n      <div id=\"event-detail-container\" class=\"entradas_div\">Valor ticket</div>\r\n      <div id=\"event-detail-container\" class=\"precios_div\">\r\n        {{ moneda }}&nbsp;{{ precio }}\r\n      </div>\r\n    </div>\r\n    <div *ngIf=\"precioUnico === false && precio > 0\" class=\"entradas\">\r\n      <div id=\"event-detail-container\" class=\"entradas_div\">Desde</div>\r\n      <div id=\"event-detail-container\" class=\"precios_div\">\r\n        {{ moneda }}&nbsp;{{ precio }}\r\n      </div>\r\n    </div>\r\n    <div *ngIf=\"precio === 0\" class=\"entradas\">\r\n      <div id=\"event-detail-container\" class=\"entradas_div\">Entrada</div>\r\n      <div id=\"event-detail-container\" class=\"precios_div\">Gratis</div>\r\n    </div>\r\n    <div class=\"precio\" (click)=\"openModalSellingPoint()\">\r\n      <div><i class=\"fas fa-ticket-alt mark-info\"></i></div>\r\n      <div id=\"event-detail-container\" class=\"puntos-venta\">\r\n        ver puntos de venta\r\n      </div>\r\n    </div>\r\n  </div>\r\n</ion-footer>\r\n");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-header class=\"ion-no-border\">\r\n  <ion-toolbar color=\"information\">\r\n    <ion-buttons slot=\"start\">\r\n      <ion-back-button\r\n        defaultHref=\"tabs/events\"\r\n        (click)=\"salir()\"\r\n        color=\"back\"\r\n        text=\"\"\r\n      ></ion-back-button>\r\n    </ion-buttons>\r\n    <ion-title color=\"back\" id=\"nombre\">{{titulo}}</ion-title>\r\n    <ion-icon\r\n      color=\"back\"\r\n      slot=\"end\"\r\n      class=\"share\"\r\n      name=\"share-social-sharp\"\r\n      (click)=\"socialSharingEvent('evento', titulo, id)\"\r\n    ></ion-icon>\r\n  </ion-toolbar>\r\n</ion-header>\r\n<ion-content>\r\n  <div class=\"padre\" id=\"event-detail-container\">\r\n    <div class=\"diva\">\r\n      <app-preload-details\r\n        [url]=\"imagen\"\r\n        [alt]=\"titulo\"\r\n        [urlPreload]=\"preloadImage\"\r\n        [clase]=\"preloadClass\"\r\n      ></app-preload-details>\r\n    </div>\r\n    <section>\r\n      <div\r\n        class=\"cuenta-regresiva\"\r\n        *ngIf=\"day !== 0 || hours !== 0 || minutes !== 0 || seconds !== 0, else start\"\r\n      >\r\n        <div class=\"time\">\r\n          <ul class=\"time-list\">\r\n            <li id=\"event-detail-container\" class=\"count-bg-one radius\">\r\n              <span id=\"days\">{{day}}</span>Dias\r\n            </li>\r\n            <li id=\"event-detail-container\" class=\"count-bg-two radius\">\r\n              <span id=\"hours\">{{hours}}</span>Horas\r\n            </li>\r\n            <li id=\"event-detail-container\" class=\"count-bg-three radius\">\r\n              <span id=\"minutes\">{{minutes}}</span>Minutos\r\n            </li>\r\n            <li id=\"event-detail-container\" class=\"count-bg-four radius\">\r\n              <span id=\"seconds\">{{seconds}}</span>Segundos\r\n            </li>\r\n          </ul>\r\n        </div>\r\n      </div>\r\n      <ng-template #start>\r\n        <div class=\"event_start\">Evento en curso</div>\r\n      </ng-template>\r\n    </section>\r\n    <div class=\"ubicacion\">\r\n      <div id=\"event-detail-container\" class=\"dir\">\r\n        <div\r\n          id=\"event-detail-container\"\r\n          class=\"div-ubicacion\"\r\n          (click)=\"openMap()\"\r\n        >\r\n          {{ lugar }}\r\n        </div>\r\n        <div class=\"lugar\">\r\n          <div><i class=\"fi fi-rr-map-marker mark-info\"></i><br /></div>\r\n          <div>\r\n            <div>{{ direccion }}</div>\r\n            <div>{{ localidad }} - {{ departamento }}</div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div class=\"fecha-hora\">\r\n      <div class=\"fecha\">\r\n        <div id=\"event-detail-container\" class=\"div-fecha\">Fecha</div>\r\n        <div class=\"fecha-hora_div\">\r\n          <ion-icon name=\"calendar-outline\" class=\"mark-info\"></ion-icon>{{fecha\r\n          | date: 'dd.MM.yyyy'}}\r\n        </div>\r\n        <div class=\"fecha-hora_div\" *ngIf=\"!dateControl\">\r\n          <ion-icon name=\"calendar-outline\" class=\"mark-info\"></ion-icon\r\n          >{{fechaFin | date: 'dd.MM.yyyy'}}\r\n        </div>\r\n      </div>\r\n      <div class=\"hora\">\r\n        <div id=\"event-detail-container\" class=\"div-hora\">Hora</div>\r\n        <div class=\"fecha-hora_div\" *ngIf=\"fecha !== fechaFin\">\r\n          <ion-icon name=\"time-outline\" class=\"mark-info\"></ion-icon>{{fecha |\r\n          date:'HH:mm'}}\r\n          <span *ngIf=\"!controlHour\">a {{fechaFin | date:'HH:mm'}}</span>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <div\r\n      class=\"descripcion\"\r\n      id=\"description-event\"\r\n      [innerHTML]=\"descripcion\"\r\n    ></div>\r\n  </div>\r\n</ion-content>\r\n<ion-footer class=\"ion-no-border\">\r\n  <div class=\"ticket\">\r\n    <div *ngIf=\"precioUnico && precio > 0\" class=\"entradas\">\r\n      <div id=\"event-detail-container\" class=\"entradas_div\">Valor ticket</div>\r\n      <div id=\"event-detail-container\" class=\"precios_div\">\r\n        {{ moneda }}&nbsp;{{ precio }}\r\n      </div>\r\n    </div>\r\n    <div *ngIf=\"precioUnico === false && precio > 0\" class=\"entradas\">\r\n      <div id=\"event-detail-container\" class=\"entradas_div\">Desde</div>\r\n      <div id=\"event-detail-container\" class=\"precios_div\">\r\n        {{ moneda }}&nbsp;{{ precio }}\r\n      </div>\r\n    </div>\r\n    <div *ngIf=\"precio === 0\" class=\"entradas\">\r\n      <div id=\"event-detail-container\" class=\"entradas_div\">Entrada</div>\r\n      <div id=\"event-detail-container\" class=\"precios_div\">Gratis</div>\r\n    </div>\r\n    <div class=\"precio\" (click)=\"openModalSellingPoint()\">\r\n      <div><i class=\"fas fa-ticket-alt mark-info\"></i></div>\r\n      <div id=\"event-detail-container\" class=\"puntos-venta\">\r\n        ver puntos de venta\r\n      </div>\r\n    </div>\r\n  </div>\r\n</ion-footer>\r\n");
 
 /***/ }),
 
@@ -985,7 +1016,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-header class=\"ion-no-border\">\r\n  <ion-toolbar>\r\n    <div class=\"slider\">\r\n      <ion-slides\r\n        class=\"sliderPrimero setHeight\"\r\n        scrollbar=\"false\"\r\n        pager=\"false\"\r\n        [options]=\"slideOpts\"\r\n      >\r\n        <ion-slide *ngFor=\"let item of sliderEvents\" class=\"sliderHijo\">\r\n          <a\r\n            *ngIf=\"item.link !== null && item.link !== '' && item.link !== ' ' && item.link !== undefined\"\r\n            href=\"{{ item.link }}\"\r\n            class=\"link\"\r\n          >\r\n            <ion-fab vertical=\"top\" horizontal=\"start\" slot=\"fixed\">\r\n              <ion-fab-button color=\"dark\">\r\n                <ion-icon\r\n                  *ngIf=\"item.linkTipo !== 'web'\"\r\n                  name=\"logo-{{ item.linkTipo }}\"\r\n                  class=\"icon-link\"\r\n                ></ion-icon>\r\n                <ion-icon\r\n                  *ngIf=\"item.linkTipo === 'web'\"\r\n                  name=\"globe-outline\"\r\n                  class=\"icon-link\"\r\n                ></ion-icon>\r\n              </ion-fab-button>\r\n            </ion-fab>\r\n          </a>\r\n          <app-preload\r\n            [url]=\"item.imagen.url\"\r\n            [alt]=\"item.imagen.name\"\r\n            [urlPreload]=\"preloadImage\"\r\n          ></app-preload>\r\n        </ion-slide>\r\n      </ion-slides>\r\n      <!-- =========>=>=>=> Filtro =========>=>=>=> -->\r\n      <div class=\"filter_place\">\r\n        <ion-label\r\n          *ngIf=\"!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')\"\r\n          (click)=\"changeFilterLocation()\"\r\n          >localidad</ion-label\r\n        >\r\n        <ion-label\r\n          *ngIf=\"!selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')\"\r\n          class=\"open_acordeon\"\r\n          (click)=\"changeFilterLocation()\"\r\n          >{{ optionLocation }}</ion-label\r\n        >\r\n        <img *ngIf=\"!selectdistancia\" src=\"/assets/icon/exchange.png\" alt=\"\" />\r\n        <ion-label\r\n          *ngIf=\"(optionType === null || optionType === 'tipo' || optionType === '')\"\r\n          (click)=\"changeFilterType()\"\r\n          >tipo</ion-label\r\n        >\r\n        <ion-label\r\n          *ngIf=\"(optionType !== null && optionType !== 'tipo' && optionType !== '')\"\r\n          (click)=\"changeFilterType()\"\r\n          class=\"open_acordeon\"\r\n          >{{ optionType }}</ion-label\r\n        >\r\n        <img src=\"/assets/icon/exchange.png\" alt=\"\" />\r\n        <ion-label\r\n          *ngIf=\"((optionDateStart === null || optionDateStart === 'fecha' || optionDateStart === '') && (optionDateEnd === null || optionDateEnd === 'fecha' || optionDateEnd === ''))\"\r\n          (click)=\"changeFilterDate()\"\r\n          >fecha</ion-label\r\n        >\r\n        <ion-label\r\n          *ngIf=\"((optionDateStart !== null && optionDateStart !== 'fecha' && optionDateStart !== '') || (optionDateEnd !== null && optionDateEnd !== 'fecha' && optionDateEnd !== ''))\"\r\n          (click)=\"changeFilterDate()\"\r\n          class=\"open_acordeon date_filter\"\r\n        >\r\n          <span *ngIf=\"optionDateStart !== null && optionDateStart !== ''\"\r\n            >desde {{ optionDateStart | date:'dd.MM.yyyy' }}</span\r\n          ><br />\r\n          <span *ngIf=\"optionDateEnd !== null && optionDateEnd !== ''\"\r\n            >hasta {{ optionDateEnd | date:'dd.MM.yyyy' }}</span\r\n          ></ion-label\r\n        >\r\n      </div>\r\n\r\n      <div>\r\n        <form [formGroup]=\"filterForm\" class=\"form_filter\">\r\n          <!-- Filtro por Fecha  -->\r\n          <div *ngIf=\"isFilterDate\">\r\n            <div class=\"filter_name\">\r\n              <span>Fecha</span>\r\n            </div>\r\n            <ion-list class=\"list_type_date\">\r\n              <ion-item\r\n                id=\"modal-desde\"\r\n                *ngIf=\"(optionDateStart === null || optionDateStart === 'fecha' || optionDateStart === '')\"\r\n                class=\"filter_list\"\r\n                >desde</ion-item\r\n              >\r\n              <ion-item\r\n                id=\"modal-desde\"\r\n                *ngIf=\"optionDateStart !== null && optionDateStart !== ''\"\r\n                class=\"filter_list\"\r\n                >desde\r\n                <span class=\"date-selected\"\r\n                  >&nbsp;&nbsp;{{ optionDateStart | date:'dd.MM.yyyy' }}</span\r\n                ></ion-item\r\n              >\r\n              <ion-modal trigger=\"modal-desde\">\r\n                <ng-template>\r\n                  <ion-content>\r\n                    <ion-datetime\r\n                      (ionChange)=\"filterEvento()\"\r\n                      mode=\"ios\"\r\n                      min=\"{{ fullDay }}\"\r\n                      displayFormat=\"DD MMM YYYY\"\r\n                      yearValues=\"{{ customYearValues }}\"\r\n                      formControlName=\"fecha_inicio\"\r\n                      presentation=\"date\"\r\n                      size=\"cover\"\r\n                    >\r\n                      <ion-buttons slot=\"buttons\">\r\n                        <ion-button color=\"danger\" (click)=\"close()\"\r\n                          >Cancelar</ion-button\r\n                        >\r\n                        <ion-button color=\"primary\" (click)=\"confirm()\"\r\n                          >Seleccionar</ion-button\r\n                        >\r\n                      </ion-buttons>\r\n                    </ion-datetime>\r\n                  </ion-content>\r\n                </ng-template>\r\n              </ion-modal>\r\n              <ion-item\r\n                id=\"modal-hasta\"\r\n                *ngIf=\"(optionDateEnd === null || optionDateEnd === 'fecha' || optionDateEnd === '')\"\r\n                class=\"filter_list\"\r\n                >hasta</ion-item\r\n              >\r\n              <ion-item\r\n                id=\"modal-hasta\"\r\n                *ngIf=\"optionDateEnd !== null && optionDateEnd !== ''\"\r\n                class=\"filter_list\"\r\n                >hasta\r\n                <span class=\"date-selected\"\r\n                  >&nbsp;&nbsp;{{ optionDateEnd | date:'dd.MM.yyyy' }}</span\r\n                ></ion-item\r\n              >\r\n              <ion-modal trigger=\"modal-hasta\">\r\n                <ng-template>\r\n                  <ion-content>\r\n                    <ion-datetime\r\n                      (ionChange)=\"filterEvento()\"\r\n                      mode=\"ios\"\r\n                      min=\"{{ fullDayNext }}\"\r\n                      displayFormat=\"DD MMM YYYY\"\r\n                      yearValues=\"{{ customYearValues }}\"\r\n                      formControlName=\"fecha_fin\"\r\n                      presentation=\"date\"\r\n                      size=\"cover\"\r\n                    >\r\n                      <ion-buttons slot=\"buttons\">\r\n                        <ion-button color=\"danger\" (click)=\"close()\"\r\n                          >Cancelar</ion-button\r\n                        >\r\n                        <ion-button color=\"primary\" (click)=\"confirm()\"\r\n                          >Seleccionar</ion-button\r\n                        >\r\n                      </ion-buttons>\r\n                    </ion-datetime>\r\n                  </ion-content>\r\n                </ng-template>\r\n              </ion-modal>\r\n            </ion-list>\r\n          </div>\r\n          <!-- Filtro por Fecha  -->\r\n          <!-- Filtro por Localidad  -->\r\n          <div *ngIf=\"!selectdistancia && isFilterLocation\">\r\n            <div class=\"filter_name\">\r\n              <span>Localidad</span>\r\n            </div>\r\n            <div>\r\n              <ion-list class=\"list_type\">\r\n                <ion-radio-group\r\n                  (ionChange)=\"filterEvento()\"\r\n                  formControlName=\"localidad\"\r\n                  class=\"type_border\"\r\n                >\r\n                  <ion-item class=\"filter_list\" lines=\"none\">\r\n                    <ion-text>Todo</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"\"></ion-radio>\r\n                  </ion-item>\r\n                  <ion-item\r\n                    class=\"filter_list\"\r\n                    lines=\"none\"\r\n                    *ngFor=\"let loc of lista_localidades_eventos\"\r\n                  >\r\n                    <ion-text>{{ loc }}</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"{{ loc }}\"></ion-radio>\r\n                  </ion-item>\r\n                </ion-radio-group>\r\n              </ion-list>\r\n            </div>\r\n          </div>\r\n          <!-- filtro por Localidad -->\r\n\r\n          <!-- filtro por Tipo -->\r\n          <div *ngIf=\"isFilterType\">\r\n            <div class=\"filter_name\">\r\n              <span>Tipo</span>\r\n            </div>\r\n            <div>\r\n              <ion-list class=\"list_type\">\r\n                <ion-radio-group\r\n                  (ionChange)=\"filterEvento()\"\r\n                  formControlName=\"tipo\"\r\n                  class=\"type_border\"\r\n                >\r\n                  <ion-item class=\"filter_list\" lines=\"none\">\r\n                    <ion-text>Todo</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"\"></ion-radio>\r\n                  </ion-item>\r\n                  <ion-item\r\n                    class=\"filter_list\"\r\n                    lines=\"none\"\r\n                    *ngFor=\"let cry of lista_tipos_eventos\"\r\n                  >\r\n                    <ion-text>{{ cry }}</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"{{ cry }}\"></ion-radio>\r\n                  </ion-item>\r\n                </ion-radio-group>\r\n              </ion-list>\r\n            </div>\r\n          </div>\r\n          <!-- Filtro por Tipo -->\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </ion-toolbar>\r\n</ion-header>\r\n\r\n<ion-content>\r\n  <div>\r\n    <ion-list>\r\n      <ng-container *ngFor=\"let item of eventos | filterEvents1:dataform\">\r\n        <ng-container *ngIf=\"item.vacio !== 1\">\r\n          <ion-item\r\n            *ngIf=\"(item.distanciaNumber <= dist || (dep != null && !this.dbService.noData && item.departamento === dep))\"\r\n            class=\"event\"\r\n            (click)=\"openModalDetailEvent(\r\n          item.id, \r\n          item.fechaInicio, \r\n          item.nombre, \r\n          item.descripcion, \r\n          item['imagen'].url, \r\n          item.lugar, \r\n          item['ubicacion'].lat, \r\n          item['ubicacion'].lng, \r\n          item.fechaFin, \r\n          item.instagram, \r\n          item.tickAntel, \r\n          item.facebook, \r\n          item.whatsapp, \r\n          item.moneda, \r\n          item.precio, \r\n          item.precioUnico,\r\n          item.direccion,\r\n          item.localidad,\r\n          item.departamento)\"\r\n          >\r\n            <ion-avatar item-start class=\"image-event\">\r\n              <app-preload-list\r\n                [url]=\"item.imagen.url\"\r\n                [urlPreload]=\"preloadImage_list\"\r\n                [clase]=\"preloadClase\"\r\n                [alt]=\"item.nombre\"\r\n              >\r\n              </app-preload-list>\r\n            </ion-avatar>\r\n            <div class=\"info-event\">\r\n              <div class=\"fecha\">\r\n                {{item.fechaInicio | date:'dd.MM.yyyy - HH:mm'}} hs\r\n              </div>\r\n              <div class=\"titulo\">{{item.nombre}}</div>\r\n              <div class=\"descripcion\">\r\n                {{ item.distancia | formatDistancia}}\r\n              </div>\r\n            </div>\r\n          </ion-item>\r\n        </ng-container>\r\n\r\n        <ng-container *ngIf=\"item.vacio === 1\">\r\n          <div class=\"empty\">\r\n            <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n            <div class=\"text_empty\">\r\n              No hay eventos para mostrar con el filtro seleccionado\r\n            </div>\r\n          </div>\r\n        </ng-container>\r\n      </ng-container>\r\n    </ion-list>\r\n\r\n    <ion-list *ngIf=\"eventos.length === 0 && !this.dbService.noData\">\r\n      <ng-container *ngFor=\"let item of [1,2,3,4,5,6]\">\r\n        <ion-item>\r\n          <ion-thumbnail slot=\"start\">\r\n            <ion-skeleton-text></ion-skeleton-text>\r\n          </ion-thumbnail>\r\n          <ion-label>\r\n            <h3>\r\n              <ion-skeleton-text\r\n                animated\r\n                style=\"width: 80%\"\r\n              ></ion-skeleton-text>\r\n            </h3>\r\n            <p>\r\n              <ion-skeleton-text\r\n                animated\r\n                style=\"width: 60%\"\r\n              ></ion-skeleton-text>\r\n            </p>\r\n            <p>\r\n              <ion-skeleton-text\r\n                animated\r\n                style=\"width: 30%\"\r\n              ></ion-skeleton-text>\r\n            </p>\r\n          </ion-label>\r\n        </ion-item>\r\n      </ng-container>\r\n    </ion-list>\r\n\r\n    <div *ngIf=\"this.dbService.noData && dist === null\" class=\"empty\">\r\n      <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n      <div class=\"text_empty\">No existen eventos en {{ dep }}</div>\r\n    </div>\r\n\r\n    <div *ngIf=\"!this.dbService.controlDistance && dist !== null\" class=\"empty\">\r\n      <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n      <div class=\"text_empty\">\r\n        No existen eventos en el rango de {{ dist }} km\r\n      </div>\r\n    </div>\r\n  </div>\r\n</ion-content>\r\n");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-header class=\"ion-no-border\">\r\n  <ion-toolbar>\r\n    <div class=\"slider\">\r\n      <ion-slides\r\n        class=\"sliderPrimero setHeight\"\r\n        scrollbar=\"false\"\r\n        pager=\"false\"\r\n        [options]=\"slideOpts\"\r\n      >\r\n        <ion-slide *ngFor=\"let item of sliderEvents\" class=\"sliderHijo\">\r\n          <a\r\n            *ngIf=\"item.link !== null && item.link !== '' && item.link !== ' ' && item.link !== undefined\"\r\n            href=\"{{ item.link }}\"\r\n            class=\"link\"\r\n          >\r\n            <ion-fab vertical=\"top\" horizontal=\"start\" slot=\"fixed\">\r\n              <ion-fab-button color=\"dark\">\r\n                <ion-icon\r\n                  *ngIf=\"item.linkTipo !== 'web'\"\r\n                  name=\"logo-{{ item.linkTipo }}\"\r\n                  class=\"icon-link\"\r\n                ></ion-icon>\r\n                <ion-icon\r\n                  *ngIf=\"item.linkTipo === 'web'\"\r\n                  name=\"globe-outline\"\r\n                  class=\"icon-link\"\r\n                ></ion-icon>\r\n              </ion-fab-button>\r\n            </ion-fab>\r\n          </a>\r\n          <app-preload\r\n            [url]=\"item.imagen.url\"\r\n            [alt]=\"item.imagen.name\"\r\n            [urlPreload]=\"preloadImage\"\r\n          ></app-preload>\r\n        </ion-slide>\r\n      </ion-slides>\r\n      <!-- =========>=>=>=> Filtro =========>=>=>=> -->\r\n      <div class=\"filter_place\">\r\n        <ion-label\r\n          *ngIf=\"!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')\"\r\n          (click)=\"changeFilterLocation()\"\r\n          >localidad</ion-label\r\n        >\r\n        <ion-label\r\n          *ngIf=\"!selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')\"\r\n          class=\"open_acordeon\"\r\n          (click)=\"changeFilterLocation()\"\r\n          >{{ optionLocation }}</ion-label\r\n        >\r\n        <img *ngIf=\"!selectdistancia\" src=\"/assets/icon/exchange.png\" alt=\"\" />\r\n        <ion-label\r\n          *ngIf=\"(optionType === null || optionType === 'tipo' || optionType === '')\"\r\n          (click)=\"changeFilterType()\"\r\n          >tipo</ion-label\r\n        >\r\n        <ion-label\r\n          *ngIf=\"(optionType !== null && optionType !== 'tipo' && optionType !== '')\"\r\n          (click)=\"changeFilterType()\"\r\n          class=\"open_acordeon\"\r\n          >{{ optionType }}</ion-label\r\n        >\r\n        <img src=\"/assets/icon/exchange.png\" alt=\"\" />\r\n        <ion-label\r\n          *ngIf=\"((optionDateStart === null || optionDateStart === 'fecha' || optionDateStart === '') && (optionDateEnd === null || optionDateEnd === 'fecha' || optionDateEnd === ''))\"\r\n          (click)=\"changeFilterDate()\"\r\n          >fecha</ion-label\r\n        >\r\n        <ion-label\r\n          *ngIf=\"((optionDateStart !== null && optionDateStart !== 'fecha' && optionDateStart !== '') || (optionDateEnd !== null && optionDateEnd !== 'fecha' && optionDateEnd !== ''))\"\r\n          (click)=\"changeFilterDate()\"\r\n          class=\"open_acordeon date_filter\"\r\n        >\r\n          <span *ngIf=\"optionDateStart !== null && optionDateStart !== ''\"\r\n            >desde {{ optionDateStart | date:'dd.MM.yyyy' }}</span\r\n          ><br />\r\n          <span *ngIf=\"optionDateEnd !== null && optionDateEnd !== ''\"\r\n            >hasta {{ optionDateEnd | date:'dd.MM.yyyy' }}</span\r\n          ></ion-label\r\n        >\r\n      </div>\r\n\r\n      <div>\r\n        <form [formGroup]=\"filterForm\" class=\"form_filter\">\r\n          <!-- Filtro por Fecha  -->\r\n          <div *ngIf=\"isFilterDate\">\r\n            <div class=\"filter_name\">\r\n              <span>Fecha</span>\r\n            </div>\r\n            <ion-list class=\"list_type_date\">\r\n              <ion-item\r\n                id=\"modal-desde\"\r\n                *ngIf=\"(optionDateStart === null || optionDateStart === 'fecha' || optionDateStart === '')\"\r\n                class=\"filter_list\"\r\n                >desde</ion-item\r\n              >\r\n              <ion-item\r\n                id=\"modal-desde\"\r\n                *ngIf=\"optionDateStart !== null && optionDateStart !== ''\"\r\n                class=\"filter_list\"\r\n                >desde\r\n                <span class=\"date-selected\"\r\n                  >&nbsp;&nbsp;{{ optionDateStart | date:'dd.MM.yyyy' }}</span\r\n                ></ion-item\r\n              >\r\n              <ion-modal trigger=\"modal-desde\">\r\n                <ng-template>\r\n                  <ion-content>\r\n                    <ion-datetime\r\n                      (ionChange)=\"filterEvento('eventos', 'fecha_inicio_evento')\"\r\n                      mode=\"ios\"\r\n                      min=\"{{ fullDay }}\"\r\n                      displayFormat=\"DD MMM YYYY\"\r\n                      yearValues=\"{{ customYearValues }}\"\r\n                      formControlName=\"fecha_inicio\"\r\n                      presentation=\"date\"\r\n                      size=\"cover\"\r\n                    >\r\n                      <ion-buttons slot=\"buttons\">\r\n                        <ion-button color=\"danger\" (click)=\"close()\"\r\n                          >Cancelar</ion-button\r\n                        >\r\n                        <ion-button color=\"primary\" (click)=\"confirm()\"\r\n                          >Seleccionar</ion-button\r\n                        >\r\n                      </ion-buttons>\r\n                    </ion-datetime>\r\n                  </ion-content>\r\n                </ng-template>\r\n              </ion-modal>\r\n              <ion-item\r\n                id=\"modal-hasta\"\r\n                *ngIf=\"(optionDateEnd === null || optionDateEnd === 'fecha' || optionDateEnd === '')\"\r\n                class=\"filter_list\"\r\n                >hasta</ion-item\r\n              >\r\n              <ion-item\r\n                id=\"modal-hasta\"\r\n                *ngIf=\"optionDateEnd !== null && optionDateEnd !== ''\"\r\n                class=\"filter_list\"\r\n                >hasta\r\n                <span class=\"date-selected\"\r\n                  >&nbsp;&nbsp;{{ optionDateEnd | date:'dd.MM.yyyy' }}</span\r\n                ></ion-item\r\n              >\r\n              <ion-modal trigger=\"modal-hasta\">\r\n                <ng-template>\r\n                  <ion-content>\r\n                    <ion-datetime\r\n                      (ionChange)=\"filterEvento('eventos', 'fecha_fin_evento')\"\r\n                      mode=\"ios\"\r\n                      min=\"{{ fullDayNext }}\"\r\n                      displayFormat=\"DD MMM YYYY\"\r\n                      yearValues=\"{{ customYearValues }}\"\r\n                      formControlName=\"fecha_fin\"\r\n                      presentation=\"date\"\r\n                      size=\"cover\"\r\n                    >\r\n                      <ion-buttons slot=\"buttons\">\r\n                        <ion-button color=\"danger\" (click)=\"close()\"\r\n                          >Cancelar</ion-button\r\n                        >\r\n                        <ion-button color=\"primary\" (click)=\"confirm()\"\r\n                          >Seleccionar</ion-button\r\n                        >\r\n                      </ion-buttons>\r\n                    </ion-datetime>\r\n                  </ion-content>\r\n                </ng-template>\r\n              </ion-modal>\r\n            </ion-list>\r\n          </div>\r\n          <!-- Filtro por Fecha  -->\r\n          <!-- Filtro por Localidad  -->\r\n          <div *ngIf=\"!selectdistancia && isFilterLocation\">\r\n            <div class=\"filter_name\">\r\n              <span>Localidad</span>\r\n            </div>\r\n            <div>\r\n              <ion-list class=\"list_type\">\r\n                <ion-radio-group\r\n                  (ionChange)=\"filterEvento('eventos', 'localidad_evento')\"\r\n                  formControlName=\"localidad\"\r\n                  class=\"type_border\"\r\n                >\r\n                  <ion-item class=\"filter_list\" lines=\"none\">\r\n                    <ion-text>Todo</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"\"></ion-radio>\r\n                  </ion-item>\r\n                  <ion-item\r\n                    class=\"filter_list\"\r\n                    lines=\"none\"\r\n                    *ngFor=\"let loc of lista_localidades_eventos\"\r\n                  >\r\n                    <ion-text>{{ loc }}</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"{{ loc }}\"></ion-radio>\r\n                  </ion-item>\r\n                </ion-radio-group>\r\n              </ion-list>\r\n            </div>\r\n          </div>\r\n          <!-- filtro por Localidad -->\r\n\r\n          <!-- filtro por Tipo -->\r\n          <div *ngIf=\"isFilterType\">\r\n            <div class=\"filter_name\">\r\n              <span>Tipo</span>\r\n            </div>\r\n            <div>\r\n              <ion-list class=\"list_type\">\r\n                <ion-radio-group\r\n                  (ionChange)=\"filterEvento('eventos', 'tipo_evento')\"\r\n                  formControlName=\"tipo\"\r\n                  class=\"type_border\"\r\n                >\r\n                  <ion-item class=\"filter_list\" lines=\"none\">\r\n                    <ion-text>Todo</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"\"></ion-radio>\r\n                  </ion-item>\r\n                  <ion-item\r\n                    class=\"filter_list\"\r\n                    lines=\"none\"\r\n                    *ngFor=\"let cry of lista_tipos_eventos\"\r\n                  >\r\n                    <ion-text>{{ cry }}</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"{{ cry }}\"></ion-radio>\r\n                  </ion-item>\r\n                </ion-radio-group>\r\n              </ion-list>\r\n            </div>\r\n          </div>\r\n          <!-- Filtro por Tipo -->\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </ion-toolbar>\r\n</ion-header>\r\n\r\n<ion-content>\r\n  <div>\r\n    <ion-list>\r\n      <ng-container *ngFor=\"let item of eventos | filterEvents1:dataform\">\r\n        <ng-container *ngIf=\"item.vacio !== 1\">\r\n          <ion-item\r\n            *ngIf=\"(item.distanciaNumber <= dist || (dep != null && !this.dbService.noData && item.departamento === dep))\"\r\n            class=\"event\"\r\n            (click)=\"openModalDetailEvent(\r\n          item.id, \r\n          item.fechaInicio, \r\n          item.nombre, \r\n          item.descripcion, \r\n          item['imagen'].url, \r\n          item.lugar, \r\n          item['ubicacion'].lat, \r\n          item['ubicacion'].lng, \r\n          item.fechaFin, \r\n          item.instagram, \r\n          item.tickAntel, \r\n          item.facebook, \r\n          item.whatsapp, \r\n          item.moneda, \r\n          item.precio, \r\n          item.precioUnico,\r\n          item.direccion,\r\n          item.localidad,\r\n          item.departamento)\"\r\n          >\r\n            <ion-avatar item-start class=\"image-event\">\r\n              <app-preload-list\r\n                [url]=\"item.imagen.url\"\r\n                [urlPreload]=\"preloadImage_list\"\r\n                [clase]=\"preloadClase\"\r\n                [alt]=\"item.nombre\"\r\n              >\r\n              </app-preload-list>\r\n            </ion-avatar>\r\n            <div class=\"info-event\">\r\n              <div class=\"fecha\">\r\n                {{item.fechaInicio | date:'dd.MM.yyyy - HH:mm'}} hs\r\n              </div>\r\n              <div class=\"titulo\">{{item.nombre}}</div>\r\n              <div class=\"descripcion\">\r\n                {{ item.distancia | formatDistancia}}\r\n              </div>\r\n            </div>\r\n          </ion-item>\r\n        </ng-container>\r\n\r\n        <ng-container *ngIf=\"item.vacio === 1\">\r\n          <div class=\"empty\">\r\n            <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n            <div class=\"text_empty\">\r\n              No hay eventos para mostrar con el filtro seleccionado\r\n            </div>\r\n          </div>\r\n        </ng-container>\r\n      </ng-container>\r\n    </ion-list>\r\n\r\n    <ion-list *ngIf=\"eventos.length === 0 && !this.dbService.noData\">\r\n      <ng-container *ngFor=\"let item of [1,2,3,4,5,6]\">\r\n        <ion-item>\r\n          <ion-thumbnail slot=\"start\">\r\n            <ion-skeleton-text></ion-skeleton-text>\r\n          </ion-thumbnail>\r\n          <ion-label>\r\n            <h3>\r\n              <ion-skeleton-text\r\n                animated\r\n                style=\"width: 80%\"\r\n              ></ion-skeleton-text>\r\n            </h3>\r\n            <p>\r\n              <ion-skeleton-text\r\n                animated\r\n                style=\"width: 60%\"\r\n              ></ion-skeleton-text>\r\n            </p>\r\n            <p>\r\n              <ion-skeleton-text\r\n                animated\r\n                style=\"width: 30%\"\r\n              ></ion-skeleton-text>\r\n            </p>\r\n          </ion-label>\r\n        </ion-item>\r\n      </ng-container>\r\n    </ion-list>\r\n\r\n    <div *ngIf=\"this.dbService.noData && dist === null\" class=\"empty\">\r\n      <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n      <div class=\"text_empty\">No existen eventos en {{ dep }}</div>\r\n    </div>\r\n\r\n    <div *ngIf=\"!this.dbService.controlDistance && dist !== null\" class=\"empty\">\r\n      <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n      <div class=\"text_empty\">\r\n        No existen eventos en el rango de {{ dist }} km\r\n      </div>\r\n    </div>\r\n  </div>\r\n</ion-content>\r\n");
 
 /***/ }),
 

@@ -18,7 +18,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const routes = [
-    { path: '', redirectTo: 'auth', pathMatch: 'full' },
+    { path: '', redirectTo: 'home-menu', pathMatch: 'full' },
     {
         path: 'map/:nombre',
         loadChildren: () => Promise.all(/*! import() */[__webpack_require__.e("default-src_app_services_geolocation_service_ts"), __webpack_require__.e("src_app_pages_map_map_module_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ./pages/map/map.module */ 41662)).then(m => m.MapPageModule)
@@ -62,10 +62,6 @@ const routes = [
     {
         path: 'dominga',
         loadChildren: () => Promise.all(/*! import() */[__webpack_require__.e("default-src_app_services_geolocation_service_ts"), __webpack_require__.e("default-node_modules_turf_distance_dist_es_index_js"), __webpack_require__.e("default-src_app_services_database_service_ts"), __webpack_require__.e("src_app_pages_dominga_dominga_module_ts")]).then(__webpack_require__.bind(__webpack_require__, /*! ./pages/dominga/dominga.module */ 27097)).then(m => m.DomingaPageModule)
-    },
-    {
-        path: 'auth',
-        loadChildren: () => __webpack_require__.e(/*! import() */ "src_app_pages_auth_auth_module_ts").then(__webpack_require__.bind(__webpack_require__, /*! ./pages/auth/auth.module */ 14583)).then(m => m.AuthPageModule)
     },
 ];
 let AppRoutingModule = class AppRoutingModule {
@@ -193,20 +189,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! tslib */ 98806);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/core */ 14001);
-/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @angular/platform-browser */ 86219);
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @angular/router */ 13252);
-/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @ionic/angular */ 78099);
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @angular/platform-browser */ 86219);
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @angular/router */ 13252);
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @ionic/angular */ 78099);
 /* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./app.component */ 2050);
 /* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app-routing.module */ 83696);
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @angular/common/http */ 83981);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @angular/common/http */ 83981);
 /* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../environments/environment */ 18260);
 /* harmony import */ var _angular_fire_compat__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/fire/compat */ 20762);
 /* harmony import */ var _angular_fire_compat_firestore__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/fire/compat/firestore */ 43059);
 /* harmony import */ var _angular_fire_compat_storage__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/fire/compat/storage */ 39202);
-/* harmony import */ var _angular_fire_compat_auth__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/fire/compat/auth */ 29774);
-/* harmony import */ var _angular_fire_compat_database__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/fire/compat/database */ 97606);
-/* harmony import */ var _angular_fire_compat_analytics__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @angular/fire/compat/analytics */ 80843);
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @angular/forms */ 18346);
+/* harmony import */ var _angular_fire_compat_database__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/fire/compat/database */ 97606);
+/* harmony import */ var _angular_fire_compat_analytics__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/fire/compat/analytics */ 80843);
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @angular/forms */ 18346);
 /* harmony import */ var _awesome_cordova_plugins_call_number_ngx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @awesome-cordova-plugins/call-number/ngx */ 53831);
 /* harmony import */ var _components_components_module__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/components.module */ 57693);
 /* harmony import */ var _shared_pipes_pipes_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./shared/pipes/pipes.module */ 74356);
@@ -223,7 +218,6 @@ __webpack_require__.r(__webpack_exports__);
 // Imports para cliente http
 
 // Import enviroments
-
 
 
 
@@ -252,16 +246,15 @@ AppModule = (0,tslib__WEBPACK_IMPORTED_MODULE_9__.__decorate)([
             _angular_fire_compat__WEBPACK_IMPORTED_MODULE_11__.AngularFireModule.initializeApp(_environments_environment__WEBPACK_IMPORTED_MODULE_2__.environment.firebaseConfig),
             _angular_fire_compat_storage__WEBPACK_IMPORTED_MODULE_12__.AngularFireStorageModule,
             _angular_fire_compat_firestore__WEBPACK_IMPORTED_MODULE_13__.AngularFirestoreModule.enablePersistence(),
-            _angular_fire_compat_auth__WEBPACK_IMPORTED_MODULE_14__.AngularFireAuthModule,
-            _angular_fire_compat_database__WEBPACK_IMPORTED_MODULE_15__.AngularFireDatabaseModule,
-            _angular_fire_compat_analytics__WEBPACK_IMPORTED_MODULE_16__.AngularFireAnalyticsModule,
+            _angular_fire_compat_database__WEBPACK_IMPORTED_MODULE_14__.AngularFireDatabaseModule,
+            _angular_fire_compat_analytics__WEBPACK_IMPORTED_MODULE_15__.AngularFireAnalyticsModule,
             _app_routing_module__WEBPACK_IMPORTED_MODULE_1__.AppRoutingModule,
-            _angular_platform_browser__WEBPACK_IMPORTED_MODULE_17__.BrowserModule,
+            _angular_platform_browser__WEBPACK_IMPORTED_MODULE_16__.BrowserModule,
             _components_components_module__WEBPACK_IMPORTED_MODULE_4__.ComponentsModule,
-            _angular_common_http__WEBPACK_IMPORTED_MODULE_18__.HttpClientModule,
-            _ionic_angular__WEBPACK_IMPORTED_MODULE_19__.IonicModule.forRoot(),
+            _angular_common_http__WEBPACK_IMPORTED_MODULE_17__.HttpClientModule,
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_18__.IonicModule.forRoot(),
             _shared_pipes_pipes_module__WEBPACK_IMPORTED_MODULE_5__.PipesModule,
-            _angular_forms__WEBPACK_IMPORTED_MODULE_20__.ReactiveFormsModule,
+            _angular_forms__WEBPACK_IMPORTED_MODULE_19__.ReactiveFormsModule,
         ],
         providers: [
             {
@@ -270,7 +263,7 @@ AppModule = (0,tslib__WEBPACK_IMPORTED_MODULE_9__.__decorate)([
                 deps: [_providers_gps_provider_service__WEBPACK_IMPORTED_MODULE_6__.GpsProvider],
                 multi: true,
             },
-            { provide: _angular_router__WEBPACK_IMPORTED_MODULE_21__.RouteReuseStrategy, useClass: _ionic_angular__WEBPACK_IMPORTED_MODULE_19__.IonicRouteStrategy },
+            { provide: _angular_router__WEBPACK_IMPORTED_MODULE_20__.RouteReuseStrategy, useClass: _ionic_angular__WEBPACK_IMPORTED_MODULE_18__.IonicRouteStrategy },
             _awesome_cordova_plugins_call_number_ngx__WEBPACK_IMPORTED_MODULE_3__.CallNumber,
             _awesome_cordova_plugins_screen_orientation_ngx__WEBPACK_IMPORTED_MODULE_7__.ScreenOrientation,
             _awesome_cordova_plugins_social_sharing_ngx__WEBPACK_IMPORTED_MODULE_8__.SocialSharing
@@ -366,7 +359,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/core */ 14001);
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ionic/angular */ 78099);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ 13252);
-/* harmony import */ var src_app_services_auth_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/services/auth.service */ 36636);
+/* harmony import */ var src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/services/google-analytics.service */ 81679);
 
 
 
@@ -375,10 +368,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let MenuComponent = class MenuComponent {
-    constructor(menuCtrl, router, authService) {
+    constructor(menuCtrl, router, gaService) {
         this.menuCtrl = menuCtrl;
         this.router = router;
-        this.authService = authService;
+        this.gaService = gaService;
         this.modoOscuro = localStorage.getItem('modoOscuro');
         this.dyslexic = localStorage.getItem('dyslexic');
         this.labelCheck = false;
@@ -391,12 +384,14 @@ let MenuComponent = class MenuComponent {
     changeTheme() {
         this.darkMode = localStorage.getItem('modoOscuro');
         if (this.darkMode == 'true') {
+            this.gaService.googleAnalyticsModos('modo_oscuro', 'desactivar_oscuro');
             localStorage.removeItem('modoOscuro');
             document.body.classList.toggle('dark');
             this.modoOscuro = localStorage.getItem('modoOscuro');
             this.labelCheck = false;
         }
         else {
+            this.gaService.googleAnalyticsModos('modo_oscuro', 'activar_oscuro');
             localStorage.setItem('modoOscuro', JSON.stringify(true));
             document.body.classList.toggle('dark');
             this.labelCheck = true;
@@ -405,12 +400,14 @@ let MenuComponent = class MenuComponent {
     dyslexicFont() {
         this.dyslexicMode = localStorage.getItem('dyslexic');
         if (this.dyslexicMode == 'true') {
+            this.gaService.googleAnalyticsModos('modo_dislexia', 'desactivar_dislexia');
             localStorage.removeItem('dyslexic');
             document.body.classList.toggle('dyslexic');
             this.dyslexic = localStorage.getItem('dyslexic');
             this.dyslexicCheck = false;
         }
         else {
+            this.gaService.googleAnalyticsModos('modo_dislexia', 'activar_dislexia');
             localStorage.setItem('dyslexic', JSON.stringify(true));
             document.body.classList.toggle('dyslexic');
             this.dyslexicCheck = true;
@@ -433,7 +430,7 @@ let MenuComponent = class MenuComponent {
 MenuComponent.ctorParameters = () => [
     { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_3__.MenuController },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__.Router },
-    { type: src_app_services_auth_service__WEBPACK_IMPORTED_MODULE_2__.AuthService }
+    { type: src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_2__.GoogleAnalyticsService }
 ];
 MenuComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_5__.__decorate)([
     (0,_angular_core__WEBPACK_IMPORTED_MODULE_6__.Component)({
@@ -839,12 +836,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "TextToSpeechComponent": () => (/* binding */ TextToSpeechComponent)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! tslib */ 98806);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! tslib */ 98806);
 /* harmony import */ var _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_text_to_speech_component_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !./node_modules/@ngtools/webpack/src/loaders/direct-resource.js!./text-to-speech.component.html */ 94466);
 /* harmony import */ var _text_to_speech_component_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./text-to-speech.component.scss */ 19792);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/core */ 14001);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/core */ 14001);
 /* harmony import */ var _capacitor_community_text_to_speech__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @capacitor-community/text-to-speech */ 78667);
-/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ionic/angular */ 78099);
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ionic/angular */ 78099);
+/* harmony import */ var src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/services/google-analytics.service */ 81679);
+
 
 
 
@@ -853,26 +852,33 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let TextToSpeechComponent = class TextToSpeechComponent {
-    constructor(platform, loading) {
+    constructor(platform, loading, gaService) {
         this.platform = platform;
         this.loading = loading;
+        this.gaService = gaService;
         this.viewImage = true;
         this.rate = 1;
     }
     ngOnInit() {
-        if (this.platform.is("ios") || this.platform.is("iphone")) {
+        if (this.platform.is('ios') || this.platform.is('iphone')) {
             this.rate = 1.4;
         }
     }
     ngOnDestroy() {
         this.stopTextToSpeech();
     }
+    googleAnalyticsAudioStart() {
+        this.gaService.googleAnalyticsAudioStart(this.nombre);
+    }
+    googleAnalyticsAudioStop() {
+        this.gaService.googleAnalyticsAudioStop(this.nombre);
+    }
     presentLoading() {
-        return (0,tslib__WEBPACK_IMPORTED_MODULE_3__.__awaiter)(this, void 0, void 0, function* () {
+        return (0,tslib__WEBPACK_IMPORTED_MODULE_4__.__awaiter)(this, void 0, void 0, function* () {
             const loading = yield this.loading.create({
                 cssClass: 'my-custom-class',
                 message: 'Por favor aguarde, procesando texto',
-                duration: 2000
+                duration: 2000,
             });
             yield loading.present();
             const { role, data } = yield loading.onDidDismiss();
@@ -880,13 +886,15 @@ let TextToSpeechComponent = class TextToSpeechComponent {
         });
     }
     playTextToSpeech() {
-        return (0,tslib__WEBPACK_IMPORTED_MODULE_3__.__awaiter)(this, void 0, void 0, function* () {
+        return (0,tslib__WEBPACK_IMPORTED_MODULE_4__.__awaiter)(this, void 0, void 0, function* () {
             this.presentLoading();
             this.viewImage = false;
             let arrText = this.texto.split('.');
             //console.log(arrText)
             _capacitor_community_text_to_speech__WEBPACK_IMPORTED_MODULE_2__.TextToSpeech.speak({ text: this.texto, lang: 'es-AR', rate: this.rate })
-                .then(() => { this.stopTextToSpeech(); })
+                .then(() => {
+                this.stopTextToSpeech();
+            })
                 .catch((reason) => 
             // this.loading.dismiss()
             console.log(reason));
@@ -895,20 +903,22 @@ let TextToSpeechComponent = class TextToSpeechComponent {
     stopTextToSpeech() {
         //        this.loading.dismiss();
         this.viewImage = true;
-        _capacitor_community_text_to_speech__WEBPACK_IMPORTED_MODULE_2__.TextToSpeech.speak({ text: "", lang: 'es-AR', rate: 1 })
+        _capacitor_community_text_to_speech__WEBPACK_IMPORTED_MODULE_2__.TextToSpeech.speak({ text: '', lang: 'es-AR', rate: 1 })
             .then(() => console.log('Done'))
             .catch((reason) => console.log(reason));
     }
 };
 TextToSpeechComponent.ctorParameters = () => [
-    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_4__.Platform },
-    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_4__.LoadingController }
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_5__.Platform },
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_5__.LoadingController },
+    { type: src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_3__.GoogleAnalyticsService }
 ];
 TextToSpeechComponent.propDecorators = {
-    texto: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_5__.Input, args: ['texto',] }]
+    texto: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_6__.Input, args: ['texto',] }],
+    nombre: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_6__.Input, args: ['nombre',] }]
 };
-TextToSpeechComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_3__.__decorate)([
-    (0,_angular_core__WEBPACK_IMPORTED_MODULE_5__.Component)({
+TextToSpeechComponent = (0,tslib__WEBPACK_IMPORTED_MODULE_4__.__decorate)([
+    (0,_angular_core__WEBPACK_IMPORTED_MODULE_6__.Component)({
         selector: 'app-text-to-speech',
         template: _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_text_to_speech_component_html__WEBPACK_IMPORTED_MODULE_0__["default"],
         styles: [_text_to_speech_component_scss__WEBPACK_IMPORTED_MODULE_1__]
@@ -931,7 +941,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "GpsProvider": () => (/* binding */ GpsProvider)
 /* harmony export */ });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! tslib */ 98806);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/core */ 14001);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/core */ 14001);
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @ionic/angular */ 78099);
 /* harmony import */ var _capacitor_geolocation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @capacitor/geolocation */ 2233);
 /* harmony import */ var _capacitor_device__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @capacitor/device */ 94219);
@@ -941,6 +951,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ 85029);
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs/operators */ 88377);
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs */ 64008);
+/* harmony import */ var _angular_fire_compat_analytics__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/fire/compat/analytics */ 80843);
+
 
 
 
@@ -951,14 +963,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let GpsProvider = class GpsProvider {
-    constructor(platform, http) {
+    constructor(platform, http, ga) {
         this.platform = platform;
         this.http = http;
+        this.ga = ga;
         this.gps = false;
         this.pais = null;
         this.unsubscribe$ = new rxjs__WEBPACK_IMPORTED_MODULE_3__.Subject();
         this.getDeviceInfo = () => (0,tslib__WEBPACK_IMPORTED_MODULE_4__.__awaiter)(this, void 0, void 0, function* () {
             this.deviceInfo = yield _capacitor_device__WEBPACK_IMPORTED_MODULE_1__.Device.getInfo();
+            let deviceID = (yield _capacitor_device__WEBPACK_IMPORTED_MODULE_1__.Device.getId()).uuid;
+            this.ga.setUserId(deviceID);
         });
         console.log('provider.server');
     }
@@ -980,8 +995,12 @@ let GpsProvider = class GpsProvider {
                         };
                         console.log('provider: ', this.posicion);
                         let res = this.getLocation(this.posicion.longitud, this.posicion.latitud);
+                        let resDepto = this.getLocationDepto(this.posicion.longitud, this.posicion.latitud);
                         res.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_5__.takeUntil)(this.unsubscribe$)).subscribe((res) => {
                             this.pais = res;
+                        });
+                        resDepto.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_5__.takeUntil)(this.unsubscribe$)).subscribe((region) => {
+                            this.ga.setUserProperties({ departamento: region });
                         });
                     }
                     else {
@@ -1012,15 +1031,21 @@ let GpsProvider = class GpsProvider {
     getLocation(lng, lat) {
         return this.http
             .get(`${src_environments_environment__WEBPACK_IMPORTED_MODULE_2__.environment.urlMopboxDepto}${lng},${lat}.json?access_token=${src_environments_environment__WEBPACK_IMPORTED_MODULE_2__.environment.mapBoxToken}`)
-            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_6__.tap)(a => console.log(a)), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_7__.map)((depto) => depto.features[depto.features.length - 1].text), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_5__.takeUntil)(this.unsubscribe$));
+            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_6__.tap)((a) => console.log(a)), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_7__.map)((depto) => depto.features[depto.features.length - 1].text), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_5__.takeUntil)(this.unsubscribe$));
+    }
+    getLocationDepto(lng, lat) {
+        return this.http
+            .get(`${src_environments_environment__WEBPACK_IMPORTED_MODULE_2__.environment.urlMopboxDepto}${lng},${lat}.json?access_token=${src_environments_environment__WEBPACK_IMPORTED_MODULE_2__.environment.mapBoxToken}`)
+            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_6__.tap)((a) => console.log(a)), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_7__.map)((depto) => depto.features[depto.features.length - 2].text), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_5__.takeUntil)(this.unsubscribe$));
     }
 };
 GpsProvider.ctorParameters = () => [
     { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_8__.Platform },
-    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_9__.HttpClient }
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_9__.HttpClient },
+    { type: _angular_fire_compat_analytics__WEBPACK_IMPORTED_MODULE_10__.AngularFireAnalytics }
 ];
 GpsProvider = (0,tslib__WEBPACK_IMPORTED_MODULE_4__.__decorate)([
-    (0,_angular_core__WEBPACK_IMPORTED_MODULE_10__.Injectable)({
+    (0,_angular_core__WEBPACK_IMPORTED_MODULE_11__.Injectable)({
         providedIn: 'root',
     })
 ], GpsProvider);
@@ -1029,142 +1054,104 @@ GpsProvider = (0,tslib__WEBPACK_IMPORTED_MODULE_4__.__decorate)([
 
 /***/ }),
 
-/***/ 36636:
-/*!******************************************!*\
-  !*** ./src/app/services/auth.service.ts ***!
-  \******************************************/
+/***/ 81679:
+/*!******************************************************!*\
+  !*** ./src/app/services/google-analytics.service.ts ***!
+  \******************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "AuthService": () => (/* binding */ AuthService)
+/* harmony export */   "GoogleAnalyticsService": () => (/* binding */ GoogleAnalyticsService)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! tslib */ 98806);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ 14001);
-/* harmony import */ var firebase_auth__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! firebase/auth */ 51070);
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ 13252);
-/* harmony import */ var _angular_fire_compat_auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/fire/compat/auth */ 29774);
-/* harmony import */ var _angular_fire_compat_firestore__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/fire/compat/firestore */ 43059);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! tslib */ 98806);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 14001);
+/* harmony import */ var _angular_fire_compat_analytics__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/fire/compat/analytics */ 80843);
 
 
 
-
-
-
-let AuthService = class AuthService {
-    constructor(afStore, ngFireAuth, router, ngZone) {
-        this.afStore = afStore;
-        this.ngFireAuth = ngFireAuth;
-        this.router = router;
-        this.ngZone = ngZone;
-        this.ngFireAuth.authState.subscribe((user) => {
-            if (user) {
-                this.userData = user;
-                localStorage.setItem('user', JSON.stringify(this.userData));
-                JSON.parse(localStorage.getItem('user'));
-            }
-            else {
-                localStorage.setItem('user', null);
-                JSON.parse(localStorage.getItem('user'));
-            }
-        });
+let GoogleAnalyticsService = class GoogleAnalyticsService {
+    constructor(ga) {
+        this.ga = ga;
     }
-    /** login con email/password */
-    // signIn(email, password) {
-    //   return this.ngFireAuth.signInWithEmailAndPassword(email, password);
-    // }
-    /** registro con email/password */
-    // registerUser(email, password) {
-    //   return this.ngFireAuth.createUserWithEmailAndPassword(email, password);
-    // }
-    /** verificación de email para nuevos usuarios */
-    // sendVerificationMail() {
-    //   return this.ngFireAuth.currentUser.then((user) => {
-    //     return user.sendEmailVerification().then(() => {
-    //       this.router.navigate(['login']);
-    //     });
-    //   });
-    // }
-    /** recuperar password */
-    // passwordRecover(passwordResetEmail) {
-    //   return this.ngFireAuth
-    //     .sendPasswordResetEmail(passwordResetEmail)
-    //     .then(() => {
-    //       window.alert(
-    //         'Password reset email has been sent, please check your inbox.'
-    //       );
-    //     })
-    //     .catch((error) => {
-    //       window.alert(error);
-    //     });
-    // }
-    /** retorna true cuando el usuario está logueado */
-    // get isLoggedIn(): boolean {
-    //   const user = JSON.parse(localStorage.getItem('user'));
-    //   return user !== null && user.emailVerified !== false ? true : false;
-    // }
-    /** retorna true cuando el usuario verificó el email */
-    // get isEmailVerified(): boolean {
-    //   const user = JSON.parse(localStorage.getItem('user'));
-    //   return user.emailVerified !== false ? true : false;
-    // }
-    /** login con Google */
-    googleAuth() {
-        return this.authLogin(new firebase_auth__WEBPACK_IMPORTED_MODULE_0__.GoogleAuthProvider());
-    }
-    /** login con Facebook */
-    facebookAuth() {
-        return this.authLogin(new firebase_auth__WEBPACK_IMPORTED_MODULE_0__.FacebookAuthProvider());
-    }
-    /** login con providers (proveedores de firebase) */
-    authLogin(provider) {
-        return this.ngFireAuth
-            .signInWithPopup(provider)
-            .then((result) => {
-            console.log("Soy result: ", result);
-            this.ngZone.run(() => {
-                this.router.navigate(['home-menu']);
+    /**métodos compartidos */
+    googleAnalyticsPantallas(pantalla_visitada, nombre) {
+        this.ga.logEvent('vistas_de_pantalla', { pantalla_visitada });
+        if (pantalla_visitada === 'detalle_de_lugar') {
+            let nombre_lugar_visitado = nombre;
+            this.ga.logEvent(pantalla_visitada + '_visitas', {
+                nombre_lugar_visitado,
             });
-            this.setUserData(result.user);
-        })
-            .catch((error) => {
-            window.alert(error);
+        }
+        else if (pantalla_visitada === 'detalle_de_evento') {
+            let nombre_evento_visitado = nombre;
+            this.ga.logEvent(pantalla_visitada + '_visitas', {
+                nombre_evento_visitado,
+            });
+        }
+        else if (pantalla_visitada === 'descripcion_lugar') {
+            let nombre_descripcion_lugar_visitada = nombre;
+            this.ga.logEvent(pantalla_visitada + '_visitas', {
+                nombre_descripcion_lugar_visitada,
+            });
+        }
+        else if (pantalla_visitada === 'mapa') {
+            let nombre_mapa_visto = nombre;
+            this.ga.logEvent(pantalla_visitada + '_lugar_visto', {
+                nombre_mapa_visto,
+            });
+        }
+    }
+    googleAnalyticsCompartir(tipo_compartir, nombre_compartir) {
+        this.ga.logEvent('compartir', { tipo_compartir, nombre_compartir });
+    }
+    googleAnalyticsRedesSociales(pantalla_red_social, tipo_red_social) {
+        this.ga.logEvent('vistas_redes_sociales', {
+            pantalla_red_social,
+            tipo_red_social,
         });
     }
-    /** almacenar user en localstorage */
-    setUserData(user) {
-        const userRef = this.afStore.doc(`users/${user.uid}`);
-        const userData = {
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-            emailVerified: user.emailVerified,
-        };
-        return userRef.set(userData, {
-            merge: true,
-        });
+    googleAnalyticsReproducirVideo(tipo_video, nombre_video) {
+        this.ga.logEvent('reproducir_video', { tipo_video, nombre_video });
     }
-    /** cerrar sesión */
-    signOut() {
-        return this.ngFireAuth.signOut().then(() => {
-            localStorage.removeItem('user');
-            this.router.navigate(['auth']);
-        });
+    /**métodos lugares */
+    googleAnalyticsAccesibilidad() {
+        this.ga.logEvent('accesibilidad');
+    }
+    googleAnalyticsPuntosDeInteres() {
+        this.ga.logEvent('puntos_de_interes');
+    }
+    googleAnalyticsAudioStart(nombre_audio_start) {
+        this.ga.logEvent('audio_lugares_start', { nombre_audio_start });
+    }
+    googleAnalyticsAudioStop(nombre_audio_stop) {
+        this.ga.logEvent('audio_lugares_stop', { nombre_audio_stop });
+    }
+    /**métodos eventos */
+    googleAnalyticsMapa(nombre_mapa_evento) {
+        this.ga.logEvent('ubicacion_evento', { nombre_mapa_evento });
+    }
+    /**métodos interfaz */
+    googleAnalyticsModos(tipo_modo, toggle) {
+        this.ga.logEvent('modos', { tipo_modo, toggle });
+    }
+    /**métodos filtros */
+    googleAnalyticsFiltroHome(tipo_filtro_home, seleccion_home) {
+        this.ga.logEvent('filtro_home', { tipo_filtro_home, seleccion_home });
+    }
+    googleAnalyticsFiltrosPantallas(filtro_pantalla, filtro_tipo) {
+        this.ga.logEvent('filtros_pantallas', { filtro_pantalla, filtro_tipo });
     }
 };
-AuthService.ctorParameters = () => [
-    { type: _angular_fire_compat_firestore__WEBPACK_IMPORTED_MODULE_1__.AngularFirestore },
-    { type: _angular_fire_compat_auth__WEBPACK_IMPORTED_MODULE_2__.AngularFireAuth },
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__.Router },
-    { type: _angular_core__WEBPACK_IMPORTED_MODULE_4__.NgZone }
+GoogleAnalyticsService.ctorParameters = () => [
+    { type: _angular_fire_compat_analytics__WEBPACK_IMPORTED_MODULE_0__.AngularFireAnalytics }
 ];
-AuthService = (0,tslib__WEBPACK_IMPORTED_MODULE_5__.__decorate)([
-    (0,_angular_core__WEBPACK_IMPORTED_MODULE_4__.Injectable)({
+GoogleAnalyticsService = (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__decorate)([
+    (0,_angular_core__WEBPACK_IMPORTED_MODULE_2__.Injectable)({
         providedIn: 'root',
     })
-], AuthService);
+], GoogleAnalyticsService);
 
 
 
@@ -2260,7 +2247,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-menu side=\"start\" menuId=\"first\" contentId=\"main\">\r\n  <ion-header>\r\n    <ion-toolbar color=\"favorite\">\r\n      <ion-title color=\"back\">Configuraciones</ion-title>\r\n      <ion-buttons slot=\"end\">\r\n        <i\r\n          class=\"fi fi-rr-arrow-left closeMenu\"\r\n          (click)=\"toggleMenu()\"\r\n        ></i>\r\n      </ion-buttons>\r\n    </ion-toolbar>\r\n  </ion-header>\r\n  <ion-content>\r\n    <ion-list>\r\n      <ion-item>\r\n        <ion-text>\r\n          <h3>Interfaz</h3>\r\n        </ion-text>\r\n      </ion-item>\r\n      <ion-item>\r\n        <ion-icon *ngIf=\"labelCheck == true\" slot=\"start\" name=\"sunny-outline\"></ion-icon>\r\n        <ion-icon *ngIf=\"labelCheck == false\" slot=\"start\" name=\"moon-outline\"></ion-icon>\r\n        <ion-label *ngIf=\"labelCheck == true\" class=\"fontOption\"> Tema claro</ion-label>\r\n        <ion-label *ngIf=\"labelCheck == false\" class=\"fontOption\"> Tema oscuro</ion-label>\r\n        <ion-toggle\r\n          *ngIf=\"modoOscuro == 'true'\"\r\n          slot=\"end\"\r\n          checked\r\n          (ionChange)=\"changeTheme()\"\r\n          mode=\"ios\"\r\n        ></ion-toggle>\r\n        <ion-toggle\r\n          *ngIf=\"modoOscuro == null\"\r\n          slot=\"end\"\r\n          (ionChange)=\"changeTheme()\"\r\n          mode=\"ios\"\r\n        ></ion-toggle>\r\n      </ion-item>\r\n      <ion-item>\r\n        <ion-icon slot=\"start\" name=\"text-outline\"></ion-icon>\r\n        <ion-label *ngIf=\"dyslexicCheck == false\" class=\"fontOption\"> Fuente dislexia</ion-label>\r\n        <ion-label *ngIf=\"dyslexicCheck == true\" class=\"fontOption\">Quitar fuente</ion-label>\r\n        <ion-toggle\r\n          *ngIf=\"dyslexic == 'true'\"\r\n          slot=\"end\"\r\n          checked\r\n          (ionChange)=\"dyslexicFont()\"\r\n          mode=\"ios\"\r\n        ></ion-toggle>\r\n        <ion-toggle\r\n          *ngIf=\"dyslexic == null\"\r\n          slot=\"end\"\r\n          (ionChange)=\"dyslexicFont()\"\r\n          mode=\"ios\"\r\n        ></ion-toggle>\r\n      </ion-item>\r\n      <ion-item>\r\n        <ion-text>\r\n          <h3>Más opciones</h3>\r\n        </ion-text>\r\n      </ion-item>\r\n      <ion-item (click)=\"sleep()\">\r\n        <ion-icon slot=\"start\" name=\"bed-outline\"></ion-icon>\r\n        <ion-label class=\"fontOption\">Donde dormir</ion-label>\r\n      </ion-item>\r\n      <ion-item (click)=\"artist()\">\r\n        <ion-icon slot=\"start\" name=\"color-palette-outline\"></ion-icon>\r\n        <ion-label class=\"fontOption\">Artistas</ion-label>\r\n      </ion-item>\r\n    </ion-list>\r\n \r\n  </ion-content>\r\n  <ion-footer class=\"ion-no-border\">\r\n    <ion-item lines=\"none\" (click)=\"authService.signOut(); toggleMenu()\">\r\n      <ion-icon slot=\"start\" name=\"log-out-outline\"></ion-icon>\r\n      <ion-label class=\"fontOption\">Cerrar Sesión</ion-label>\r\n    </ion-item>\r\n  </ion-footer>\r\n</ion-menu>\r\n");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-menu side=\"start\" menuId=\"first\" contentId=\"main\">\r\n  <ion-header>\r\n    <ion-toolbar color=\"favorite\">\r\n      <ion-title color=\"back\">Configuraciones</ion-title>\r\n      <ion-buttons slot=\"end\">\r\n        <i\r\n          class=\"fi fi-rr-arrow-left closeMenu\"\r\n          (click)=\"toggleMenu()\"\r\n        ></i>\r\n      </ion-buttons>\r\n    </ion-toolbar>\r\n  </ion-header>\r\n  <ion-content>\r\n    <ion-list>\r\n      <ion-item>\r\n        <ion-text>\r\n          <h3>Interfaz</h3>\r\n        </ion-text>\r\n      </ion-item>\r\n      <ion-item>\r\n        <ion-icon *ngIf=\"labelCheck == true\" slot=\"start\" name=\"sunny-outline\"></ion-icon>\r\n        <ion-icon *ngIf=\"labelCheck == false\" slot=\"start\" name=\"moon-outline\"></ion-icon>\r\n        <ion-label *ngIf=\"labelCheck == true\" class=\"fontOption\"> Tema claro</ion-label>\r\n        <ion-label *ngIf=\"labelCheck == false\" class=\"fontOption\"> Tema oscuro</ion-label>\r\n        <ion-toggle\r\n          *ngIf=\"modoOscuro == 'true'\"\r\n          slot=\"end\"\r\n          checked\r\n          (ionChange)=\"changeTheme()\"\r\n          mode=\"ios\"\r\n        ></ion-toggle>\r\n        <ion-toggle\r\n          *ngIf=\"modoOscuro == null\"\r\n          slot=\"end\"\r\n          (ionChange)=\"changeTheme()\"\r\n          mode=\"ios\"\r\n        ></ion-toggle>\r\n      </ion-item>\r\n      <ion-item>\r\n        <ion-icon slot=\"start\" name=\"text-outline\"></ion-icon>\r\n        <ion-label *ngIf=\"dyslexicCheck == false\" class=\"fontOption\"> Fuente dislexia</ion-label>\r\n        <ion-label *ngIf=\"dyslexicCheck == true\" class=\"fontOption\">Quitar fuente</ion-label>\r\n        <ion-toggle\r\n          *ngIf=\"dyslexic == 'true'\"\r\n          slot=\"end\"\r\n          checked\r\n          (ionChange)=\"dyslexicFont()\"\r\n          mode=\"ios\"\r\n        ></ion-toggle>\r\n        <ion-toggle\r\n          *ngIf=\"dyslexic == null\"\r\n          slot=\"end\"\r\n          (ionChange)=\"dyslexicFont()\"\r\n          mode=\"ios\"\r\n        ></ion-toggle>\r\n      </ion-item>\r\n      <ion-item>\r\n        <ion-text>\r\n          <h3>Más opciones</h3>\r\n        </ion-text>\r\n      </ion-item>\r\n      <ion-item (click)=\"sleep()\">\r\n        <ion-icon slot=\"start\" name=\"bed-outline\"></ion-icon>\r\n        <ion-label class=\"fontOption\">Donde dormir</ion-label>\r\n      </ion-item>\r\n      <ion-item (click)=\"artist()\">\r\n        <ion-icon slot=\"start\" name=\"color-palette-outline\"></ion-icon>\r\n        <ion-label class=\"fontOption\">Artistas</ion-label>\r\n      </ion-item>\r\n    </ion-list>\r\n \r\n  </ion-content>\r\n</ion-menu>\r\n");
 
 /***/ }),
 
@@ -2350,7 +2337,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("    <ion-fab vertical=\"bottom\" color=\"red\" horizontal=\"end\" edge slot=\"fixed\" [style.display]=\"viewImage == false ? 'flex': 'none'\">\r\n        <ion-fab-button color=\"circuits\">\r\n            <ion-icon  color=\"light\" name=\"stop\" (click)=\"stopTextToSpeech()\"></ion-icon>\r\n        </ion-fab-button>\r\n    </ion-fab>\r\n    <ion-fab vertical=\"bottom\" horizontal=\"end\" edge slot=\"fixed\" [style.display]=\"viewImage == true ? 'flex': 'none'\">\r\n        <ion-fab-button color=\"circuits\">\r\n            <ion-icon color=\"light\" class=\"hecho\" name=\"play\" (click)=\"playTextToSpeech()\" ></ion-icon>\r\n        </ion-fab-button>\r\n    </ion-fab>");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("    <ion-fab vertical=\"bottom\" color=\"red\" horizontal=\"end\" edge slot=\"fixed\" [style.display]=\"viewImage == false ? 'flex': 'none'\">\r\n        <ion-fab-button color=\"circuits\">\r\n            <ion-icon  color=\"light\" name=\"stop\" (click)=\"stopTextToSpeech(); googleAnalyticsAudioStop()\"></ion-icon>\r\n        </ion-fab-button>\r\n    </ion-fab>\r\n    <ion-fab vertical=\"bottom\" horizontal=\"end\" edge slot=\"fixed\" [style.display]=\"viewImage == true ? 'flex': 'none'\">\r\n        <ion-fab-button color=\"circuits\">\r\n            <ion-icon color=\"light\" class=\"hecho\" name=\"play\" (click)=\"playTextToSpeech(); googleAnalyticsAudioStart()\" ></ion-icon>\r\n        </ion-fab-button>\r\n    </ion-fab>");
 
 /***/ }),
 

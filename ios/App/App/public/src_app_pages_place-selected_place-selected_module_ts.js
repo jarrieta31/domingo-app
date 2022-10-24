@@ -99,16 +99,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "PlaceSelectedPage": () => (/* binding */ PlaceSelectedPage)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! tslib */ 98806);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! tslib */ 98806);
 /* harmony import */ var _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_place_selected_page_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !./node_modules/@ngtools/webpack/src/loaders/direct-resource.js!./place-selected.page.html */ 73079);
 /* harmony import */ var _place_selected_page_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./place-selected.page.scss */ 1204);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/core */ 14001);
-/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @ionic/angular */ 78099);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/core */ 14001);
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @ionic/angular */ 78099);
 /* harmony import */ var src_app_services_database_place_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/services/database/place.service */ 22087);
 /* harmony import */ var _video_video_page__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../video/video.page */ 35652);
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/router */ 13252);
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/router */ 13252);
 /* harmony import */ var _components_preload_details_preload_details_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/preload-details/preload-details.component */ 60563);
 /* harmony import */ var _awesome_cordova_plugins_social_sharing_ngx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @awesome-cordova-plugins/social-sharing/ngx */ 90900);
+/* harmony import */ var src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! src/app/services/google-analytics.service */ 81679);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/common/http */ 83981);
+
+
 
 
 
@@ -120,15 +124,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let PlaceSelectedPage = class PlaceSelectedPage {
-    constructor(placeSvc, modalCtrl, router, actionSheetController, socialSharing) {
+    constructor(placeSvc, modalCtrl, router, actionSheetController, socialSharing, gaService, http) {
         this.placeSvc = placeSvc;
         this.modalCtrl = modalCtrl;
         this.router = router;
         this.actionSheetController = actionSheetController;
         this.socialSharing = socialSharing;
+        this.gaService = gaService;
+        this.http = http;
         this.place = null;
         this.near = [];
-        this.param = "";
+        this.param = '';
         this.slideOpts = {
             initialSlide: 0,
             speed: 400,
@@ -138,24 +144,26 @@ let PlaceSelectedPage = class PlaceSelectedPage {
         };
         this.videos = [];
         /**url load  */
-        this.preloadImage = "/assets/load_1.30.gif";
+        this.preloadImage = '/assets/load_1.30.gif';
         /**clase preload */
-        this.preloadClass = "img-principal";
+        this.preloadClass = 'img-principal';
         /**clase preload galeria*/
-        this.preloadClassGaleria = "img-galeria";
+        this.preloadClassGaleria = 'img-galeria';
         /**clase preload interes*/
-        this.preloadClassInteres = "img-interes";
+        this.preloadClassInteres = 'img-interes';
         /**url para compartir */
-        this.shareURL = "https://developer-dominga.web.app/share-place/";
+        this.shareURL = 'https://developer-dominga.web.app/share-place/';
     }
     ngOnInit() {
+        document.title = 'Detalle de Lugar';
         this.place_suscription = this.placeSvc.place_selected.subscribe((res) => {
             this.place = res;
+            this.gaService.googleAnalyticsPantallas('detalle_de_lugar', res.nombre);
             if (this.place.videos.length > 0) {
                 this.videos = this.place.videos.filter((item) => item.url !== null &&
                     item.url !== undefined &&
-                    item.url !== "" &&
-                    item.url !== " ");
+                    item.url !== '' &&
+                    item.url !== ' ');
             }
             this.placeSvc.getPlaceNear();
             this.near_places = this.placeSvc.near_places.subscribe((res) => {
@@ -172,8 +180,31 @@ let PlaceSelectedPage = class PlaceSelectedPage {
     getPlace(id) {
         this.placeSvc.getPlaceId(id);
     }
-    socialSharingShare(nombre, id) {
-        this.socialSharing.share(nombre, null, null, this.shareURL + id);
+    socialSharingShare(nombre, id, imagen) {
+        // console.log(imagen)
+        // fetch(imagen, {
+        //   method: 'GET',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   mode: 'no-cors',
+        // })
+        //   .then((res) => res.blob())
+        //   .then((imgBlob) => {
+        //     console.log(imgBlob)
+        //     let objectURL = URL.createObjectURL(imgBlob);
+        //     console.log(objectURL);
+        //   })
+        //   .catch((error) => {
+        //     console.log('Request failed', error);
+        //   });
+        let image = [imagen];
+        this.gaService.googleAnalyticsCompartir('lugar', 'lugar_' + nombre);
+        this.socialSharing.shareWithOptions({
+            message: nombre,
+            subject: nombre,
+            files: image,
+            url: this.shareURL + id,
+            chooserTitle: 'Compartiendo ' + nombre,
+        });
     }
     /**
      * Al seleccionar una imagen de la mini galería modifica la imagen principal
@@ -182,17 +213,18 @@ let PlaceSelectedPage = class PlaceSelectedPage {
         this.preloadDetails.url = src;
     }
     irHome() {
-        this.router.navigate(["/tabs/place"]);
+        this.router.navigate(['/tabs/place']);
     }
     /**
      * Abre modal para reproducir video
      * @param url - URL del video que se va a ejecutar
      */
-    verVideo(url) {
-        return (0,tslib__WEBPACK_IMPORTED_MODULE_6__.__awaiter)(this, void 0, void 0, function* () {
+    verVideo(url, nombre) {
+        return (0,tslib__WEBPACK_IMPORTED_MODULE_7__.__awaiter)(this, void 0, void 0, function* () {
+            this.gaService.googleAnalyticsReproducirVideo('lugares', nombre);
             const video = yield this.modalCtrl.create({
                 component: _video_video_page__WEBPACK_IMPORTED_MODULE_3__.VideoPage,
-                cssClass: "modal-video",
+                cssClass: 'modal-video',
                 backdropDismiss: false,
                 showBackdrop: true,
                 componentProps: {
@@ -208,71 +240,71 @@ let PlaceSelectedPage = class PlaceSelectedPage {
      * que brinda opciones de como llegar al mismo ya se en auto, bicicleta o caminando
      */
     abrirMapaActionSheet() {
-        return (0,tslib__WEBPACK_IMPORTED_MODULE_6__.__awaiter)(this, void 0, void 0, function* () {
+        return (0,tslib__WEBPACK_IMPORTED_MODULE_7__.__awaiter)(this, void 0, void 0, function* () {
             const actionSheet = yield this.actionSheetController.create({
-                header: "Abrir Mapa",
-                cssClass: "my-custom-class",
+                header: 'Abrir Mapa',
+                cssClass: 'my-custom-class',
                 buttons: [
                     {
-                        text: "Ir en auto",
-                        icon: "car-sport",
+                        text: 'Ir en auto',
+                        icon: 'car-sport',
                         handler: () => {
                             //Abre el mapa en modo auto
                             this.router.navigate([
-                                "/map",
+                                '/map',
                                 this.place.nombre,
                                 {
                                     longitud: this.place.ubicacion.lng,
                                     latitud: this.place.ubicacion.lat,
                                     tipo: this.place.tipo,
                                     id: this.place.id,
-                                    profile: "mapbox/driving-traffic",
+                                    profile: 'mapbox/driving-traffic',
                                 },
                             ]);
                         },
                     },
                     {
-                        text: "Ir caminando",
-                        icon: "walk",
+                        text: 'Ir caminando',
+                        icon: 'walk',
                         handler: () => {
                             this.router.navigate([
-                                "/map",
+                                '/map',
                                 this.place.nombre,
                                 {
                                     longitud: this.place.ubicacion.lng,
                                     latitud: this.place.ubicacion.lat,
                                     tipo: this.place.tipo,
                                     id: this.place.id,
-                                    profile: "mapbox/walking",
+                                    profile: 'mapbox/walking',
                                 },
                             ]);
-                            console.log("Ir caminando");
+                            console.log('Ir caminando');
                         },
                     },
                     {
-                        text: "Ir en bicicleta",
-                        icon: "bicycle-outline",
+                        text: 'Ir en bicicleta',
+                        icon: 'bicycle-outline',
                         handler: () => {
                             this.router.navigate([
-                                "/map",
+                                '/map',
                                 this.place.nombre,
                                 {
                                     longitud: this.place.ubicacion.lng,
                                     latitud: this.place.ubicacion.lat,
                                     tipo: this.place.tipo,
                                     id: this.place.id,
-                                    profile: "mapbox/driving",
+                                    profile: 'mapbox/driving',
                                 },
                             ]);
-                            console.log("Ir en Bicicleta");
+                            console.log('Ir en Bicicleta');
                         },
                     },
                     {
-                        text: "Cancelar",
-                        icon: "close",
-                        role: "cancel",
+                        text: 'Cancelar',
+                        icon: 'close',
+                        role: 'cancel',
                         handler: () => {
-                            console.log("Cancel clicked");
+                            console.log('Cancel clicked');
                         },
                     },
                 ],
@@ -283,17 +315,19 @@ let PlaceSelectedPage = class PlaceSelectedPage {
 };
 PlaceSelectedPage.ctorParameters = () => [
     { type: src_app_services_database_place_service__WEBPACK_IMPORTED_MODULE_2__.PlaceService },
-    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_7__.ModalController },
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_8__.Router },
-    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_7__.ActionSheetController },
-    { type: _awesome_cordova_plugins_social_sharing_ngx__WEBPACK_IMPORTED_MODULE_5__.SocialSharing }
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_8__.ModalController },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_9__.Router },
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_8__.ActionSheetController },
+    { type: _awesome_cordova_plugins_social_sharing_ngx__WEBPACK_IMPORTED_MODULE_5__.SocialSharing },
+    { type: src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_6__.GoogleAnalyticsService },
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_10__.HttpClient }
 ];
 PlaceSelectedPage.propDecorators = {
-    preloadDetails: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_9__.ViewChild, args: [_components_preload_details_preload_details_component__WEBPACK_IMPORTED_MODULE_4__.PreloadDetailsComponent, { static: true },] }]
+    preloadDetails: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_11__.ViewChild, args: [_components_preload_details_preload_details_component__WEBPACK_IMPORTED_MODULE_4__.PreloadDetailsComponent, { static: true },] }]
 };
-PlaceSelectedPage = (0,tslib__WEBPACK_IMPORTED_MODULE_6__.__decorate)([
-    (0,_angular_core__WEBPACK_IMPORTED_MODULE_9__.Component)({
-        selector: "app-place-selected",
+PlaceSelectedPage = (0,tslib__WEBPACK_IMPORTED_MODULE_7__.__decorate)([
+    (0,_angular_core__WEBPACK_IMPORTED_MODULE_11__.Component)({
+        selector: 'app-place-selected',
         template: _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_place_selected_page_html__WEBPACK_IMPORTED_MODULE_0__["default"],
         styles: [_place_selected_page_scss__WEBPACK_IMPORTED_MODULE_1__]
     })
@@ -313,7 +347,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-header>\r\n  <ion-toolbar color=\"information\">\r\n    <ion-buttons slot=\"start\">\r\n      <ion-back-button\r\n        (click)=\"irHome()\"\r\n        color=\"back\"\r\n        text=\"\"\r\n      ></ion-back-button>\r\n    </ion-buttons>\r\n    <ion-title color=\"back\" id=\"nombre\">{{place.nombre}}</ion-title>\r\n    <ion-icon\r\n      color=\"back\"\r\n      slot=\"end\"\r\n      class=\"share\"\r\n      name=\"share-social-sharp\"\r\n      (click)=\"socialSharingShare(place.nombre, place.id)\"\r\n    ></ion-icon>\r\n  </ion-toolbar>\r\n</ion-header>\r\n<ion-content>\r\n  <ion-fab\r\n    *ngIf=\"videos.length > 0\"\r\n    vertical=\"top\"\r\n    horizontal=\"start\"\r\n    slot=\"fixed\"\r\n  >\r\n    <ion-fab-button color=\"danger\">\r\n      <ion-icon name=\"logo-youtube\"></ion-icon>\r\n    </ion-fab-button>\r\n    <ion-fab-list side=\"bottom\" class=\"lista_videos\">\r\n      <ion-fab-button class=\"btn_video\" *ngFor=\"let video of videos\">\r\n        <ion-icon\r\n          (click)=\"verVideo(video.url)\"\r\n          name=\"videocam-outline\"\r\n          style=\"font-size: 180%\"\r\n        ></ion-icon>\r\n      </ion-fab-button>\r\n    </ion-fab-list>\r\n  </ion-fab>\r\n  <div class=\"padre\" id=\"place-container\">\r\n    <div class=\"diva\">\r\n      <app-preload-details\r\n        #foto\r\n        [url]=\"place.imagenPrincipal.url\"\r\n        [alt]=\"place.nombre\"\r\n        [urlPreload]=\"preloadImage\"\r\n        [clase]=\"preloadClass\"\r\n      ></app-preload-details>\r\n    </div>\r\n    <div class=\"divb\">\r\n      <ion-slides class=\"slidePadre\" pager=\"false\" [options]=\"slideOpts\">\r\n        <ion-slide class=\"slideHijo\" *ngFor=\"let img of place.imagenes\">\r\n          <div>\r\n            <app-preload-details\r\n              #foto\r\n              (click)=\"cambiarImagen(img.url)\"\r\n              [url]=\"img.url\"\r\n              [alt]=\"img.url\"\r\n              [urlPreload]=\"preloadImage\"\r\n              [clase]=\"preloadClassGaleria\"\r\n            ></app-preload-details>\r\n          </div>\r\n        </ion-slide>\r\n      </ion-slides>\r\n    </div>\r\n    <div class=\"divc\">\r\n      <div class=\"iconos\">\r\n        <div class=\"iconAuto\" *ngIf=\"place.auto == true\">\r\n          <ion-icon name=\"car-sport-outline\"></ion-icon>\r\n        </div>\r\n        <div class=\"iconEstilos\" *ngIf=\"place.bicicleta == true\">\r\n          <ion-icon name=\"bicycle-outline\"></ion-icon>\r\n        </div>\r\n        <div class=\"iconEstilos\" *ngIf=\"place.caminar == true\">\r\n          <ion-icon name=\"walk-outline\"></ion-icon>\r\n        </div>\r\n        <!-- <div id=\"dist\">\r\n                  <div>{{ distancia | formatDistancia }}</div>                 \r\n              </div> -->\r\n      </div>\r\n      <p\r\n        class=\"text\"\r\n        id=\"place-description\"\r\n        [routerLink]=\"['/descripcion', place.id]\"\r\n        [innerHTML]=\"place.descripcionCorta\"\r\n      ></p>\r\n    </div>\r\n    <div class=\"divd\">\r\n      <app-minimapa [lugarActual]=\"place\"></app-minimapa>\r\n    </div>\r\n    <h6 class=\"interes\">Te puede interesar</h6>\r\n    <div class=\"divf\">\r\n      <a\r\n        class=\"sugerencia\"\r\n        (click)=\"getPlace(sug.id)\"\r\n        *ngFor=\"let sug of near\"\r\n        [routerLink]=\"['/place-selected',sug.id]\"\r\n      >\r\n        <div class=\"sug\">\r\n          <app-preload-details\r\n            [url]=\"sug.image.url\"\r\n            [alt]=\"sug.image.url\"\r\n            [urlPreload]=\"preloadImage\"\r\n            [clase]=\"preloadClassInteres\"\r\n          ></app-preload-details>\r\n        </div>\r\n        <div class=\"infoSug\">\r\n          <div class=\"sugNombre\">{{ sug.name }}</div>\r\n          <div class=\"sugDistancia\">\r\n            {{ sug.distance | formatDistancia }} desde {{ place.nombre }}\r\n          </div>\r\n        </div>\r\n      </a>\r\n    </div>\r\n  </div>\r\n</ion-content>\r\n");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-header>\r\n  <ion-toolbar color=\"information\">\r\n    <ion-buttons slot=\"start\">\r\n      <ion-back-button\r\n        (click)=\"irHome()\"\r\n        color=\"back\"\r\n        text=\"\"\r\n      ></ion-back-button>\r\n    </ion-buttons>\r\n    <ion-title color=\"back\" id=\"nombre\">{{place.nombre}}</ion-title>\r\n    <ion-icon\r\n      color=\"back\"\r\n      slot=\"end\"\r\n      class=\"share\"\r\n      name=\"share-social-sharp\"\r\n      (click)=\"socialSharingShare(place.nombre, place.id, place.imagenPrincipal.url)\"\r\n    ></ion-icon>\r\n  </ion-toolbar>\r\n</ion-header>\r\n<ion-content>\r\n  <ion-fab\r\n    *ngIf=\"videos.length > 0\"\r\n    vertical=\"top\"\r\n    horizontal=\"start\"\r\n    slot=\"fixed\"\r\n  >\r\n    <ion-fab-button color=\"danger\">\r\n      <ion-icon name=\"logo-youtube\"></ion-icon>\r\n    </ion-fab-button>\r\n    <ion-fab-list side=\"bottom\" class=\"lista_videos\">\r\n      <ion-fab-button class=\"btn_video\" *ngFor=\"let video of videos\">\r\n        <ion-icon\r\n          (click)=\"verVideo(video.url, place.nombre)\"\r\n          name=\"videocam-outline\"\r\n          style=\"font-size: 180%\"\r\n        ></ion-icon>\r\n      </ion-fab-button>\r\n    </ion-fab-list>\r\n  </ion-fab>\r\n  <div class=\"padre\" id=\"place-container\">\r\n    <div class=\"diva\">\r\n      <app-preload-details\r\n        #foto\r\n        [url]=\"place.imagenPrincipal.url\"\r\n        [alt]=\"place.nombre\"\r\n        [urlPreload]=\"preloadImage\"\r\n        [clase]=\"preloadClass\"\r\n      ></app-preload-details>\r\n    </div>\r\n    <div class=\"divb\">\r\n      <ion-slides class=\"slidePadre\" pager=\"false\" [options]=\"slideOpts\">\r\n        <ion-slide class=\"slideHijo\" *ngFor=\"let img of place.imagenes\">\r\n          <div>\r\n            <app-preload-details\r\n              #foto\r\n              (click)=\"cambiarImagen(img.url)\"\r\n              [url]=\"img.url\"\r\n              [alt]=\"img.url\"\r\n              [urlPreload]=\"preloadImage\"\r\n              [clase]=\"preloadClassGaleria\"\r\n            ></app-preload-details>\r\n          </div>\r\n        </ion-slide>\r\n      </ion-slides>\r\n    </div>\r\n    <div class=\"divc\">\r\n      <div class=\"iconos\">\r\n        <div class=\"iconAuto\" *ngIf=\"place.auto == true\">\r\n          <ion-icon name=\"car-sport-outline\"></ion-icon>\r\n        </div>\r\n        <div class=\"iconEstilos\" *ngIf=\"place.bicicleta == true\">\r\n          <ion-icon name=\"bicycle-outline\"></ion-icon>\r\n        </div>\r\n        <div class=\"iconEstilos\" *ngIf=\"place.caminar == true\">\r\n          <ion-icon name=\"walk-outline\"></ion-icon>\r\n        </div>\r\n        <!-- <div id=\"dist\">\r\n                  <div>{{ distancia | formatDistancia }}</div>                 \r\n              </div> -->\r\n      </div>\r\n      <p\r\n        class=\"text\"\r\n        id=\"place-description\"\r\n        [routerLink]=\"['/descripcion', place.id]\"\r\n        [innerHTML]=\"place.descripcionCorta\"\r\n      ></p>\r\n    </div>\r\n    <div class=\"divd\">\r\n      <app-minimapa [lugarActual]=\"place\"></app-minimapa>\r\n    </div>\r\n    <h6 class=\"interes\">Te puede interesar</h6>\r\n    <div class=\"divf\">\r\n      <a\r\n        class=\"sugerencia\"\r\n        (click)=\"getPlace(sug.id); this.gaService.googleAnalyticsPuntosDeInteres()\"\r\n        *ngFor=\"let sug of near\"\r\n        [routerLink]=\"['/place-selected',sug.id]\"\r\n      >\r\n        <div class=\"sug\">\r\n          <app-preload-details\r\n            [url]=\"sug.image.url\"\r\n            [alt]=\"sug.image.url\"\r\n            [urlPreload]=\"preloadImage\"\r\n            [clase]=\"preloadClassInteres\"\r\n          ></app-preload-details>\r\n        </div>\r\n        <div class=\"infoSug\">\r\n          <div class=\"sugNombre\">{{ sug.name }}</div>\r\n          <div class=\"sugDistancia\">\r\n            {{ sug.distance | formatDistancia }} desde {{ place.nombre }}\r\n          </div>\r\n        </div>\r\n      </a>\r\n    </div>\r\n  </div>\r\n</ion-content>\r\n");
 
 /***/ }),
 

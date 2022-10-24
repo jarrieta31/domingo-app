@@ -134,27 +134,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "ArtistPage": () => (/* binding */ ArtistPage)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! tslib */ 98806);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! tslib */ 98806);
 /* harmony import */ var _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_artist_page_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !./node_modules/@ngtools/webpack/src/loaders/direct-resource.js!./artist.page.html */ 96435);
 /* harmony import */ var _artist_page_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./artist.page.scss */ 89145);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @angular/core */ 14001);
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/forms */ 18346);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! rxjs */ 64008);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! rxjs */ 99457);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! rxjs */ 18252);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! rxjs/operators */ 88377);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! rxjs/operators */ 94058);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! rxjs/operators */ 29026);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! rxjs/operators */ 85029);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @angular/core */ 14001);
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/forms */ 18346);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! rxjs */ 64008);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! rxjs */ 99457);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! rxjs */ 18252);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! rxjs/operators */ 88377);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! rxjs/operators */ 94058);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! rxjs/operators */ 29026);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! rxjs/operators */ 85029);
 /* harmony import */ var src_app_services_database_artist_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/services/database/artist.service */ 73623);
-/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @ionic/angular */ 78099);
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @ionic/angular */ 78099);
 /* harmony import */ var src_app_services_database_slides_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/services/database/slides.service */ 60696);
 /* harmony import */ var _video_video_page__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../video/video.page */ 35652);
 /* harmony import */ var src_app_services_database_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/app/services/database.service */ 60568);
 /* harmony import */ var src_app_services_geolocation_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! src/app/services/geolocation.service */ 4276);
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @angular/common/http */ 83981);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @angular/common/http */ 83981);
 /* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! src/environments/environment */ 18260);
 /* harmony import */ var _capacitor_browser__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @capacitor/browser */ 39337);
+/* harmony import */ var src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! src/app/services/google-analytics.service */ 81679);
+/* harmony import */ var _awesome_cordova_plugins_social_sharing_ngx__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @awesome-cordova-plugins/social-sharing/ngx */ 90900);
+
+
 
 
 
@@ -173,7 +177,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let ArtistPage = class ArtistPage {
-    constructor(fb, artistSvc, loadingCtrl, sliderSvc, modalCtrl, databaseSvc, geolocationSvc, http) {
+    constructor(fb, artistSvc, loadingCtrl, sliderSvc, modalCtrl, databaseSvc, geolocationSvc, http, gaService, socialSharing) {
         this.fb = fb;
         this.artistSvc = artistSvc;
         this.loadingCtrl = loadingCtrl;
@@ -182,6 +186,8 @@ let ArtistPage = class ArtistPage {
         this.databaseSvc = databaseSvc;
         this.geolocationSvc = geolocationSvc;
         this.http = http;
+        this.gaService = gaService;
+        this.socialSharing = socialSharing;
         /**guarda los lugares activos en la subscription del servicio */
         this.artists = [];
         /**
@@ -196,9 +202,9 @@ let ArtistPage = class ArtistPage {
         };
         this.locationActive = [];
         /**url load  */
-        this.preloadImage = "/assets/load.gif";
+        this.preloadImage = '/assets/load.gif';
         /**captura los datos del formulario de filtros */
-        this.dataForm = "";
+        this.dataForm = '';
         /**se guardan los sliders de la pantalla artistas */
         this.sliderArtist = [];
         /**control la apertura de filtros */
@@ -213,12 +219,14 @@ let ArtistPage = class ArtistPage {
         this.dist = null;
         this.dep = null;
         /**url load  */
-        this.preloadImage_list = "/assets/load_cuadrada.gif";
+        this.preloadImage_list = '/assets/load_cuadrada.gif';
         /** clase de preload list */
-        this.preloadClase = "img-artista";
+        this.preloadClase = 'img-artista';
+        /**url para compartir */
+        this.shareURL = 'https://developer-dominga.web.app/artist/';
         this.filterForm = this.fb.group({
-            localidad: ["", _angular_forms__WEBPACK_IMPORTED_MODULE_9__.Validators.required],
-            categoria: ["", _angular_forms__WEBPACK_IMPORTED_MODULE_9__.Validators.required],
+            localidad: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_11__.Validators.required],
+            categoria: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_11__.Validators.required],
         });
     }
     resetSlide() {
@@ -227,7 +235,12 @@ let ArtistPage = class ArtistPage {
     endSlide() {
         this.slide.stopAutoplay();
     }
-    filterArtist() {
+    artistShare(tipo, nombre, id) {
+        this.gaService.googleAnalyticsCompartir(tipo, tipo + '_' + nombre);
+        this.socialSharing.share(nombre, null, null, this.shareURL + id);
+    }
+    filterArtist(pantalla, tipo) {
+        this.gaService.googleAnalyticsFiltrosPantallas(pantalla, tipo);
         this.dataForm = this.filterForm.value;
         if (this.isFilterLocation)
             this.isFilterLocation = false;
@@ -235,16 +248,16 @@ let ArtistPage = class ArtistPage {
             this.isFilterType = false;
         this.optionLocation = this.dataForm.localidad;
         this.optionType = this.dataForm.categoria;
-        if (this.dataForm.localidad === "")
-            this.optionLocation = "localidad";
-        if (this.dataForm.categoria === "")
-            this.optionType = "tipo";
+        if (this.dataForm.localidad === '')
+            this.optionLocation = 'localidad';
+        if (this.dataForm.categoria === '')
+            this.optionType = 'tipo';
     }
     show(message) {
-        return (0,tslib__WEBPACK_IMPORTED_MODULE_10__.__awaiter)(this, void 0, void 0, function* () {
+        return (0,tslib__WEBPACK_IMPORTED_MODULE_12__.__awaiter)(this, void 0, void 0, function* () {
             this.loading = yield this.loadingCtrl.create({
                 message,
-                spinner: "bubbles",
+                spinner: 'bubbles',
             });
             this.loading.present().then(() => {
                 this.loading.dismiss();
@@ -285,17 +298,18 @@ let ArtistPage = class ArtistPage {
     }
     /**retorna true si se selecciono Distancia como filtro principal */
     get selectdistancia() {
-        return localStorage.getItem("distanceActivo") ? true : false;
+        return localStorage.getItem('distanceActivo') ? true : false;
     }
     /**
      * Abre modal para reproducir video
      * @param url - URL del video que se va a ejecutar
      */
-    verVideo(url) {
-        return (0,tslib__WEBPACK_IMPORTED_MODULE_10__.__awaiter)(this, void 0, void 0, function* () {
+    verVideo(url, nombre) {
+        return (0,tslib__WEBPACK_IMPORTED_MODULE_12__.__awaiter)(this, void 0, void 0, function* () {
+            this.gaService.googleAnalyticsReproducirVideo('artistas', nombre);
             const video = yield this.modalCtrl.create({
                 component: _video_video_page__WEBPACK_IMPORTED_MODULE_4__.VideoPage,
-                cssClass: "modal-video",
+                cssClass: 'modal-video',
                 backdropDismiss: false,
                 showBackdrop: true,
                 componentProps: {
@@ -307,56 +321,66 @@ let ArtistPage = class ArtistPage {
         });
     }
     openInstagram(url) {
+        this.socialNetwork('instagram');
         _capacitor_browser__WEBPACK_IMPORTED_MODULE_8__.Browser.open({ url: url });
     }
     openSpotify(url) {
+        this.socialNetwork('spotify');
         _capacitor_browser__WEBPACK_IMPORTED_MODULE_8__.Browser.open({ url: url });
+    }
+    socialNetwork(tipo) {
+        this.gaService.googleAnalyticsRedesSociales('artistas', tipo);
     }
     getLocation(lng, lat) {
         return this.http
             .get(`${src_environments_environment__WEBPACK_IMPORTED_MODULE_7__.environment.urlMopboxDepto}${lng},${lat}.json?access_token=${src_environments_environment__WEBPACK_IMPORTED_MODULE_7__.environment.mapBoxToken}`)
-            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.map)((depto) => depto.features[depto.features.length - 2].text), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.takeUntil)(this.unsubscribe$));
+            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_13__.map)((depto) => depto.features[depto.features.length - 2].text), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_14__.takeUntil)(this.unsubscribe$));
     }
     ionViewWillEnter() {
-        if (localStorage.getItem("deptoActivo") != undefined &&
-            localStorage.getItem("deptoActivo") != null) {
+        document.title = 'Artistas';
+        this.gaService.googleAnalyticsPantallas('artistas');
+        if (localStorage.getItem('deptoActivo') != undefined &&
+            localStorage.getItem('deptoActivo') != null) {
             this.dist = null;
-            this.dep = localStorage.getItem("deptoActivo");
+            this.dep = localStorage.getItem('deptoActivo');
         }
-        else if (localStorage.getItem("distanceActivo") != undefined &&
-            localStorage.getItem("distanceActivo") != null) {
+        else if (localStorage.getItem('distanceActivo') != undefined &&
+            localStorage.getItem('distanceActivo') != null) {
             this.dep = null;
-            this.dist = parseInt(localStorage.getItem("distanceActivo"));
+            this.dist = parseInt(localStorage.getItem('distanceActivo'));
         }
-        if (localStorage.getItem("deptoActivo") != this.currentDepto) {
-            this.currentDepto = localStorage.getItem("deptoActivo");
+        if (localStorage.getItem('deptoActivo') != this.currentDepto) {
+            this.currentDepto = localStorage.getItem('deptoActivo');
             this.filterForm.reset();
-            this.dataForm = "";
-            this.optionLocation = "localidad";
-            this.optionType = "tipo";
+            this.dataForm = '';
+            this.optionLocation = 'localidad';
+            this.optionType = 'tipo';
         }
-        this.unsubscribe$ = new rxjs__WEBPACK_IMPORTED_MODULE_13__.Subject();
+        this.unsubscribe$ = new rxjs__WEBPACK_IMPORTED_MODULE_15__.Subject();
         this.sliderSvc.getSliders();
         this.sliderSvc.slider
-            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.map)((slider) => slider.filter((s) => s.pantalla === "artistas")), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.takeUntil)(this.unsubscribe$))
+            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_13__.map)((slider) => slider.filter((s) => s.pantalla === 'artistas')), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_14__.takeUntil)(this.unsubscribe$))
             .subscribe((res) => {
             this.sliderArtist = res;
         });
         this.resetSlide();
         /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
-        let posDep = this.geolocationSvc.posicion$.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_14__.switchMap)((pos) => {
-            return (0,rxjs__WEBPACK_IMPORTED_MODULE_15__.forkJoin)((0,rxjs__WEBPACK_IMPORTED_MODULE_16__.of)(pos), this.getLocation(pos.longitud, pos.latitud));
-        }), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.takeUntil)(this.unsubscribe$));
+        let posDep = this.geolocationSvc.posicion$.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_16__.switchMap)((pos) => {
+            return (0,rxjs__WEBPACK_IMPORTED_MODULE_17__.forkJoin)((0,rxjs__WEBPACK_IMPORTED_MODULE_18__.of)(pos), this.getLocation(pos.longitud, pos.latitud));
+        }), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_14__.takeUntil)(this.unsubscribe$));
         if (this.geolocationSvc.posicion$.value !== null) {
             posDep
-                .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_17__.tap)((dep) => (this.depDist = dep[1])), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_14__.switchMap)((res) => this.artistSvc.getArtist(res[1])), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.takeUntil)(this.unsubscribe$))
+                .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_19__.tap)((dep) => (this.depDist = dep[1])), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_16__.switchMap)((res) => this.artistSvc.getArtist(res[1])), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_14__.takeUntil)(this.unsubscribe$))
                 .subscribe((res) => {
                 this.artists = [];
                 this.artists = res;
             });
         }
         else {
-            this.artistSvc.getArtist(this.dep).pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.takeUntil)(this.unsubscribe$)).subscribe((res) => {
+            this.artistSvc
+                .getArtist(this.dep)
+                .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_14__.takeUntil)(this.unsubscribe$))
+                .subscribe((res) => {
                 this.artists = [];
                 this.artists = res;
             });
@@ -373,21 +397,23 @@ let ArtistPage = class ArtistPage {
     }
 };
 ArtistPage.ctorParameters = () => [
-    { type: _angular_forms__WEBPACK_IMPORTED_MODULE_9__.FormBuilder },
+    { type: _angular_forms__WEBPACK_IMPORTED_MODULE_11__.FormBuilder },
     { type: src_app_services_database_artist_service__WEBPACK_IMPORTED_MODULE_2__.ArtistService },
-    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_18__.LoadingController },
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_20__.LoadingController },
     { type: src_app_services_database_slides_service__WEBPACK_IMPORTED_MODULE_3__.SlidesService },
-    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_18__.ModalController },
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_20__.ModalController },
     { type: src_app_services_database_service__WEBPACK_IMPORTED_MODULE_5__.DatabaseService },
     { type: src_app_services_geolocation_service__WEBPACK_IMPORTED_MODULE_6__.GeolocationService },
-    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_19__.HttpClient }
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_21__.HttpClient },
+    { type: src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_9__.GoogleAnalyticsService },
+    { type: _awesome_cordova_plugins_social_sharing_ngx__WEBPACK_IMPORTED_MODULE_10__.SocialSharing }
 ];
 ArtistPage.propDecorators = {
-    slide: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_20__.ViewChild, args: [_ionic_angular__WEBPACK_IMPORTED_MODULE_18__.IonSlides,] }]
+    slide: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_22__.ViewChild, args: [_ionic_angular__WEBPACK_IMPORTED_MODULE_20__.IonSlides,] }]
 };
-ArtistPage = (0,tslib__WEBPACK_IMPORTED_MODULE_10__.__decorate)([
-    (0,_angular_core__WEBPACK_IMPORTED_MODULE_20__.Component)({
-        selector: "app-artist",
+ArtistPage = (0,tslib__WEBPACK_IMPORTED_MODULE_12__.__decorate)([
+    (0,_angular_core__WEBPACK_IMPORTED_MODULE_22__.Component)({
+        selector: 'app-artist',
         template: _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_artist_page_html__WEBPACK_IMPORTED_MODULE_0__["default"],
         styles: [_artist_page_scss__WEBPACK_IMPORTED_MODULE_1__]
     })
@@ -673,7 +699,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-header class=\"ion-no-border\">\r\n  <ion-toolbar>\r\n    <div class=\"slider\">\r\n      <ion-slides\r\n        class=\"sliderPrimero setHeight\"\r\n        scrollbar=\"false\"\r\n        pager=\"false\"\r\n        [options]=\"slideOpts\"\r\n      >\r\n        <ion-slide *ngFor=\"let item of sliderArtist\" class=\"sliderHijo\">\r\n          <a\r\n            *ngIf=\"item.link !== null && item.link !== '' && item.link !== ' ' && item.link !== undefined\"\r\n            href=\"{{ item.link }}\"\r\n            class=\"link\"\r\n          >\r\n            <ion-fab vertical=\"top\" horizontal=\"start\" slot=\"fixed\">\r\n              <ion-fab-button color=\"dark\">\r\n                <ion-icon\r\n                  *ngIf=\"item.linkTipo !== 'web'\"\r\n                  name=\"logo-{{ item.linkTipo }}\"\r\n                  class=\"icon-link\"\r\n                ></ion-icon>\r\n                <ion-icon\r\n                  *ngIf=\"item.linkTipo === 'web'\"\r\n                  name=\"globe-outline\"\r\n                  class=\"icon-link\"\r\n                ></ion-icon>\r\n              </ion-fab-button>\r\n            </ion-fab>\r\n          </a>\r\n          <app-preload\r\n            [url]=\"item.imagen.url\"\r\n            [alt]=\"item.imagen.name\"\r\n            [urlPreload]=\"preloadImage\"\r\n          ></app-preload>\r\n        </ion-slide>\r\n      </ion-slides>\r\n      <!-- </div> -->\r\n\r\n      <!-- =========>=>=>=> Filtro =========>=>=>=> -->\r\n      <div class=\"filter_place\">\r\n        <ion-label\r\n          *ngIf=\"!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')\"\r\n          (click)=\"changeFilterLocation()\"\r\n          >localidad</ion-label\r\n        >\r\n        <ion-label\r\n          *ngIf=\" !selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')\"\r\n          class=\"open_filter\"\r\n          (click)=\"changeFilterLocation()\"\r\n          >{{ optionLocation }}</ion-label\r\n        >\r\n        <img *ngIf=\"!selectdistancia\" src=\"/assets/icon/exchange.png\" alt=\"\" />\r\n        <ion-label\r\n          *ngIf=\"optionType === null || optionType === 'tipo' || optionType === ''\"\r\n          (click)=\"changeFilterType()\"\r\n          >tipo</ion-label\r\n        >\r\n        <ion-label\r\n          *ngIf=\"optionType !== null && optionType !== 'tipo' && optionType !== ''\"\r\n          class=\"open_filter\"\r\n          (click)=\"changeFilterType()\"\r\n          >{{ optionType }}</ion-label\r\n        >\r\n      </div>\r\n\r\n      <div>\r\n        <form [formGroup]=\"filterForm\" class=\"form_filter\">\r\n          <!-- Filtro por Localidad  -->\r\n          <div *ngIf=\"isFilterLocation\">\r\n            <div class=\"filter_name\">\r\n              <span>Localidad</span>\r\n            </div>\r\n            <div>\r\n              <ion-list class=\"list_type\">\r\n                <ion-radio-group\r\n                  (ionChange)=\"filterArtist()\"\r\n                  formControlName=\"localidad\"\r\n                  class=\"type_border\"\r\n                >\r\n                  <ion-item class=\"filter_list\" lines=\"none\">\r\n                    <ion-text>Todo</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"\"></ion-radio>\r\n                  </ion-item>\r\n                  <ion-item\r\n                    class=\"filter_list\"\r\n                    lines=\"none\"\r\n                    *ngFor=\"let loc of lista_localidad_artis\"\r\n                  >\r\n                    <ion-text>{{ loc }}</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"{{ loc }}\"></ion-radio>\r\n                  </ion-item>\r\n                </ion-radio-group>\r\n              </ion-list>\r\n            </div>\r\n          </div>\r\n          <!-- filtro por Localidad -->\r\n\r\n          <!-- filtro por Tipo -->\r\n          <div *ngIf=\"isFilterType\">\r\n            <div class=\"filter_name\">\r\n              <span>Tipo</span>\r\n            </div>\r\n            <div>\r\n              <ion-list class=\"list_type\">\r\n                <ion-radio-group\r\n                  (ionChange)=\"filterArtist()\"\r\n                  formControlName=\"categoria\"\r\n                  class=\"type_border\"\r\n                >\r\n                  <ion-item class=\"filter_list\" lines=\"none\">\r\n                    <ion-text>Todo</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"\"></ion-radio>\r\n                  </ion-item>\r\n                  <ion-item\r\n                    class=\"filter_list last\"\r\n                    lines=\"none\"\r\n                    *ngFor=\"let tipo of lista_tipo_artis\"\r\n                  >\r\n                    <ion-text>{{ tipo }}</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"{{ tipo }}\"></ion-radio>\r\n                  </ion-item>\r\n                </ion-radio-group>\r\n              </ion-list>\r\n            </div>\r\n          </div>\r\n          <!-- Filtro por Tipo -->\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </ion-toolbar>\r\n</ion-header>\r\n\r\n<ion-content>\r\n  <ion-list>\r\n    <div class=\"artist\" *ngFor=\"let art of artists | filterArtist:dataForm\">\r\n      <ng-container *ngIf=\"art.vacio !== 1\">\r\n        <div class=\"imgArtist\">\r\n          <app-preload-list\r\n            [url]=\"art.imagen.url\"\r\n            [alt]=\"art.nombre\"\r\n            [clase]=\"preloadClase\"\r\n            [urlPreload]=\"preloadImage_list\"\r\n          ></app-preload-list>\r\n        </div>\r\n        <div class=\"infoArtist\">\r\n          <div id=\"info-art\" class=\"type\">{{ art.categoria }}</div>\r\n          <div id=\"info-art\" class=\"name\">{{ art.nombre }}</div>\r\n          <div class=\"netArtist\">\r\n            <img\r\n              *ngIf=\"art.instagram !== null && art.instagram !== undefined && art.instagram !== '' && art.instagram !== ' ' \"\r\n              (click)=\"openInstagram(art.instagram)\"\r\n              src=\"/assets/icon/instagram.png\"\r\n              alt=\"instagram\"\r\n            />\r\n            <img\r\n              *ngIf=\"art.spotify !== null && art.spotify !== undefined && art.spotify !== '' && art.spotify !== ' ' \"\r\n              (click)=\"openSpotify(art.spotify)\"\r\n              src=\"/assets/icon/spotify.png\"\r\n              alt=\"spotify\"\r\n            />\r\n            <img\r\n              *ngIf=\"art.youtube !== null && art.youtube !== undefined && art.youtube !== '' && art.youtube !== ' ' \"\r\n              (click)=\"verVideo(art.youtube)\"\r\n              src=\"/assets/icon/youtube.png\"\r\n              alt=\"youtube\"\r\n            />\r\n            <img\r\n              (click)=\"artistShare()\"\r\n              src=\"/assets/icon/share.png\"\r\n              alt=\"compartir\"\r\n            />\r\n          </div>\r\n        </div>\r\n      </ng-container>\r\n\r\n      <ng-container *ngIf=\"art.vacio === 1\">\r\n        <div class=\"empty\">\r\n          <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n          <div class=\"text_empty\">\r\n            No hay artistas para mostrar con el filtro seleccionado\r\n          </div>\r\n        </div>\r\n      </ng-container>\r\n    </div>\r\n  </ion-list>\r\n\r\n  <ion-list *ngIf=\"artists.length === 0 && !this.artistSvc.noData\">\r\n    <ng-container *ngFor=\"let item of [1,2,3,4,5,6]\">\r\n      <ion-item>\r\n        <ion-thumbnail slot=\"start\">\r\n          <ion-skeleton-text></ion-skeleton-text>\r\n        </ion-thumbnail>\r\n        <ion-label>\r\n          <h3>\r\n            <ion-skeleton-text animated style=\"width: 80%\"></ion-skeleton-text>\r\n          </h3>\r\n          <p>\r\n            <ion-skeleton-text animated style=\"width: 60%\"></ion-skeleton-text>\r\n          </p>\r\n          <p>\r\n            <ion-skeleton-text animated style=\"width: 30%\"></ion-skeleton-text>\r\n          </p>\r\n        </ion-label>\r\n      </ion-item>\r\n    </ng-container>\r\n  </ion-list>\r\n\r\n  <div *ngIf=\"this.artistSvc.noData\" class=\"empty\">\r\n    <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n    <div class=\"text_empty\" *ngIf=\"dep !== null\">\r\n      No hay artistas en {{ dep }}\r\n    </div>\r\n    <div class=\"text_empty\" *ngIf=\"dist !== null\">\r\n      No hay artistas en {{ depDist }}\r\n    </div>\r\n  </div>\r\n</ion-content>\r\n");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-header class=\"ion-no-border\">\r\n  <ion-toolbar>\r\n    <div class=\"slider\">\r\n      <ion-slides\r\n        class=\"sliderPrimero setHeight\"\r\n        scrollbar=\"false\"\r\n        pager=\"false\"\r\n        [options]=\"slideOpts\"\r\n      >\r\n        <ion-slide *ngFor=\"let item of sliderArtist\" class=\"sliderHijo\">\r\n          <a\r\n            *ngIf=\"item.link !== null && item.link !== '' && item.link !== ' ' && item.link !== undefined\"\r\n            href=\"{{ item.link }}\"\r\n            class=\"link\"\r\n          >\r\n            <ion-fab vertical=\"top\" horizontal=\"start\" slot=\"fixed\">\r\n              <ion-fab-button color=\"dark\">\r\n                <ion-icon\r\n                  *ngIf=\"item.linkTipo !== 'web'\"\r\n                  name=\"logo-{{ item.linkTipo }}\"\r\n                  class=\"icon-link\"\r\n                ></ion-icon>\r\n                <ion-icon\r\n                  *ngIf=\"item.linkTipo === 'web'\"\r\n                  name=\"globe-outline\"\r\n                  class=\"icon-link\"\r\n                ></ion-icon>\r\n              </ion-fab-button>\r\n            </ion-fab>\r\n          </a>\r\n          <app-preload\r\n            [url]=\"item.imagen.url\"\r\n            [alt]=\"item.imagen.name\"\r\n            [urlPreload]=\"preloadImage\"\r\n          ></app-preload>\r\n        </ion-slide>\r\n      </ion-slides>\r\n      <!-- </div> -->\r\n\r\n      <!-- =========>=>=>=> Filtro =========>=>=>=> -->\r\n      <div class=\"filter_place\">\r\n        <ion-label\r\n          *ngIf=\"!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')\"\r\n          (click)=\"changeFilterLocation()\"\r\n          >localidad</ion-label\r\n        >\r\n        <ion-label\r\n          *ngIf=\" !selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')\"\r\n          class=\"open_filter\"\r\n          (click)=\"changeFilterLocation()\"\r\n          >{{ optionLocation }}</ion-label\r\n        >\r\n        <img *ngIf=\"!selectdistancia\" src=\"/assets/icon/exchange.png\" alt=\"\" />\r\n        <ion-label\r\n          *ngIf=\"optionType === null || optionType === 'tipo' || optionType === ''\"\r\n          (click)=\"changeFilterType()\"\r\n          >tipo</ion-label\r\n        >\r\n        <ion-label\r\n          *ngIf=\"optionType !== null && optionType !== 'tipo' && optionType !== ''\"\r\n          class=\"open_filter\"\r\n          (click)=\"changeFilterType()\"\r\n          >{{ optionType }}</ion-label\r\n        >\r\n      </div>\r\n\r\n      <div>\r\n        <form [formGroup]=\"filterForm\" class=\"form_filter\">\r\n          <!-- Filtro por Localidad  -->\r\n          <div *ngIf=\"isFilterLocation\">\r\n            <div class=\"filter_name\">\r\n              <span>Localidad</span>\r\n            </div>\r\n            <div>\r\n              <ion-list class=\"list_type\">\r\n                <ion-radio-group\r\n                  (ionChange)=\"filterArtist('artista', 'localidad_artista')\"\r\n                  formControlName=\"localidad\"\r\n                  class=\"type_border\"\r\n                >\r\n                  <ion-item class=\"filter_list\" lines=\"none\">\r\n                    <ion-text>Todo</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"\"></ion-radio>\r\n                  </ion-item>\r\n                  <ion-item\r\n                    class=\"filter_list\"\r\n                    lines=\"none\"\r\n                    *ngFor=\"let loc of lista_localidad_artis\"\r\n                  >\r\n                    <ion-text>{{ loc }}</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"{{ loc }}\"></ion-radio>\r\n                  </ion-item>\r\n                </ion-radio-group>\r\n              </ion-list>\r\n            </div>\r\n          </div>\r\n          <!-- filtro por Localidad -->\r\n\r\n          <!-- filtro por Tipo -->\r\n          <div *ngIf=\"isFilterType\">\r\n            <div class=\"filter_name\">\r\n              <span>Tipo</span>\r\n            </div>\r\n            <div>\r\n              <ion-list class=\"list_type\">\r\n                <ion-radio-group\r\n                  (ionChange)=\"filterArtist('artista', 'tipo_artista')\"\r\n                  formControlName=\"categoria\"\r\n                  class=\"type_border\"\r\n                >\r\n                  <ion-item class=\"filter_list\" lines=\"none\">\r\n                    <ion-text>Todo</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"\"></ion-radio>\r\n                  </ion-item>\r\n                  <ion-item\r\n                    class=\"filter_list last\"\r\n                    lines=\"none\"\r\n                    *ngFor=\"let tipo of lista_tipo_artis\"\r\n                  >\r\n                    <ion-text>{{ tipo }}</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"{{ tipo }}\"></ion-radio>\r\n                  </ion-item>\r\n                </ion-radio-group>\r\n              </ion-list>\r\n            </div>\r\n          </div>\r\n          <!-- Filtro por Tipo -->\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </ion-toolbar>\r\n</ion-header>\r\n\r\n<ion-content>\r\n  <ion-list>\r\n    <div class=\"artist\" *ngFor=\"let art of artists | filterArtist:dataForm\">\r\n      <ng-container *ngIf=\"art.vacio !== 1\">\r\n        <div class=\"imgArtist\">\r\n          <app-preload-list\r\n            [url]=\"art.imagen.url\"\r\n            [alt]=\"art.nombre\"\r\n            [clase]=\"preloadClase\"\r\n            [urlPreload]=\"preloadImage_list\"\r\n          ></app-preload-list>\r\n        </div>\r\n        <div class=\"infoArtist\">\r\n          <div id=\"info-art\" class=\"type\">{{ art.categoria }}</div>\r\n          <div id=\"info-art\" class=\"name\">{{ art.nombre }}</div>\r\n          <div class=\"netArtist\">\r\n            <img\r\n              *ngIf=\"art.instagram !== null && art.instagram !== undefined && art.instagram !== '' && art.instagram !== ' ' \"\r\n              (click)=\"openInstagram(art.instagram)\"\r\n              src=\"/assets/icon/instagram.png\"\r\n              alt=\"instagram\"\r\n            />\r\n            <img\r\n              *ngIf=\"art.spotify !== null && art.spotify !== undefined && art.spotify !== '' && art.spotify !== ' ' \"\r\n              (click)=\"openSpotify(art.spotify)\"\r\n              src=\"/assets/icon/spotify.png\"\r\n              alt=\"spotify\"\r\n            />\r\n            <img\r\n              *ngIf=\"art.youtube !== null && art.youtube !== undefined && art.youtube !== '' && art.youtube !== ' ' \"\r\n              (click)=\"verVideo(art.youtube, art.nombre)\"\r\n              src=\"/assets/icon/youtube.png\"\r\n              alt=\"youtube\"\r\n            />\r\n            <img\r\n              (click)=\"artistShare('artista', art.nombre)\"\r\n              src=\"/assets/icon/share.png\"\r\n              alt=\"compartir\"\r\n            />\r\n          </div>\r\n        </div>\r\n      </ng-container>\r\n\r\n      <ng-container *ngIf=\"art.vacio === 1\">\r\n        <div class=\"empty\">\r\n          <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n          <div class=\"text_empty\">\r\n            No hay artistas para mostrar con el filtro seleccionado\r\n          </div>\r\n        </div>\r\n      </ng-container>\r\n    </div>\r\n  </ion-list>\r\n\r\n  <ion-list *ngIf=\"artists.length === 0 && !this.artistSvc.noData\">\r\n    <ng-container *ngFor=\"let item of [1,2,3,4,5,6]\">\r\n      <ion-item>\r\n        <ion-thumbnail slot=\"start\">\r\n          <ion-skeleton-text></ion-skeleton-text>\r\n        </ion-thumbnail>\r\n        <ion-label>\r\n          <h3>\r\n            <ion-skeleton-text animated style=\"width: 80%\"></ion-skeleton-text>\r\n          </h3>\r\n          <p>\r\n            <ion-skeleton-text animated style=\"width: 60%\"></ion-skeleton-text>\r\n          </p>\r\n          <p>\r\n            <ion-skeleton-text animated style=\"width: 30%\"></ion-skeleton-text>\r\n          </p>\r\n        </ion-label>\r\n      </ion-item>\r\n    </ng-container>\r\n  </ion-list>\r\n\r\n  <div *ngIf=\"this.artistSvc.noData\" class=\"empty\">\r\n    <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n    <div class=\"text_empty\" *ngIf=\"dep !== null\">\r\n      No hay artistas en {{ dep }}\r\n    </div>\r\n    <div class=\"text_empty\" *ngIf=\"dist !== null\">\r\n      No hay artistas en {{ depDist }}\r\n    </div>\r\n  </div>\r\n</ion-content>\r\n");
 
 /***/ }),
 

@@ -128,15 +128,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "ModalInfoPage": () => (/* binding */ ModalInfoPage)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! tslib */ 98806);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! tslib */ 98806);
 /* harmony import */ var _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_modal_info_page_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !./node_modules/@ngtools/webpack/src/loaders/direct-resource.js!./modal-info.page.html */ 67594);
 /* harmony import */ var _modal_info_page_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modal-info.page.scss */ 36773);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/core */ 14001);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/core */ 14001);
 /* harmony import */ var _awesome_cordova_plugins_call_number_ngx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @awesome-cordova-plugins/call-number/ngx */ 53831);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs */ 64008);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs */ 64008);
 /* harmony import */ var src_app_services_database_place_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/services/database/place.service */ 22087);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ 94058);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs/operators */ 94058);
 /* harmony import */ var _capacitor_browser__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @capacitor/browser */ 39337);
+/* harmony import */ var src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/app/services/google-analytics.service */ 81679);
+
 
 
 
@@ -147,58 +149,61 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let ModalInfoPage = class ModalInfoPage {
-    constructor(callNumber, placeSvc) {
+    constructor(callNumber, placeSvc, gaService) {
         this.callNumber = callNumber;
         this.placeSvc = placeSvc;
-        this.unsubscribe$ = new rxjs__WEBPACK_IMPORTED_MODULE_5__.Subject();
+        this.gaService = gaService;
+        this.unsubscribe$ = new rxjs__WEBPACK_IMPORTED_MODULE_6__.Subject();
         this.place = null;
         this.telefonos = [];
     }
     ngOnInit() {
+        document.title = 'Descripción Lugar';
         this.placeSvc.place_selected
-            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_6__.takeUntil)(this.unsubscribe$))
+            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_7__.takeUntil)(this.unsubscribe$))
             .subscribe((res) => {
+            this.gaService.googleAnalyticsPantallas('descripcion_lugar', res.nombre);
             this.place = res;
             this.place.telefonos.forEach((tel) => {
-                if (tel["numero"] !== null &&
-                    tel["numero"] !== undefined &&
-                    tel["numero"] !== "" &&
-                    tel["numero"] !== " ") {
-                    this.telefonos.push(tel["numero"]);
+                if (tel['numero'] !== null &&
+                    tel['numero'] !== undefined &&
+                    tel['numero'] !== '' &&
+                    tel['numero'] !== ' ') {
+                    this.telefonos.push(tel['numero']);
                 }
             });
         });
         if (this.place.web === null ||
             this.place.web === undefined ||
-            this.place.web === "" ||
-            this.place.web === " ") {
-            let elem = document.getElementById("web");
-            elem.setAttribute("style", "display:none");
+            this.place.web === '' ||
+            this.place.web === ' ') {
+            let elem = document.getElementById('web');
+            elem.setAttribute('style', 'display:none');
         }
         if (this.place.facebook == null ||
             this.place.facebook === undefined ||
-            this.place.facebook === "" ||
-            this.place.facebook === " ") {
-            let elem = document.getElementById("facebook");
-            elem.setAttribute("style", "display:none");
+            this.place.facebook === '' ||
+            this.place.facebook === ' ') {
+            let elem = document.getElementById('facebook');
+            elem.setAttribute('style', 'display:none');
         }
         if (this.place.instagram == null ||
             this.place.instagram === undefined ||
-            this.place.instagram === "" ||
-            this.place.instagram === " ") {
-            let elem = document.getElementById("instagram");
-            elem.setAttribute("style", "display:none");
+            this.place.instagram === '' ||
+            this.place.instagram === ' ') {
+            let elem = document.getElementById('instagram');
+            elem.setAttribute('style', 'display:none');
         }
         if (this.place.whatsapp === null ||
             this.place.whatsapp === undefined ||
-            this.place.whatsapp === "" ||
-            this.place.whatsapp === " ") {
-            let elem = document.getElementById("whatsapp");
-            elem.setAttribute("style", "display:none");
+            this.place.whatsapp === '' ||
+            this.place.whatsapp === ' ') {
+            let elem = document.getElementById('whatsapp');
+            elem.setAttribute('style', 'display:none');
         }
         if (this.telefonos.length === 0) {
-            let elem = document.getElementById("phone");
-            elem.setAttribute("style", "display:none");
+            let elem = document.getElementById('phone');
+            elem.setAttribute('style', 'display:none');
         }
     }
     ngAfterViewInit() {
@@ -209,28 +214,32 @@ let ModalInfoPage = class ModalInfoPage {
         this.unsubscribe$.complete();
     }
     callPhone() {
+        this.gaService.googleAnalyticsRedesSociales('lugares', 'telefono');
         this.callNumber
             .callNumber(this.telefonos[0], true)
-            .then((res) => console.log("Llamando!", res))
-            .catch((err) => console.log("Error en llamada", err));
+            .then((res) => console.log('Llamando!', res))
+            .catch((err) => console.log('Error en llamada', err));
     }
     openWeb() {
+        this.gaService.googleAnalyticsRedesSociales('lugares', 'web');
         _capacitor_browser__WEBPACK_IMPORTED_MODULE_4__.Browser.open({ url: this.place.web });
     }
     openFacebook() {
+        this.gaService.googleAnalyticsRedesSociales('lugares', 'facebook');
         _capacitor_browser__WEBPACK_IMPORTED_MODULE_4__.Browser.open({ url: this.place.facebook });
     }
 };
 ModalInfoPage.ctorParameters = () => [
     { type: _awesome_cordova_plugins_call_number_ngx__WEBPACK_IMPORTED_MODULE_2__.CallNumber },
-    { type: src_app_services_database_place_service__WEBPACK_IMPORTED_MODULE_3__.PlaceService }
+    { type: src_app_services_database_place_service__WEBPACK_IMPORTED_MODULE_3__.PlaceService },
+    { type: src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_5__.GoogleAnalyticsService }
 ];
 ModalInfoPage.propDecorators = {
-    descripcionHtml: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_7__.ViewChild, args: ["descripcion", { static: true },] }]
+    descripcionHtml: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_8__.ViewChild, args: ['descripcion', { static: true },] }]
 };
-ModalInfoPage = (0,tslib__WEBPACK_IMPORTED_MODULE_8__.__decorate)([
-    (0,_angular_core__WEBPACK_IMPORTED_MODULE_7__.Component)({
-        selector: "app-modal-info",
+ModalInfoPage = (0,tslib__WEBPACK_IMPORTED_MODULE_9__.__decorate)([
+    (0,_angular_core__WEBPACK_IMPORTED_MODULE_8__.Component)({
+        selector: 'app-modal-info',
         template: _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_modal_info_page_html__WEBPACK_IMPORTED_MODULE_0__["default"],
         styles: [_modal_info_page_scss__WEBPACK_IMPORTED_MODULE_1__]
     })
@@ -250,7 +259,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-header>\r\n  <ion-toolbar color=\"options\">\r\n    <ion-buttons slot=\"start\">\r\n      <ion-back-button\r\n        defaultHref=\"places/{{place.id}}\"\r\n        color=\"back\"\r\n      ></ion-back-button>\r\n    </ion-buttons>\r\n    <ion-title color=\"back\"> {{ place.nombre }} </ion-title>\r\n  </ion-toolbar>\r\n  <!-- Botones de reproduccion Text To Speech -->\r\n  <app-text-to-speech [texto]=\"descripcionText\"></app-text-to-speech> \r\n</ion-header>\r\n<ion-content>\r\n  <ion-text>\r\n    <br>\r\n    <div #descripcion class=\"texto\" [innerHTML]=\"place.descripcion\"></div>\r\n  </ion-text>\r\n  <ion-grid>\r\n    <ion-row>\r\n      <ion-col id=\"web\">\r\n        <div class=\"ion-text-center\">\r\n          <div class=\"circulo_red\">\r\n            <div (click)=\"openWeb()\">\r\n              <ion-icon name=\"globe-outline\"></ion-icon>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </ion-col>\r\n      <ion-col id=\"facebook\">\r\n        <div class=\"ion-text-center\">\r\n          <div class=\"circulo_red\">\r\n            <div (click)=\"openFacebook()\">\r\n              <ion-icon class=\"icon-fb\" name=\"logo-facebook\"></ion-icon>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </ion-col>\r\n      <ion-col id=\"instagram\">\r\n        <div class=\"ion-text-center\">\r\n          <div class=\"circulo_red\">\r\n            <a href=\"{{ place.instagram }}\"\r\n              ><ion-icon name=\"logo-instagram\"></ion-icon\r\n            ></a>\r\n          </div>\r\n        </div>\r\n      </ion-col>\r\n      <ion-col id=\"whatsapp\">\r\n        <div class=\"ion-text-center\">\r\n          <div class=\"circulo_red_wpp\">\r\n            <a href=\"{{ place.whatsapp }}\"\r\n              ><ion-icon name=\"logo-whatsapp\"></ion-icon\r\n            ></a>\r\n          </div>\r\n        </div>\r\n      </ion-col>\r\n      <ion-col id=\"phone\">\r\n        <div class=\"ion-text-center\">\r\n          <div class=\"circulo_red\" (click)=\"callPhone()\">\r\n            <ion-icon name=\"call-outline\"></ion-icon>\r\n          </div>\r\n        </div>\r\n      </ion-col>\r\n    </ion-row>\r\n  </ion-grid>\r\n</ion-content>\r\n");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-header>\r\n  <ion-toolbar color=\"options\">\r\n    <ion-buttons slot=\"start\">\r\n      <ion-back-button\r\n        defaultHref=\"places/{{place.id}}\"\r\n        color=\"back\"\r\n      ></ion-back-button>\r\n    </ion-buttons>\r\n    <ion-title color=\"back\"> {{ place.nombre }} </ion-title>\r\n  </ion-toolbar>\r\n  <!-- Botones de reproduccion Text To Speech -->\r\n  <app-text-to-speech\r\n    [texto]=\"descripcionText\"\r\n    [nombre]=\"place.nombre\"\r\n  ></app-text-to-speech>\r\n</ion-header>\r\n<ion-content>\r\n  <ion-text>\r\n    <br />\r\n    <div #descripcion class=\"texto\" [innerHTML]=\"place.descripcion\"></div>\r\n  </ion-text>\r\n  <ion-grid>\r\n    <ion-row>\r\n      <ion-col id=\"web\">\r\n        <div class=\"ion-text-center\">\r\n          <div class=\"circulo_red\">\r\n            <div (click)=\"openWeb()\">\r\n              <ion-icon name=\"globe-outline\"></ion-icon>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </ion-col>\r\n      <ion-col id=\"facebook\">\r\n        <div class=\"ion-text-center\">\r\n          <div class=\"circulo_red\">\r\n            <div (click)=\"openFacebook()\">\r\n              <ion-icon class=\"icon-fb\" name=\"logo-facebook\"></ion-icon>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </ion-col>\r\n      <ion-col id=\"instagram\">\r\n        <div class=\"ion-text-center\">\r\n          <div class=\"circulo_red\">\r\n            <a\r\n              href=\"{{ place.instagram }}\" (click)=\"this.gaService.googleAnalyticsRedesSociales('lugares', 'instagram')\"\r\n              ><ion-icon name=\"logo-instagram\"></ion-icon\r\n            ></a>\r\n          </div>\r\n        </div>\r\n      </ion-col>\r\n      <ion-col id=\"whatsapp\">\r\n        <div class=\"ion-text-center\">\r\n          <div class=\"circulo_red_wpp\">\r\n            <a\r\n              href=\"{{ place.whatsapp }}\" (click)=\"this.gaService.googleAnalyticsRedesSociales('lugares', 'whatsapp')\"\r\n              ><ion-icon name=\"logo-whatsapp\"></ion-icon\r\n            ></a>\r\n          </div>\r\n        </div>\r\n      </ion-col>\r\n      <ion-col id=\"phone\">\r\n        <div class=\"ion-text-center\">\r\n          <div\r\n            class=\"circulo_red\"\r\n            (click)=\"callPhone()\"\r\n          >\r\n            <ion-icon name=\"call-outline\"></ion-icon>\r\n          </div>\r\n        </div>\r\n      </ion-col>\r\n    </ion-row>\r\n  </ion-grid>\r\n</ion-content>\r\n");
 
 /***/ }),
 

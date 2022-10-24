@@ -131,25 +131,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "WhereSleepPage": () => (/* binding */ WhereSleepPage)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! tslib */ 98806);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! tslib */ 98806);
 /* harmony import */ var _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_where_sleep_page_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !./node_modules/@ngtools/webpack/src/loaders/direct-resource.js!./where-sleep.page.html */ 32266);
 /* harmony import */ var _where_sleep_page_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./where-sleep.page.scss */ 44544);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @angular/core */ 14001);
-/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @ionic/angular */ 78099);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @angular/core */ 14001);
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @ionic/angular */ 78099);
 /* harmony import */ var src_app_services_database_where_sleep_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/services/database/where-sleep.service */ 90570);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! rxjs */ 64008);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! rxjs */ 99457);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! rxjs */ 18252);
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/forms */ 18346);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! rxjs */ 64008);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! rxjs */ 99457);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! rxjs */ 18252);
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/forms */ 18346);
 /* harmony import */ var src_app_services_database_slides_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/services/database/slides.service */ 60696);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! rxjs/operators */ 88377);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! rxjs/operators */ 94058);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! rxjs/operators */ 29026);
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @angular/common/http */ 83981);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! rxjs/operators */ 88377);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! rxjs/operators */ 94058);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! rxjs/operators */ 29026);
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @angular/common/http */ 83981);
 /* harmony import */ var src_app_services_geolocation_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/services/geolocation.service */ 4276);
 /* harmony import */ var src_app_services_database_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/app/services/database.service */ 60568);
 /* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! src/environments/environment */ 18260);
 /* harmony import */ var _capacitor_browser__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @capacitor/browser */ 39337);
+/* harmony import */ var src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! src/app/services/google-analytics.service */ 81679);
+/* harmony import */ var _awesome_cordova_plugins_social_sharing_ngx__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @awesome-cordova-plugins/social-sharing/ngx */ 90900);
+
+
 
 
 
@@ -167,7 +171,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let WhereSleepPage = class WhereSleepPage {
-    constructor(loadingCtrl, sleepSvc, fb, sliderSvc, geolocationSvc, http, databaseSvc) {
+    constructor(loadingCtrl, sleepSvc, fb, sliderSvc, geolocationSvc, http, databaseSvc, socialSharing, gaService) {
         this.loadingCtrl = loadingCtrl;
         this.sleepSvc = sleepSvc;
         this.fb = fb;
@@ -175,6 +179,8 @@ let WhereSleepPage = class WhereSleepPage {
         this.geolocationSvc = geolocationSvc;
         this.http = http;
         this.databaseSvc = databaseSvc;
+        this.socialSharing = socialSharing;
+        this.gaService = gaService;
         /**filtro seleccionado, distancia o departamento */
         this.dist = null;
         this.dep = null;
@@ -185,19 +191,21 @@ let WhereSleepPage = class WhereSleepPage {
         /**departamente seleccionado actualmente */
         this.currentDepto = this.databaseSvc.selectionDepto;
         /**url load  */
-        this.preloadImage = "/assets/load.gif";
+        this.preloadImage = '/assets/load.gif';
         this.sleep = [];
-        this.textoBuscar = "";
+        this.textoBuscar = '';
+        /**url para compartir */
+        this.shareURL = 'https://developer-dominga.web.app/share-where-sleep/';
         this.locationActive = [];
         /**url load  */
-        this.preloadImage_list = "/assets/load_cuadrada.gif";
+        this.preloadImage_list = '/assets/load_cuadrada.gif';
         /** clase de preload list */
-        this.preloadClase = "img-dormir";
+        this.preloadClase = 'img-dormir';
         /**captura los datos del formulario de filtros */
-        this.dataForm = "";
+        this.dataForm = '';
         this.filterForm = this.fb.group({
-            localidad: ["", _angular_forms__WEBPACK_IMPORTED_MODULE_8__.Validators.required],
-            tipo: ["", _angular_forms__WEBPACK_IMPORTED_MODULE_8__.Validators.required],
+            localidad: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_10__.Validators.required],
+            tipo: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_10__.Validators.required],
         });
         this.slideOpts = {
             initialSlide: 0,
@@ -215,11 +223,15 @@ let WhereSleepPage = class WhereSleepPage {
     endSlide() {
         this.slide.stopAutoplay();
     }
+    socialSharingShare(nombre, id) {
+        this.gaService.googleAnalyticsCompartir('donde_dormir', 'donde_dormir_' + nombre);
+        this.socialSharing.share(nombre, null, null, this.shareURL + id);
+    }
     show(message) {
-        return (0,tslib__WEBPACK_IMPORTED_MODULE_9__.__awaiter)(this, void 0, void 0, function* () {
+        return (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__awaiter)(this, void 0, void 0, function* () {
             this.loading = yield this.loadingCtrl.create({
                 message,
-                spinner: "bubbles",
+                spinner: 'bubbles',
             });
             this.loading.present().then(() => {
                 this.loading.dismiss();
@@ -229,36 +241,37 @@ let WhereSleepPage = class WhereSleepPage {
     buscar(event) {
         this.textoBuscar = event.detail.value;
     }
-    filterSleep() {
+    filterSleep(pantalla, tipo) {
+        this.gaService.googleAnalyticsFiltrosPantallas(pantalla, tipo);
         this.dataForm = this.filterForm.value;
         if (this.isFilterLocation)
             this.isFilterLocation = false;
         this.optionLocation = this.dataForm.localidad;
-        if (this.dataForm.localidad === "")
-            this.optionLocation = "localidad";
+        if (this.dataForm.localidad === '')
+            this.optionLocation = 'localidad';
     }
     changeFilterSleep() {
         this.isFilterLocation = !this.isFilterLocation;
     }
     get selectdistancia() {
-        return localStorage.getItem("distanceActivo") ? true : false;
+        return localStorage.getItem('distanceActivo') ? true : false;
     }
     getLocation(lng, lat) {
         return this.http
             .get(`${src_environments_environment__WEBPACK_IMPORTED_MODULE_6__.environment.urlMopboxDepto}${lng},${lat}.json?access_token=${src_environments_environment__WEBPACK_IMPORTED_MODULE_6__.environment.mapBoxToken}`)
-            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_10__.map)((depto) => depto.features[depto.features.length - 2].text), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.takeUntil)(this.unsubscribe$));
+            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.map)((depto) => depto.features[depto.features.length - 2].text), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_13__.takeUntil)(this.unsubscribe$));
     }
     /**endpoint de mapbox para calcular distancia entre dos puntos teniendo en cuenta las calles */
     getDistance(lngUser, latUser, lngPlace, latPlace) {
-        return this.http.get("https://api.mapbox.com/directions/v5/mapbox/driving/" +
+        return this.http.get('https://api.mapbox.com/directions/v5/mapbox/driving/' +
             lngUser +
-            "," +
+            ',' +
             latUser +
-            ";" +
+            ';' +
             lngPlace +
-            "," +
+            ',' +
             latPlace +
-            "?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA");
+            '?overview=full&geometries=geojson&access_token=pk.eyJ1IjoiY2FzYWRvbWluZ2EiLCJhIjoiY2s3NTlzajFoMDVzZTNlcGduMWh0aml3aSJ9.JcZFoGdIQnz3hSg2p4FGkA');
     }
     /** =====>=>=>=> Metodos Filtro localidad <============== */
     /** Devuelve una lista de localidades */
@@ -276,51 +289,56 @@ let WhereSleepPage = class WhereSleepPage {
         return localidades;
     }
     openInstagram(url) {
+        this.gaService.googleAnalyticsRedesSociales('donde_dormir', 'instagram');
         _capacitor_browser__WEBPACK_IMPORTED_MODULE_7__.Browser.open({ url: url });
     }
     openWhatsapp(url) {
+        this.gaService.googleAnalyticsRedesSociales('donde_dormir', 'whatsapp');
         _capacitor_browser__WEBPACK_IMPORTED_MODULE_7__.Browser.open({ url: url });
     }
     ionViewWillEnter() {
-        if (localStorage.getItem("deptoActivo") != undefined &&
-            localStorage.getItem("deptoActivo") != null) {
+        document.title = 'Donde Dormir';
+        this.gaService.googleAnalyticsPantallas('donde_dormir');
+        if (localStorage.getItem('deptoActivo') != undefined &&
+            localStorage.getItem('deptoActivo') != null) {
             this.dist = null;
-            this.dep = localStorage.getItem("deptoActivo");
+            this.dep = localStorage.getItem('deptoActivo');
         }
-        else if (localStorage.getItem("distanceActivo") != undefined &&
-            localStorage.getItem("distanceActivo") != null) {
+        else if (localStorage.getItem('distanceActivo') != undefined &&
+            localStorage.getItem('distanceActivo') != null) {
             this.dep = null;
-            this.dist = parseInt(localStorage.getItem("distanceActivo"));
+            this.dist = parseInt(localStorage.getItem('distanceActivo'));
         }
-        if (localStorage.getItem("deptoActivo") != this.currentDepto) {
-            this.currentDepto = localStorage.getItem("deptoActivo");
+        if (localStorage.getItem('deptoActivo') != this.currentDepto) {
+            this.currentDepto = localStorage.getItem('deptoActivo');
             this.filterForm.reset();
-            this.dataForm = "";
-            this.optionLocation = "localidad";
+            this.dataForm = '';
+            this.optionLocation = 'localidad';
         }
-        this.unsubscribe$ = new rxjs__WEBPACK_IMPORTED_MODULE_12__.Subject();
+        this.unsubscribe$ = new rxjs__WEBPACK_IMPORTED_MODULE_14__.Subject();
         this.sliderSvc.getSliders();
         this.sliderSvc.slider
-            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_10__.map)((slider) => slider.filter((s) => s.pantalla === "donde_dormir")), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.takeUntil)(this.unsubscribe$))
+            .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.map)((slider) => slider.filter((s) => s.pantalla === 'donde_dormir')), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_13__.takeUntil)(this.unsubscribe$))
             .subscribe((res) => {
             this.sliderSleep = res;
         });
         this.resetSlide();
         /******** RXJS PARA TRAER LUGARES CON INFO COMPLETA ************************************/
-        let posDep = this.geolocationSvc.posicion$.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_13__.switchMap)((pos) => {
-            return (0,rxjs__WEBPACK_IMPORTED_MODULE_14__.forkJoin)((0,rxjs__WEBPACK_IMPORTED_MODULE_15__.of)(pos), this.getLocation(pos.longitud, pos.latitud));
-        }), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.takeUntil)(this.unsubscribe$));
-        let dto = posDep.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_13__.switchMap)((res) => this.sleepSvc.getDondeDormir(res[1])), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.takeUntil)(this.unsubscribe$));
+        let posDep = this.geolocationSvc.posicion$.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_15__.switchMap)((pos) => {
+            return (0,rxjs__WEBPACK_IMPORTED_MODULE_16__.forkJoin)((0,rxjs__WEBPACK_IMPORTED_MODULE_17__.of)(pos), this.getLocation(pos.longitud, pos.latitud));
+        }), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_13__.takeUntil)(this.unsubscribe$));
+        let dto = posDep.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_15__.switchMap)((res) => this.sleepSvc.getDondeDormir(res[1])), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_13__.takeUntil)(this.unsubscribe$));
         if (this.geolocationSvc.posicion$.value !== null) {
-            dto
-                .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.takeUntil)(this.unsubscribe$))
-                .subscribe((res) => {
+            dto.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_13__.takeUntil)(this.unsubscribe$)).subscribe((res) => {
                 this.sleep = [];
                 this.sleep = res;
             });
         }
         else {
-            this.sleepSvc.getDondeDormir(this.dep).pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_11__.takeUntil)(this.unsubscribe$)).subscribe((res) => {
+            this.sleepSvc
+                .getDondeDormir(this.dep)
+                .pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_13__.takeUntil)(this.unsubscribe$))
+                .subscribe((res) => {
                 this.sleep = [];
                 this.sleep = res;
             });
@@ -335,20 +353,22 @@ let WhereSleepPage = class WhereSleepPage {
     }
 };
 WhereSleepPage.ctorParameters = () => [
-    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_16__.LoadingController },
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_18__.LoadingController },
     { type: src_app_services_database_where_sleep_service__WEBPACK_IMPORTED_MODULE_2__.WhereSleepService },
-    { type: _angular_forms__WEBPACK_IMPORTED_MODULE_8__.FormBuilder },
+    { type: _angular_forms__WEBPACK_IMPORTED_MODULE_10__.FormBuilder },
     { type: src_app_services_database_slides_service__WEBPACK_IMPORTED_MODULE_3__.SlidesService },
     { type: src_app_services_geolocation_service__WEBPACK_IMPORTED_MODULE_4__.GeolocationService },
-    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_17__.HttpClient },
-    { type: src_app_services_database_service__WEBPACK_IMPORTED_MODULE_5__.DatabaseService }
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_19__.HttpClient },
+    { type: src_app_services_database_service__WEBPACK_IMPORTED_MODULE_5__.DatabaseService },
+    { type: _awesome_cordova_plugins_social_sharing_ngx__WEBPACK_IMPORTED_MODULE_9__.SocialSharing },
+    { type: src_app_services_google_analytics_service__WEBPACK_IMPORTED_MODULE_8__.GoogleAnalyticsService }
 ];
 WhereSleepPage.propDecorators = {
-    slide: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_18__.ViewChild, args: [_ionic_angular__WEBPACK_IMPORTED_MODULE_16__.IonSlides,] }]
+    slide: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_20__.ViewChild, args: [_ionic_angular__WEBPACK_IMPORTED_MODULE_18__.IonSlides,] }]
 };
-WhereSleepPage = (0,tslib__WEBPACK_IMPORTED_MODULE_9__.__decorate)([
-    (0,_angular_core__WEBPACK_IMPORTED_MODULE_18__.Component)({
-        selector: "app-where-sleep",
+WhereSleepPage = (0,tslib__WEBPACK_IMPORTED_MODULE_11__.__decorate)([
+    (0,_angular_core__WEBPACK_IMPORTED_MODULE_20__.Component)({
+        selector: 'app-where-sleep',
         template: _C_Users_Administrador_Desktop_Repositorios_domingo_app_node_modules_ngtools_webpack_src_loaders_direct_resource_js_where_sleep_page_html__WEBPACK_IMPORTED_MODULE_0__["default"],
         styles: [_where_sleep_page_scss__WEBPACK_IMPORTED_MODULE_1__]
     })
@@ -895,7 +915,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-header class=\"ion-no-border\">\r\n  <ion-toolbar>\r\n    <div class=\"slider\">\r\n      <ion-slides\r\n        class=\"sliderPrimero setHeight\"\r\n        scrollbar=\"false\"\r\n        pager=\"false\"\r\n        [options]=\"slideOpts\"\r\n      >\r\n        <ion-slide *ngFor=\"let item of sliderSleep\" class=\"sliderHijo\">\r\n          <a\r\n            *ngIf=\"item.link !== null && item.link !== '' && item.link !== ' ' && item.link !== undefined\"\r\n            href=\"{{ item.link }}\"\r\n            class=\"link\"\r\n          >\r\n            <ion-fab vertical=\"top\" horizontal=\"start\" slot=\"fixed\">\r\n              <ion-fab-button color=\"dark\">\r\n                <ion-icon\r\n                  *ngIf=\"item.linkTipo !== 'web'\"\r\n                  name=\"logo-{{ item.linkTipo }}\"\r\n                  class=\"icon-link\"\r\n                ></ion-icon>\r\n                <ion-icon\r\n                  *ngIf=\"item.linkTipo === 'web'\"\r\n                  name=\"globe-outline\"\r\n                  class=\"icon-link\"\r\n                ></ion-icon>\r\n              </ion-fab-button>\r\n            </ion-fab>\r\n          </a>\r\n          <app-preload\r\n            [url]=\"item.imagen.url\"\r\n            [alt]=\"item.imagen.name\"\r\n            [urlPreload]=\"preloadImage\"\r\n          ></app-preload>\r\n        </ion-slide>\r\n      </ion-slides>\r\n\r\n      <!-- filtro -->\r\n      <div\r\n        *ngIf=\"!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')\"\r\n        class=\"filter_place\"\r\n      >\r\n        <ion-label (click)=\"changeFilterSleep()\">localidad</ion-label>\r\n      </div>\r\n      <div\r\n        *ngIf=\"!selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')\"\r\n        class=\"filter_place\"\r\n      >\r\n        <ion-label\r\n          (click)=\"changeFilterSleep()\"\r\n          id=\"filters\"\r\n          class=\"open_filter\"\r\n          >{{ optionLocation }}</ion-label\r\n        >\r\n      </div>\r\n\r\n      <div>\r\n        <form [formGroup]=\"filterForm\" class=\"form_filter\">\r\n          <!-- Filtro por Localidad  -->\r\n          <div *ngIf=\"isFilterLocation\">\r\n            <div class=\"filter_name\">\r\n              <span id=\"filters\">Localidad</span>\r\n            </div>\r\n            <div>\r\n              <ion-list class=\"list_location\">\r\n                <ion-radio-group\r\n                  (ionChange)=\"filterSleep()\"\r\n                  formControlName=\"localidad\"\r\n                  class=\"location_border\"\r\n                >\r\n                  <ion-item class=\"filter_list\" lines=\"none\">\r\n                    <ion-text id=\"filters\">Todo</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"\"></ion-radio>\r\n                  </ion-item>\r\n                  <ion-item\r\n                    class=\"filter_list last\"\r\n                    lines=\"none\"\r\n                    *ngFor=\"let loc of localidades\"\r\n                  >\r\n                    <ion-text id=\"filters\">{{ loc }}</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"{{ loc }}\"></ion-radio>\r\n                  </ion-item>\r\n                </ion-radio-group>\r\n              </ion-list>\r\n            </div>\r\n          </div>\r\n          <!-- filtro por Localidad -->\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </ion-toolbar>\r\n</ion-header>\r\n\r\n<ion-content>\r\n  <div>\r\n    <ion-list class=\"lista\">\r\n      <ng-container *ngFor=\"let item of sleep | filtroDondeComer:dataForm\">\r\n        <ion-item\r\n          *ngIf=\"(item.distanciaNumber <= dist || (dep !== null && !this.sleepSvc.noData && item.departamento === dep))\"\r\n        >\r\n          <div class=\"padre\">\r\n            <div class=\"imagen\">\r\n              <ion-avatar item-start>\r\n                <app-preload-list\r\n                  [url]=\"item.imagen.url\"\r\n                  [alt]=\"item.nombre\"\r\n                  [clase]=\"preloadClase\"\r\n                  [urlPreload]=\"preloadImage_list\"\r\n                ></app-preload-list>\r\n              </ion-avatar>\r\n              <small id=\"eat-info\">{{item.distancia | formatDistancia}}</small>\r\n            </div>\r\n            <div class=\"info\">\r\n              <ion-label>\r\n                <h2 id=\"eat-info\">{{ item.nombre }}</h2>\r\n                <div class=\"infoAbajo\">\r\n                  <h3 id=\"eat-info\">{{ item.direccion }}</h3>\r\n                  <p id=\"eat-info\" *ngFor=\"let tel of item.telefonos\">\r\n                    <span\r\n                      id=\"eat-info\"\r\n                      *ngIf=\"tel.numero !== null && tel.numero !== undefined && tel.numero !== '' && tel.numero !== ' '\"\r\n                      >Tel: </span\r\n                    >{{ tel.numero }}\r\n                  </p>\r\n                </div>\r\n                <ion-icon\r\n                  class=\"contact\"\r\n                  *ngIf=\"item.instagram !== null\"\r\n                  name=\"logo-instagram\"\r\n                  (click)=\"openInstagram(item.instagram)\"\r\n                ></ion-icon>\r\n                <ion-icon\r\n                  class=\"contact\"\r\n                  *ngIf=\"item.whatsapp !== null\"\r\n                  name=\"logo-whatsapp\"\r\n                  (click)=\"openWhatsapp(item.whatsapp)\"\r\n                ></ion-icon>\r\n                <ion-icon\r\n                  color=\"dark\"\r\n                  slot=\"end\"\r\n                  class=\"contact\"\r\n                  name=\"share-social-sharp\"\r\n                  (click)=\"socialSharingShare(place.nombre, place.id)\"\r\n                ></ion-icon>\r\n              </ion-label>\r\n            </div>\r\n          </div>\r\n        </ion-item>\r\n      </ng-container>\r\n    </ion-list>\r\n\r\n    <ion-list *ngIf=\"sleep.length === 0 && !this.sleepSvc.noData\">\r\n      <ng-container *ngFor=\"let item of [1,2,3,4,5,6,7,8,9,10]\">\r\n        <ion-item>\r\n          <ion-thumbnail slot=\"start\">\r\n            <ion-skeleton-text></ion-skeleton-text>\r\n          </ion-thumbnail>\r\n          <ion-label>\r\n            <h3>\r\n              <ion-skeleton-text\r\n                animated\r\n                style=\"width: 80%\"\r\n              ></ion-skeleton-text>\r\n            </h3>\r\n            <p>\r\n              <ion-skeleton-text\r\n                animated\r\n                style=\"width: 60%\"\r\n              ></ion-skeleton-text>\r\n            </p>\r\n            <p>\r\n              <ion-skeleton-text\r\n                animated\r\n                style=\"width: 30%\"\r\n              ></ion-skeleton-text>\r\n            </p>\r\n          </ion-label>\r\n        </ion-item>\r\n      </ng-container>\r\n    </ion-list>\r\n\r\n    <div *ngIf=\"this.sleepSvc.noData && dist === null\" class=\"empty\">\r\n      <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n      <div class=\"text_empty\">No existen lugares en {{ dep }}</div>\r\n    </div>\r\n\r\n    <div *ngIf=\"!this.sleepSvc.controlDistance && dist !== null\" class=\"empty\">\r\n      <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n      <div class=\"text_empty\">\r\n        No existen lugares en el rango de {{ dist }} km\r\n      </div>\r\n    </div>\r\n  </div>\r\n</ion-content>\r\n");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<ion-header class=\"ion-no-border\">\r\n  <ion-toolbar>\r\n    <div class=\"slider\">\r\n      <ion-slides\r\n        class=\"sliderPrimero setHeight\"\r\n        scrollbar=\"false\"\r\n        pager=\"false\"\r\n        [options]=\"slideOpts\"\r\n      >\r\n        <ion-slide *ngFor=\"let item of sliderSleep\" class=\"sliderHijo\">\r\n          <a\r\n            *ngIf=\"item.link !== null && item.link !== '' && item.link !== ' ' && item.link !== undefined\"\r\n            href=\"{{ item.link }}\"\r\n            class=\"link\"\r\n          >\r\n            <ion-fab vertical=\"top\" horizontal=\"start\" slot=\"fixed\">\r\n              <ion-fab-button color=\"dark\">\r\n                <ion-icon\r\n                  *ngIf=\"item.linkTipo !== 'web'\"\r\n                  name=\"logo-{{ item.linkTipo }}\"\r\n                  class=\"icon-link\"\r\n                ></ion-icon>\r\n                <ion-icon\r\n                  *ngIf=\"item.linkTipo === 'web'\"\r\n                  name=\"globe-outline\"\r\n                  class=\"icon-link\"\r\n                ></ion-icon>\r\n              </ion-fab-button>\r\n            </ion-fab>\r\n          </a>\r\n          <app-preload\r\n            [url]=\"item.imagen.url\"\r\n            [alt]=\"item.imagen.name\"\r\n            [urlPreload]=\"preloadImage\"\r\n          ></app-preload>\r\n        </ion-slide>\r\n      </ion-slides>\r\n\r\n      <!-- filtro -->\r\n      <div\r\n        *ngIf=\"!selectdistancia && (optionLocation === null || optionLocation === 'localidad' || optionLocation === '')\"\r\n        class=\"filter_place\"\r\n      >\r\n        <ion-label (click)=\"changeFilterSleep()\">localidad</ion-label>\r\n      </div>\r\n      <div\r\n        *ngIf=\"!selectdistancia && (optionLocation !== null && optionLocation !== 'localidad' && optionLocation !== '')\"\r\n        class=\"filter_place\"\r\n      >\r\n        <ion-label\r\n          (click)=\"changeFilterSleep()\"\r\n          id=\"filters\"\r\n          class=\"open_filter\"\r\n          >{{ optionLocation }}</ion-label\r\n        >\r\n      </div>\r\n\r\n      <div>\r\n        <form [formGroup]=\"filterForm\" class=\"form_filter\">\r\n          <!-- Filtro por Localidad  -->\r\n          <div *ngIf=\"isFilterLocation\">\r\n            <div class=\"filter_name\">\r\n              <span id=\"filters\">Localidad</span>\r\n            </div>\r\n            <div>\r\n              <ion-list class=\"list_location\">\r\n                <ion-radio-group\r\n                  (ionChange)=\"filterSleep('donde_dormir', 'localidad_donde_dormir')\"\r\n                  formControlName=\"localidad\"\r\n                  class=\"location_border\"\r\n                >\r\n                  <ion-item class=\"filter_list\" lines=\"none\">\r\n                    <ion-text id=\"filters\">Todo</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"\"></ion-radio>\r\n                  </ion-item>\r\n                  <ion-item\r\n                    class=\"filter_list last\"\r\n                    lines=\"none\"\r\n                    *ngFor=\"let loc of localidades\"\r\n                  >\r\n                    <ion-text id=\"filters\">{{ loc }}</ion-text>\r\n                    <ion-radio slot=\"end\" value=\"{{ loc }}\"></ion-radio>\r\n                  </ion-item>\r\n                </ion-radio-group>\r\n              </ion-list>\r\n            </div>\r\n          </div>\r\n          <!-- filtro por Localidad -->\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </ion-toolbar>\r\n</ion-header>\r\n\r\n<ion-content>\r\n  <div>\r\n    <ion-list class=\"lista\">\r\n      <ng-container *ngFor=\"let item of sleep | filtroDondeComer:dataForm\">\r\n        <ion-item\r\n          *ngIf=\"(item.distanciaNumber <= dist || (dep !== null && !this.sleepSvc.noData && item.departamento === dep))\"\r\n        >\r\n          <div class=\"padre\">\r\n            <div class=\"imagen\">\r\n              <ion-avatar item-start>\r\n                <app-preload-list\r\n                  [url]=\"item.imagen.url\"\r\n                  [alt]=\"item.nombre\"\r\n                  [clase]=\"preloadClase\"\r\n                  [urlPreload]=\"preloadImage_list\"\r\n                ></app-preload-list>\r\n              </ion-avatar>\r\n              <small id=\"eat-info\">{{item.distancia | formatDistancia}}</small>\r\n            </div>\r\n            <div class=\"info\">\r\n              <ion-label>\r\n                <h2 id=\"eat-info\">{{ item.nombre }}</h2>\r\n                <div class=\"infoAbajo\">\r\n                  <h3 id=\"eat-info\">{{ item.direccion }}</h3>\r\n                  <p id=\"eat-info\" *ngFor=\"let tel of item.telefonos\">\r\n                    <span\r\n                      id=\"eat-info\"\r\n                      *ngIf=\"tel.numero !== null && tel.numero !== undefined && tel.numero !== '' && tel.numero !== ' '\"\r\n                      >Tel: </span\r\n                    >{{ tel.numero }}\r\n                  </p>\r\n                </div>\r\n                <ion-icon\r\n                  class=\"contact\"\r\n                  *ngIf=\"item.instagram !== null\"\r\n                  name=\"logo-instagram\"\r\n                  (click)=\"openInstagram(item.instagram)\"\r\n                ></ion-icon>\r\n                <ion-icon\r\n                  class=\"contact\"\r\n                  *ngIf=\"item.whatsapp !== null\"\r\n                  name=\"logo-whatsapp\"\r\n                  (click)=\"openWhatsapp(item.whatsapp)\"\r\n                ></ion-icon>\r\n                <ion-icon\r\n                  color=\"dark\"\r\n                  slot=\"end\"\r\n                  class=\"contact\"\r\n                  name=\"share-social-sharp\"\r\n                  (click)=\"socialSharingShare(item.nombre, item.id)\"\r\n                ></ion-icon>\r\n              </ion-label>\r\n            </div>\r\n          </div>\r\n        </ion-item>\r\n      </ng-container>\r\n    </ion-list>\r\n\r\n    <ion-list *ngIf=\"sleep.length === 0 && !this.sleepSvc.noData\">\r\n      <ng-container *ngFor=\"let item of [1,2,3,4,5,6,7,8,9,10]\">\r\n        <ion-item>\r\n          <ion-thumbnail slot=\"start\">\r\n            <ion-skeleton-text></ion-skeleton-text>\r\n          </ion-thumbnail>\r\n          <ion-label>\r\n            <h3>\r\n              <ion-skeleton-text\r\n                animated\r\n                style=\"width: 80%\"\r\n              ></ion-skeleton-text>\r\n            </h3>\r\n            <p>\r\n              <ion-skeleton-text\r\n                animated\r\n                style=\"width: 60%\"\r\n              ></ion-skeleton-text>\r\n            </p>\r\n            <p>\r\n              <ion-skeleton-text\r\n                animated\r\n                style=\"width: 30%\"\r\n              ></ion-skeleton-text>\r\n            </p>\r\n          </ion-label>\r\n        </ion-item>\r\n      </ng-container>\r\n    </ion-list>\r\n\r\n    <div *ngIf=\"this.sleepSvc.noData && dist === null\" class=\"empty\">\r\n      <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n      <div class=\"text_empty\">No existen lugares en {{ dep }}</div>\r\n    </div>\r\n\r\n    <div *ngIf=\"!this.sleepSvc.controlDistance && dist !== null\" class=\"empty\">\r\n      <i class=\"fi fi-rr-sad icon_empty\"></i>\r\n      <div class=\"text_empty\">\r\n        No existen lugares en el rango de {{ dist }} km\r\n      </div>\r\n    </div>\r\n  </div>\r\n</ion-content>\r\n");
 
 /***/ }),
 
