@@ -117,14 +117,13 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   }
 
   socialSharingShare(nombre: string, id: string, imagen: string) {
-    console.log(imagen)
+    this.base64ImageURL(imagen);
     this.gaService.googleAnalyticsCompartir('lugar', 'lugar_' + nombre);
     this.socialSharing.share(nombre, null, imagen, this.shareURL + id);
   }
 
   /**
    * Al seleccionar una imagen de la mini galería modifica la imagen principal
-   * this.base64ImageURL(imagen)
    */
   cambiarImagen(src: string) {
     this.preloadDetails.url = src;
