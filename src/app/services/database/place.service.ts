@@ -1,15 +1,29 @@
-import { Injectable } from "@angular/core";
-import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { BehaviorSubject, Observable, Subject } from "rxjs";
-import { Place } from "src/app/shared/place";
-import distance from "@turf/distance";
-import { Point } from "src/app/shared/point";
-import { GeolocationService } from "../geolocation.service";
+import { Injectable } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { Place } from 'src/app/shared/place';
+import distance from '@turf/distance';
+import { Point } from 'src/app/shared/point';
+import { GeolocationService } from '../geolocation.service';
 
-export declare type Units = "meters" | "millimeters" | "centimeters" | "kilometers" | "acres" | "miles" | "nauticalmiles" | "inches" | "yards" | "feet" | "radians" | "degrees" | "hectares";
+export declare type Units =
+  | 'meters'
+  | 'millimeters'
+  | 'centimeters'
+  | 'kilometers'
+  | 'acres'
+  | 'miles'
+  | 'nauticalmiles'
+  | 'inches'
+  | 'yards'
+  | 'feet'
+  | 'radians'
+  | 'degrees'
+  | 'hectares';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class PlaceService {
   /**Se guardan los lugares del departamento seleccionado */
@@ -44,158 +58,165 @@ export class PlaceService {
   controlDistance: boolean = false;
 
   deptoLimit: any[] = [
-    { nameDepto: "Artigas", limit: ["Artigas", "Salto", "Rivera"] },
+    { nameDepto: 'Artigas', limit: ['Artigas', 'Salto', 'Rivera'] },
     {
-      nameDepto: "Canelones",
-      limit: ["Canelones", "Florida", "Lavalleja", "Maldonado", "San José"],
+      nameDepto: 'Canelones',
+      limit: ['Canelones', 'Florida', 'Lavalleja', 'Maldonado', 'San José'],
     },
     {
-      nameDepto: "Cerro Largo",
+      nameDepto: 'Cerro Largo',
       limit: [
-        "Cerro Largo",
-        "Durazno",
-        "Rivera",
-        "Tacuarembó",
-        "Treinta y Tres",
+        'Cerro Largo',
+        'Durazno',
+        'Rivera',
+        'Tacuarembó',
+        'Treinta y Tres',
       ],
     },
     {
-      nameDepto: "Colonia",
-      limit: ["Colonia", "Flores", "San José", "Soriano"],
+      nameDepto: 'Colonia',
+      limit: ['Colonia', 'Flores', 'San José', 'Soriano'],
     },
     {
-      nameDepto: "Durazno",
+      nameDepto: 'Durazno',
       limit: [
-        "Durazno",
-        "Cerro Largo",
-        "Flores",
-        "Florida",
-        "Río Negro",
-        "Soriano",
-        "Tacuarembó",
-        "Treinta y Tres",
+        'Durazno',
+        'Cerro Largo',
+        'Flores',
+        'Florida',
+        'Río Negro',
+        'Soriano',
+        'Tacuarembó',
+        'Treinta y Tres',
       ],
     },
     {
-      nameDepto: "Flores",
+      nameDepto: 'Flores',
       limit: [
-        "Flores",
-        "Colonia",
-        "Durazno",
-        "Florida",
-        "Río Negro",
-        "San José",
-        "Soriano",
+        'Flores',
+        'Colonia',
+        'Durazno',
+        'Florida',
+        'Río Negro',
+        'San José',
+        'Soriano',
       ],
     },
     {
-      nameDepto: "Florida",
+      nameDepto: 'Florida',
       limit: [
-        "Florida",
-        "Canelones",
-        "Durazno",
-        "Flores",
-        "Lavalleja",
-        "San José",
-        "Treinta y Tres",
+        'Florida',
+        'Canelones',
+        'Durazno',
+        'Flores',
+        'Lavalleja',
+        'San José',
+        'Treinta y Tres',
       ],
     },
     {
-      nameDepto: "Lavalleja",
+      nameDepto: 'Lavalleja',
       limit: [
-        "Lavalleja",
-        "Canelones",
-        "Florida",
-        "Maldonado",
-        "Rocha",
-        "Treinta y Tres",
+        'Lavalleja',
+        'Canelones',
+        'Florida',
+        'Maldonado',
+        'Rocha',
+        'Treinta y Tres',
       ],
     },
     {
-      nameDepto: "Maldonado",
-      limit: ["Maldonado", "Canelones", "Lavalleja", "Rocha"],
+      nameDepto: 'Maldonado',
+      limit: ['Maldonado', 'Canelones', 'Lavalleja', 'Rocha'],
     },
-    { nameDepto: "Montevideo", limit: ["Montevideo", "Canelones", "San José"] },
+    { nameDepto: 'Montevideo', limit: ['Montevideo', 'Canelones', 'San José'] },
     {
-      nameDepto: "Paysandú",
-      limit: ["Paysandú", "Río Negro", "Salto", "Tacuarembó"],
+      nameDepto: 'Paysandú',
+      limit: ['Paysandú', 'Río Negro', 'Salto', 'Tacuarembó'],
     },
     {
-      nameDepto: "Río Negro",
+      nameDepto: 'Río Negro',
       limit: [
-        "Río Negro",
-        "Durazno",
-        "Flores",
-        "Paysandú",
-        "Soriano",
-        "Tacuarembó",
+        'Río Negro',
+        'Durazno',
+        'Flores',
+        'Paysandú',
+        'Soriano',
+        'Tacuarembó',
       ],
     },
     {
-      nameDepto: "Rivera",
-      limit: ["Rivera", "Artigas", "Cerro Largo", "Salto", "Tacuarembó"],
+      nameDepto: 'Rivera',
+      limit: ['Rivera', 'Artigas', 'Cerro Largo', 'Salto', 'Tacuarembó'],
     },
     {
-      nameDepto: "Rocha",
-      limit: ["Rocha", "Maldonado", "Lavalleja", "Treinta y Tres"],
+      nameDepto: 'Rocha',
+      limit: ['Rocha', 'Maldonado', 'Lavalleja', 'Treinta y Tres'],
     },
     {
-      nameDepto: "Salto",
-      limit: ["Salto", "Artigas", "Paysandú", "Rivera", "Tacuarembó"],
+      nameDepto: 'Salto',
+      limit: ['Salto', 'Artigas', 'Paysandú', 'Rivera', 'Tacuarembó'],
     },
     {
-      nameDepto: "San José",
+      nameDepto: 'San José',
       limit: [
-        "San José",
-        "Canelones",
-        "Colonia",
-        "Flores",
-        "Florida",
-        "Soriano",
+        'San José',
+        'Canelones',
+        'Colonia',
+        'Flores',
+        'Florida',
+        'Soriano',
       ],
     },
     {
-      nameDepto: "Soriano",
+      nameDepto: 'Soriano',
       limit: [
-        "Soriano",
-        "Colonia",
-        "Durazno",
-        "Flores",
-        "Río Negro",
-        "San José",
+        'Soriano',
+        'Colonia',
+        'Durazno',
+        'Flores',
+        'Río Negro',
+        'San José',
       ],
     },
     {
-      nameDepto: "Tacuarembó",
+      nameDepto: 'Tacuarembó',
       limit: [
-        "Tacuarembó",
-        "Cerro Largo",
-        "Durazno",
-        "Paysandú",
-        "Río Negro",
-        "Rivera",
-        "Salto",
+        'Tacuarembó',
+        'Cerro Largo',
+        'Durazno',
+        'Paysandú',
+        'Río Negro',
+        'Rivera',
+        'Salto',
       ],
     },
     {
-      nameDepto: "Treinta y Tres",
+      nameDepto: 'Treinta y Tres',
       limit: [
-        "Treinta y Tres",
-        "Cerro Largo",
-        "Durazno",
-        "Florida",
-        "Lavalleja",
-        "Rocha",
-        "Tacuarembó",
+        'Treinta y Tres',
+        'Cerro Largo',
+        'Durazno',
+        'Florida',
+        'Lavalleja',
+        'Rocha',
+        'Tacuarembó',
       ],
     },
   ];
 
   constructor(
     private afs: AngularFirestore,
-    private geolocationSvc: GeolocationService
+    private geolocationSvc: GeolocationService,
+    private afstorage: AngularFireStorage
   ) {
     this.places = new BehaviorSubject<Place[]>(this.initPlace);
+  }
+
+  urlDowload() {
+    return this.afstorage
+      .ref('lugares/N9peYkc/Real_de_San_Carlos (1).jpg')
+      .getDownloadURL()
   }
 
   /**
@@ -203,8 +224,8 @@ export class PlaceService {
    * @param searchDepto se utiliza para chequear si el departamento ya fue seleccionado anteriormente
    */
   getPlaces(checkDepto: string) {
-    this.depto = localStorage.getItem("deptoActivo");
-    this.distance = parseInt(localStorage.getItem("distanceActivo"));
+    this.depto = localStorage.getItem('deptoActivo');
+    this.distance = parseInt(localStorage.getItem('distanceActivo'));
     this.allLugares = [];
     this.distancePlaces = [];
 
@@ -212,7 +233,7 @@ export class PlaceService {
 
     let searchDepto: boolean = false;
 
-    const options:Units = "kilometers";
+    const options: Units = 'kilometers';
 
     if (this.depto != null) {
       this.save_depto.forEach((search) => {
@@ -224,10 +245,10 @@ export class PlaceService {
 
     if (this.depto != null && !searchDepto) {
       this.afs
-        .collection("lugares")
-        .ref.where("departamento", "==", this.depto)
-        .where("publicado", "==", true)
-        .orderBy("prioridad")
+        .collection('lugares')
+        .ref.where('departamento', '==', this.depto)
+        .where('publicado', '==', true)
+        .orderBy('prioridad')
         .get()
         .then((querySnapshot) => {
           const mapPlaces = new Map();
@@ -258,7 +279,7 @@ export class PlaceService {
                   this.geolocationSvc.posicion.latitud,
                 ],
                 [dist.ubicacion.lng, dist.ubicacion.lat],
-                {units: options}
+                { units: options }
               );
               dist.distancia = calcDist;
               dist.distanciaNumber = calcDist;
@@ -268,8 +289,8 @@ export class PlaceService {
             this.geolocationSvc.posicion === null
           ) {
             this.allLugares.forEach((dist) => {
-              dist.distancia = "Ubicación no activa";
-              dist.distanciaNumber = "Ubicación no activa";
+              dist.distancia = 'Ubicación no activa';
+              dist.distanciaNumber = 'Ubicación no activa';
             });
           }
 
@@ -285,7 +306,7 @@ export class PlaceService {
         .catch((err) => {
           console.log(err);
         })
-        .finally(() => "Fin");
+        .finally(() => 'Fin');
     } else if (this.depto != null && searchDepto) {
       this.initPlace.forEach((res) => {
         if (res.departamento == this.depto) {
@@ -304,7 +325,7 @@ export class PlaceService {
               this.geolocationSvc.posicion.latitud,
             ],
             [dist.ubicacion.lng, dist.ubicacion.lat],
-            {units: options}
+            { units: options }
           );
           dist.distancia = calcDist;
           dist.distanciaNumber = calcDist;
@@ -351,7 +372,7 @@ export class PlaceService {
                   this.geolocationSvc.posicion.latitud,
                 ],
                 [dist.ubicacion.lng, dist.ubicacion.lat],
-                {units: options}
+                { units: options }
               );
               dist.distancia = calcDist;
               dist.distanciaNumber = calcDist;
@@ -365,10 +386,10 @@ export class PlaceService {
           deptoSearch = false;
         } else {
           this.afs
-            .collection("lugares")
-            .ref.where("departamento", "==", dep)
-            .where("publicado", "==", true)
-            .orderBy("prioridad")
+            .collection('lugares')
+            .ref.where('departamento', '==', dep)
+            .where('publicado', '==', true)
+            .orderBy('prioridad')
             .get()
             .then((querySnapshot) => {
               querySnapshot.forEach((item) => {
@@ -397,7 +418,7 @@ export class PlaceService {
                       this.geolocationSvc.posicion.latitud,
                     ],
                     [dist.ubicacion.lng, dist.ubicacion.lat],
-                    {units: options}
+                    { units: options }
                   );
                   dist.distancia = calcDist;
                   dist.distanciaNumber = calcDist;
@@ -414,7 +435,7 @@ export class PlaceService {
             .catch((err) => {
               console.log(err);
             })
-            .finally(() => "Fin");
+            .finally(() => 'Fin');
           deptoSearch = false;
         }
       });
@@ -438,8 +459,8 @@ export class PlaceService {
     this.initPlace.forEach((res) => {
       if (res.id == id) {
         res.descripcionCorta =
-          res.descripcion.replace(/<\/?[^>]+(>|$)/g, "").substring(0, 140) +
-          "..." +
+          res.descripcion.replace(/<\/?[^>]+(>|$)/g, '').substring(0, 140) +
+          '...' +
           `<a>Ver más</a>`;
         this.near_place = res;
         this.place_selected.next(res);
@@ -451,14 +472,14 @@ export class PlaceService {
   getPlaceNear() {
     this.near_places = new BehaviorSubject<any[]>(null);
     this.distance_place = [];
-    let options:Units = "kilometers";
+    let options: Units = 'kilometers';
 
     this.initPlace.forEach((res) => {
       if (res.id != this.near_place.id && res.departamento == this.depto) {
         let dist = distance(
           [this.near_place.ubicacion.lng, this.near_place.ubicacion.lat],
           [res.ubicacion.lng, res.ubicacion.lat],
-          {units: options}
+          { units: options }
         );
 
         this.distance_place.push({
@@ -471,7 +492,7 @@ export class PlaceService {
         let dist = distance(
           [this.near_place.ubicacion.lng, this.near_place.ubicacion.lat],
           [res.ubicacion.lng, res.ubicacion.lat],
-          {units: options}
+          { units: options }
         );
 
         this.distance_place.push({
