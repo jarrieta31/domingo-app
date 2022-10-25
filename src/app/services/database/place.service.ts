@@ -213,9 +213,9 @@ export class PlaceService {
     this.places = new BehaviorSubject<Place[]>(this.initPlace);
   }
 
-  urlDowload() {
+  urlDowload(carpeta: string, nombre: string) {
     return this.afstorage
-      .ref('lugares/N9peYkc/Real_de_San_Carlos (1).jpg')
+      .ref('lugares/'+carpeta+'/'+nombre)
       .getDownloadURL()
   }
 

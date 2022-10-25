@@ -48,8 +48,6 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   /**url para compartir */
   shareURL: string = 'https://developer-dominga.web.app/share-place/';
 
-  base64: string = '';
-
   constructor(
     private placeSvc: PlaceService,
     private modalCtrl: ModalController,
@@ -94,15 +92,13 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
     this.placeSvc.getPlaceId(id);
   }
 
-  urlDowload() {
-    this.placeSvc.urlDowload();
-  }
-
-  socialSharingShare(nombre: string, id: string) {
-    this.placeSvc.urlDowload().subscribe((res) => {
+  socialSharingShare(nombre: string, id: string, carpeta: string, nombreImagen: string) {
+    console.log(carpeta + " - " + nombreImagen)
+    this.gaService.googleAnalyticsCompartir('lugar', 'lugar_' + nombre);
+    this.placeSvc.urlDowload(carpeta, nombreImagen).subscribe((res) => {
+      console.log(res)
       this.socialSharing.share(nombre, null, res, this.shareURL + id);
     });
-    this.gaService.googleAnalyticsCompartir('lugar', 'lugar_' + nombre);
   }
 
   /**
