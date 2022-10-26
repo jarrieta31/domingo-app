@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { PreloadDetailsComponent } from '../../components/preload-details/preload-details.component';
 import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
+import { getStorage, ref, getDownloadURL, uploadString} from "firebase/storage";
 
 @Component({
   selector: 'app-place-selected',
@@ -80,6 +81,8 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
         this.near = res;
       });
     });
+
+
   }
 
   ngOnDestroy() {
@@ -93,13 +96,31 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   }
 
   socialSharingShare(nombre: string, id: string, carpeta: string, nombreImagen: string) {
+    const storage = getStorage();
+    let img64: string;
+    getDownloadURL(ref(storage, `lugares/${carpeta}/${nombreImagen}`))
+      .then((url) => {
+        const xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+        xhr.onload = () => {
+          let reader = new FileReader();
+          //const blob = xhr.response
+          reader.readAsDataURL(xhr.response)
+          reader.onloadend = () => {
+            img64 = reader.result as string;
+            this.socialSharing.share(nombre, null, img64, this.shareURL + id)
+          }
+        };
+        xhr.open('GET', url);
+        xhr.send();
+      })
+      .catch((error) => {
+        // Handle any errors
+      });
     console.log(carpeta + " - " + nombreImagen)
     this.gaService.googleAnalyticsCompartir('lugar', 'lugar_' + nombre);
-    this.placeSvc.urlDowload(carpeta, nombreImagen).subscribe((res) => {
-      console.log(res)
-      this.socialSharing.share(nombre, null, res, this.shareURL + id);
-    });
   }
+
 
   /**
    * Al seleccionar una imagen de la mini galería modifica la imagen principal
