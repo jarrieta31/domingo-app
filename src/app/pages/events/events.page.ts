@@ -168,7 +168,9 @@ export class EventsPage {
     precioUnico: boolean,
     direccion: string,
     localidad: string,
-    departamento: string
+    departamento: string,
+    carpeta: string,
+    nombreImagen: string
   ) {
     this.contadorVisitas(id);
 
@@ -196,7 +198,9 @@ export class EventsPage {
         precioUnico: precioUnico,
         direccion: direccion,
         localidad: localidad,
-        departamento: departamento
+        departamento: departamento,
+        carpeta: carpeta,
+        nombreImagen: nombreImagen,
       },
     });
 

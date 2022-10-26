@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Place } from 'src/app/shared/place';
 import distance from '@turf/distance';
@@ -208,15 +207,8 @@ export class PlaceService {
   constructor(
     private afs: AngularFirestore,
     private geolocationSvc: GeolocationService,
-    private afstorage: AngularFireStorage
   ) {
     this.places = new BehaviorSubject<Place[]>(this.initPlace);
-  }
-
-  urlDowload(carpeta: string, nombre: string) {
-    return this.afstorage
-      .ref('lugares/'+carpeta+'/'+nombre)
-      .getDownloadURL()
   }
 
   /**

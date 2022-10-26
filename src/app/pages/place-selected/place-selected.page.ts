@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { PreloadDetailsComponent } from '../../components/preload-details/preload-details.component';
 import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
-import { getStorage, ref, getDownloadURL, uploadString} from "firebase/storage";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 @Component({
   selector: 'app-place-selected',
@@ -96,6 +96,7 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
   }
 
   socialSharingShare(nombre: string, id: string, carpeta: string, nombreImagen: string) {
+    this.gaService.googleAnalyticsCompartir('lugar', 'lugar_' + nombre);
     const storage = getStorage();
     let img64: string;
     getDownloadURL(ref(storage, `lugares/${carpeta}/${nombreImagen}`))
@@ -115,10 +116,8 @@ export class PlaceSelectedPage implements OnInit, OnDestroy {
         xhr.send();
       })
       .catch((error) => {
-        // Handle any errors
+        console.log(error);
       });
-    console.log(carpeta + " - " + nombreImagen)
-    this.gaService.googleAnalyticsCompartir('lugar', 'lugar_' + nombre);
   }
 
 

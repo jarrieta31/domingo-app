@@ -6,6 +6,7 @@ import { Browser } from '@capacitor/browser';
 import { takeUntil } from 'rxjs/operators';
 import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 @Component({
   selector: 'app-event-detail',
@@ -32,6 +33,8 @@ export class EventDetailPage implements OnInit, OnDestroy {
   @Input('direccion') direccion: boolean;
   @Input('localidad') localidad: string;
   @Input('departamento') departamento: string;
+  @Input('carpeta') carpeta: string;
+  @Input('nombreImagen') nombreImagen: string;
 
   _second = 1000;
   _minute = this._second * 60;
@@ -100,9 +103,28 @@ export class EventDetailPage implements OnInit, OnDestroy {
    * @param nombre nombre de evento compartido
    * @param id id de evento compartido
    */
-  socialSharingEvent(tipo: string, nombre: string, id: string, imagen: string) {
+  socialSharingEvent(tipo: string, nombre: string, id: string, carpeta: string, nombreImagen: string) {
     this.gaService.googleAnalyticsCompartir(tipo, tipo + '_' + nombre);
-    this.socialSharing.share(nombre, null, imagen, this.shareURL + id);
+    const storage = getStorage();
+    let img64: string;
+    getDownloadURL(ref(storage, `eventos/${carpeta}/${nombreImagen}`))
+      .then((url) => {
+        const xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+        xhr.onload = () => {
+          let reader = new FileReader();
+          reader.readAsDataURL(xhr.response)
+          reader.onloadend = () => {
+            img64 = reader.result as string;
+            this.socialSharing.share(nombre, null, img64, this.shareURL + id)
+          }
+        };
+        xhr.open('GET', url);
+        xhr.send();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   /**
